@@ -15,7 +15,7 @@ from Metrics import get_measurements_from_data
 class MetricsWindow(QtWidgets.QMainWindow):
     
     def __init__(self, shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, reference_side, file_name):
-        super(MetricsWindow, self) .__init__()
+        super() .__init__()
         self._shape = shape
         self._lefteye = left_pupil
         self._righteye = right_pupil

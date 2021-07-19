@@ -110,7 +110,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.load_file2()
         
     def initUI(self):
-        self.ui = uic.loadUi('DoubleView.ui', self)
+        self.ui = uic.loadUi('uis/DoubleView.ui', self)
         
         """Button Connection"""
         #New Photograph Button
