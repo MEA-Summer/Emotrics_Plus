@@ -24,7 +24,7 @@ from LandmarkSettingWindow import LandmarkSettingsWindow
 # from Metrics import get_measurements_from_data
 
 class SinglePhotoWindow(QtWidgets.QMainWindow):
-    finished = QtCore.pyqtSignal()
+    # finished = QtCore.pyqtSignal()
     def __init__(self, *args, **kwargs):
         super(SinglePhotoWindow, self).__init__(*args, **kwargs)
         
@@ -382,7 +382,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                             QtWidgets.QMessageBox.Ok)  
     
     def previous(self):
-        self.finished.emit()
+        # self.finished.emit()
         self.close()
 
 def main():

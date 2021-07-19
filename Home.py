@@ -15,21 +15,13 @@ class HomeWindow(QtWidgets.QMainWindow):
         self.pushButton_2.clicked.connect(self.load_DoublePhotoWindow)
 
     def load_SinglePhotoWindow(self):
-        self.NewWindow = SinglePhotoWindow(self)
-        self.NewWindow.show()
-        self.hide()
-        self.NewWindow.finished.connect(self.unhide)
+        self = SinglePhotoWindow(self)
+        self.show()
 
     def load_DoublePhotoWindow(self):
-        self.NewWindow = DoublePhotoWindow(self)
-        self.NewWindow.show()
-        self.hide()
-        self.NewWindow.finished.connect(self.unhide)
-
-    def unhide(self):
+        self = DoublePhotoWindow(self)
         self.show()
-        
-        
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     main = HomeWindow()
