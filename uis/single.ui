@@ -1345,6 +1345,9 @@ p, li { white-space: pre-wrap; }
         <property name="text">
          <string>Left </string>
         </property>
+        <property name="checked">
+         <bool>false</bool>
+        </property>
        </widget>
       </item>
       <item row="3" column="2" colspan="3">
@@ -1360,6 +1363,9 @@ p, li { white-space: pre-wrap; }
         </property>
         <property name="text">
          <string>Right </string>
+        </property>
+        <property name="checked">
+         <bool>true</bool>
         </property>
        </widget>
       </item>
