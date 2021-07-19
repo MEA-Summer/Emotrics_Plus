@@ -199,11 +199,11 @@ def find_NLF(shape, points):
         (x_R_left, y_R_left) = (0,0)
         angle_left = 0
     
-    if angle_right >= 90:
+    if angle_right >= 80:
         (x_R_right, y_R_right) = (0,0)
         angle_right = 0
         
-    if angle_left >= 90:
+    if angle_left >= 80:
         (x_R_left, y_R_left) = (0,0)
         angle_left = 0   
     

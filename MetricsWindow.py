@@ -28,13 +28,10 @@ class MetricsWindow(QtWidgets.QMainWindow):
         
         
     def initUI(self):
-        self.ui = uic.loadUi('Metrics.ui', self)
+        self.ui = uic.loadUi('uis/single_metrics.ui', self)
         
         #Measurements
         MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self._shape, self._lefteye, self._righteye, self._points, self._CalibrationType, self._CalibrationValue)
-        
-        #Standard Dash
-        
         
         
         #Brow Height
@@ -67,34 +64,34 @@ class MetricsWindow(QtWidgets.QMainWindow):
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.MarginalReflexDistance2, decimals=2)))
         self.resultTable.setItem(2, 3, val)
         
-        #Commissure Excursion
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.CommissureExcursion, decimals=2)))
+        #Eye Area
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.EyeArea, decimals=2)))
         self.resultTable.setItem(3, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.CommissureExcursion, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.EyeArea, decimals=2)))
         self.resultTable.setItem(3, 1, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.CommissureExcursion, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.EyeArea, decimals=2)))
         self.resultTable.setItem(3, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.CommissureExcursion, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.EyeArea, decimals=2)))
         self.resultTable.setItem(3, 3, val)
-        
-        #Smile Angle
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.SmileAngle, decimals=2)))
-        self.resultTable.setItem(4, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.SmileAngle, decimals=2)))
-        self.resultTable.setItem(4, 1, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.SmileAngle, decimals=2)))
-        self.resultTable.setItem(4, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.SmileAngle, decimals=2)))
-        self.resultTable.setItem(4, 3, val)
         
         #NLF Angle
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.NLF_angle, decimals=2)))
-        self.resultTable.setItem(5, 0, val)
+        self.resultTable.setItem(4, 0, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.NLF_angle, decimals=2)))
-        self.resultTable.setItem(5, 1, val)
+        self.resultTable.setItem(4, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.NLF_angle, decimals=2)))
-        self.resultTable.setItem(5, 2, val)
+        self.resultTable.setItem(4, 2, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.NLF_angle, decimals=2)))
+        self.resultTable.setItem(4, 3, val)
+        
+        #Commissure Excursion
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.CommissureExcursion, decimals=2)))
+        self.resultTable.setItem(5, 0, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.CommissureExcursion, decimals=2)))
+        self.resultTable.setItem(5, 1, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.CommissureExcursion, decimals=2)))
+        self.resultTable.setItem(5, 2, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.CommissureExcursion, decimals=2)))
         self.resultTable.setItem(5, 3, val)
         
         #Commisure Height Deviation
@@ -107,18 +104,18 @@ class MetricsWindow(QtWidgets.QMainWindow):
         dash = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(6, 3, dash)
         
+        #Smile Angle
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.SmileAngle, decimals=2)))
+        self.resultTable.setItem(7, 0, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.SmileAngle, decimals=2)))
+        self.resultTable.setItem(7, 1, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.SmileAngle, decimals=2)))
+        self.resultTable.setItem(7, 2, val)
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.SmileAngle, decimals=2)))
+        self.resultTable.setItem(7, 3, val)
+        
         #Upper Lip Height Deviation
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.UpperLipHeightDeviation, decimals=2)))
-        self.resultTable.setItem(7, 2, val)
-        dash = QtWidgets.QTableWidgetItem('-')
-        self.resultTable.setItem(7, 0, dash)
-        dash = QtWidgets.QTableWidgetItem('-')
-        self.resultTable.setItem(7, 1, dash)
-        dash = QtWidgets.QTableWidgetItem('-')
-        self.resultTable.setItem(7, 3, dash)
-        
-        #Lower Lip Height Deviation
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.LowerLipHeightDeviation, decimals=2)))
         self.resultTable.setItem(8, 2, val)
         dash = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(8, 0, dash)
@@ -147,19 +144,62 @@ class MetricsWindow(QtWidgets.QMainWindow):
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.DentalShowArea, decimals=2)))
         self.resultTable.setItem(10, 3, val)
         
-        #Eye Area
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.EyeArea, decimals=2)))
-        self.resultTable.setItem(11, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.EyeArea, decimals=2)))
-        self.resultTable.setItem(11, 1, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.EyeArea, decimals=2)))
+        #Lower Lip Height Deviation
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.LowerLipHeightDeviation, decimals=2)))
         self.resultTable.setItem(11, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.EyeArea, decimals=2)))
-        self.resultTable.setItem(11, 3, val)
+        dash = QtWidgets.QTableWidgetItem('-')
+        self.resultTable.setItem(11, 0, dash)
+        dash = QtWidgets.QTableWidgetItem('-')
+        self.resultTable.setItem(11, 1, dash)
+        dash = QtWidgets.QTableWidgetItem('-')
+        self.resultTable.setItem(11, 3, dash)
         
         
+        #Connecting the click button to the photos
+        self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
-        
+         
+    def get_new_selection(self, selected, deselected):
+        """This function is for when the user selects a item on the table 
+        which will show a picture of an example"""
+        for i in selected.indexes():
+            if i.row() == 0:
+                pixmap = QtGui.QPixmap('./Metrics/Brow_Height.jpg')
+                self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 1:
+                pixmap = QtGui.QPixmap('./Metrics/Marginal_Reflex_Distance_1.jpg')
+                self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 2:
+                pixmap = QtGui.QPixmap('./Metrics/Marginal_Reflex_Distance_2.jpg')
+                self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 3:
+                    pixmap = QtGui.QPixmap('./Metrics/Eye_Area.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 4:
+                    pixmap = QtGui.QPixmap('./Metrics/Nasolabial_Fold_Angle.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 5:
+                    pixmap = QtGui.QPixmap('./Metrics/Commissure_Excursion.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 6:
+                    pixmap = QtGui.QPixmap('./Metrics/Commissure_Height_Deviation.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 7:
+                    pixmap = QtGui.QPixmap('./Metrics/Smile_Angle.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 8:
+                    pixmap = QtGui.QPixmap('./Metrics/Upper_Lip_Height_Deviation.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 9:
+                    pixmap = QtGui.QPixmap('./Metrics/Dental_Show.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 10:
+                    pixmap = QtGui.QPixmap('./Metrics/Dental_Show_Area.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            elif i.row() == 11:
+                    pixmap = QtGui.QPixmap('./Metrics/Lower_Lip_Height_Deviation.jpg')
+                    self.metricsLabel.setPixmap(pixmap)
+            
         
         
         

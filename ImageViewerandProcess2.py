@@ -45,6 +45,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self._shape = None
         self._lefteye = None
         self._righteye = None
+        self._lefteye_landmarks = None
+        self._righteye_landmarks = None
         self._image = None
         #self._opencvimage = None
         self._boundingbox = None
@@ -60,12 +62,12 @@ class ImageViewer(QtWidgets.QGraphicsView):
         """Setting Parameters"""
         #Landmarks Setting
         self._landmark_size = 1 #Size of landmarks (used to make sure landmarks adjust based on num of pixels)
-        self._landmark_color = QtCore.Qt.red #Color of current landmarks
-        self._landmark_color_lower_lid = QtCore.Qt.blue #Color of default landmarks
-        self._landmark_color_lower_lips = QtCore.Qt.blue #Color of landmarks and metrics in lips
-        self._iris_color = QtCore.Qt.yellow #Color of Iris
-        self._label_color = QtCore.Qt.white #Color of numbers next to landmarks
-        self._NLF_color = QtCore.Qt.black #Color of NLF angle label
+        self._landmark_color = QtGui.QColor(QtCore.Qt.red) #Color of current landmarks
+        self._landmark_color_lower_lid = QtGui.QColor(QtCore.Qt.blue) #Color of default landmarks
+        self._landmark_color_lower_lips = QtGui.QColor(QtCore.Qt.blue) #Color of landmarks and metrics in lips
+        self._iris_color = QtGui.QColor(QtCore.Qt.green) #Color of Iris
+        self._label_color = QtGui.QColor(QtCore.Qt.white) #Color of numbers next to landmarks
+        self._NLF_color = QtGui.QColor(QtCore.Qt.black) #Color of NLF angle label
         
         #Visualization Setting
         self._IsShapeVisible = True #Tracks if user hides dots
@@ -76,7 +78,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self._AdjustingMidLine = False
         self._IsMouseOverMidLine = False
         self._IsMidLineMoving = False
-        self._midLine_color = QtCore.Qt.yellow #Color of lines in Midline
+        self._midLine_color = QtGui.QColor(QtCore.Qt.yellow) #Color of lines in Midline
         
         #These variables control actions from clicks
         self._IsPointLifted = False
@@ -307,16 +309,28 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                 elif item.rect().height() > self._landmark_size*2:
                                     if np.sqrt(((x_mousePos - self._lefteye[0])**2 + (y_mousePos - self._lefteye[1])**2)) < self._landmark_size*2:
                                         position = 'left'
-                                        temp = get_iris_manual(self._image, self._shape, position)
+                                        if self._lefteye_landmarks is None:
+                                            self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
+                                        temp_circle, temp_iris = get_iris_manual(self._image, self._shape, self._lefteye_landmarks, 
+                                                               self._landmark_size, position)
                                         new_window_opened = True
-                                        if temp is not None:
-                                            self._lefteye = temp
+                                        if temp_circle is not None and temp_iris is not None:
+                                            self._lefteye = temp_circle
+                                            self._lefteye_landmarks = temp_iris
+                                            # print('self._lefteye = ', self._lefteye,
+                                            #       'self._lefteye_landmarks = ', self._lefteye_landmarks)
                                     elif np.sqrt(((x_mousePos - self._righteye[0])**2 + (y_mousePos - self._righteye[1])**2)) < self._landmark_size*2:
                                         position = 'right'
-                                        temp = get_iris_manual(self._image, self._shape, position)
+                                        if self._righteye_landmarks is None:
+                                            self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
+                                        temp_circle, temp_iris = get_iris_manual(self._image, self._shape, self._righteye_landmarks, 
+                                                               self._landmark_size, position)
                                         new_window_opened = True
-                                        if temp is not None:
-                                            self._righteye = temp
+                                        if temp_circle is not None and temp_iris is not None:
+                                            self._righteye = temp_circle
+                                            self._righteye_landmarks = temp_iris
+                                            # print('self._righteye = ', self._righteye,
+                                            #       'self._righteye_landmarks = ', self._righteye_landmarks)
                                     self.update_shape()        
                         
                     """Following Code is "attepmting" to track any removed IDs"""
@@ -340,6 +354,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                             if any_missing:
                                 self._PointToModify = missing_IDs[0] #if multiple missing IDs, next placed will be 
                         except:
+                            print('Error in finding self._PointToModify /n')
                             print('self._shape = ', self._shape)
                 if new_window_opened != True:
                     self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
@@ -510,6 +525,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     self._lefteye[1] = y_mousePos
                     self._righteye[0] = new_right_x
                     self._righteye[1] = new_right_y
+                    self.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
                 
                 elif self._IsDragRight == True:
                     #find how much the mouse moved the eye                    
@@ -522,15 +538,17 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     self._lefteye[1] = new_left_y
                     self._righteye[0] = x_mousePos
                     self._righteye[1] = y_mousePos
+                    self.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
             elif self._BothEyesTogether == False:
                 if self._IsDragLeft == True:
                     #update the iris info
                     self._lefteye[0] = x_mousePos
                     self._lefteye[1] = y_mousePos
+                    self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
                 elif self._IsDragRight == True:
                     self._righteye[0] = x_mousePos
                     self._righteye[1] = y_mousePos
-                    
+                    self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
             self.update_shape()
         
         else:
@@ -558,18 +576,23 @@ class ImageViewer(QtWidgets.QGraphicsView):
         Ellipse = QtWidgets.QGraphicsEllipseItem(0,0,CircleInformation[2]*2,CircleInformation[2]*2)
         #Label = QtWidgets.QGraphicsSimpleTextItem(str(ID), parent=Ellipse)
         #ellipse will be colored based on ID
-        if int(ID) == 37 or (int(ID) >= 40 and int(ID) <= 43) or int(ID) == 43 or (int(ID) >= 46 and int(ID) <= 48):
-            #checks if the dot is in the lower lid of the eye
-            pen = QtGui.QPen(self._landmark_color_lower_lid)
-            brush = QtGui.QBrush(self._landmark_color_lower_lid) 
-        elif int(ID) == 61 or (int(ID) >= 65 and int(ID) <= 68):
-            #checks if the dot is in the lower inner lip
-            pen = QtGui.QPen(self._landmark_color_lower_lips)
-            brush = QtGui.QBrush(self._landmark_color_lower_lips)
+        if ID == '':
+            #checks if the point is the unmarks eye landmarks
+            pen = QtGui.QPen(self._iris_color)
+            brush = QtGui.QBrush(self._iris_color)
         else:
-            pen = QtGui.QPen(self._landmark_color)
-            brush = QtGui.QBrush(self._landmark_color) 
-            
+            if int(ID) == 37 or (int(ID) >= 40 and int(ID) <= 43) or int(ID) == 43 or (int(ID) >= 46 and int(ID) <= 48):
+                #checks if the dot is in the lower lid of the eye
+                pen = QtGui.QPen(self._landmark_color_lower_lid)
+                brush = QtGui.QBrush(self._landmark_color_lower_lid) 
+            elif int(ID) == 61 or (int(ID) >= 65 and int(ID) <= 68):
+                #checks if the dot is in the lower inner lip
+                pen = QtGui.QPen(self._landmark_color_lower_lips)
+                brush = QtGui.QBrush(self._landmark_color_lower_lips)
+            else:
+                pen = QtGui.QPen(self._landmark_color)
+                brush = QtGui.QBrush(self._landmark_color) 
+                
             
         #set the ellipse line width according to the image size
         if self._scene.height() < 1000:
@@ -627,7 +650,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
         point_1 = np.array(LineInformation[0])
         point_2 = np.array(LineInformation[1])
         Line = QtWidgets.QGraphicsLineItem(point_1[0],point_1[1],point_2[0],point_2[1])
-        pen = QtGui.QPen(self._iris_color)
+        pen = QtGui.QPen(self._midLine_color)
         #set the line width according to the image size
         if self._scene.height() < 1000:
             pen.setWidth(1)
@@ -658,11 +681,17 @@ class ImageViewer(QtWidgets.QGraphicsView):
     ##############################
     
     
-    def show_Facial_Landmarks(self, Facial_landmarks, left_eye, right_eye, boundingbox):
+    def show_Facial_Landmarks(self, Facial_landmarks, left_eye, right_eye, lefteye_landmarks, righteye_landmarks, boundingbox):
         self._shape = Facial_landmarks
         self._boundingbox = boundingbox
         self._lefteye = left_eye
         self._righteye = right_eye
+        self._lefteye_landmarks = lefteye_landmarks
+        self._righteye_landmarks = righteye_landmarks
+        # print('self._lefteye = ', self._lefteye,
+        #       '\n self._righteye = ', self._righteye,
+        #       '\n self._lefteye_landmarks = ', self._lefteye_landmarks,
+        #       '\n self._righteye_landmarks = ', self._righteye_landmarks)
         self.update_shape()
     
     
@@ -675,15 +704,29 @@ class ImageViewer(QtWidgets.QGraphicsView):
             self.update_shape()
         else:
             print('Toggle Failed')
-    
 
     
-    def show_iris(self, left_eye, right_eye):
-        self._lefteye = left_eye
-        self._righteye = right_eye
+    def show_iris(self):
         self.draw_circle(self._lefteye)
         self.draw_circle(self._righteye)
-    
+        # self.draw_dot(self._lefteye, '')
+        # self.draw_dot(self._righteye, '')
+        
+    def show_iris_landmarks(self, lefteye_landmarks, righteye_landmarks):
+        """This function is to display dots that represent the landmarks 
+        of the eyes found in the eye model"""
+        self._lefteye_landmarks = lefteye_landmarks
+        self._righteye_landmarks = righteye_landmarks
+        #Since the landmarks should be the same size, only one for loop needs to be used
+        try:
+            if self._lefteye_landmarks != [0, 0, 0, 0, 0] and self._righteye_landmarks != [0, 0, 0, 0, 0]:
+                for i in range(5):
+                    left_point = [self._lefteye_landmarks[i,0], self._lefteye_landmarks[i,1], 1]
+                    right_point = [self._righteye_landmarks[i,0], self._righteye_landmarks[i,1], 1]
+                    self.draw_dot(left_point, '')
+                    self.draw_dot(right_point, '')
+        except:
+            print('Error in show_iris_landmarks')
         
     def toggle_midLine(self):
         if self._IsMidLineVisible == False and self._points == None:
@@ -752,11 +795,57 @@ class ImageViewer(QtWidgets.QGraphicsView):
     
     def matchEyesRtoL(self):
         self._lefteye[2] = self._righteye[2]
+        self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
         self.update_shape()
     
     def matchEyesLtoR(self):
         self._righteye[2] = self._lefteye[2]
+        self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
         self.update_shape()
+    
+    
+    def normalize_eye_landmarks(self, normalize_left=True, normalize_right=True):
+        """The following is adjusting the eye landmarks to match the new eye location"""
+        if self._lefteye_landmarks is None:
+            self._lefteye_landmarks = np.array([[0,0],[0,0],[0,0],[0,0],[0,0]])
+            
+        if self._righteye_landmarks is None:
+            self._righteye_landmarks = np.array([[0,0],[0,0],[0,0],[0,0],[0,0]])
+            
+        
+        if normalize_left == True:
+            #Point 0: Center
+            self._lefteye_landmarks[0,0] = self._lefteye[0]
+            self._lefteye_landmarks[0,1] = self._lefteye[1]
+            #Point 1: Right or "East" Point (x_center + radius, y_center)
+            self._lefteye_landmarks[1,0] = self._lefteye[0] + self._lefteye[2]
+            self._lefteye_landmarks[1,1] = self._lefteye[1]
+            #Point 2: Above or "North" Point (x_center, y_center - radius)
+            self._lefteye_landmarks[2,0] = self._lefteye[0] 
+            self._lefteye_landmarks[2,1] = self._lefteye[1] - self._lefteye[2] #Since y increases as it goes down the radius is subtracted not added
+            #Point 3: Right or "East" Point (x_center - radius, y_center)
+            self._lefteye_landmarks[3,0] = self._lefteye[0] - self._lefteye[2]
+            self._lefteye_landmarks[3,1] = self._lefteye[1]
+            #Point 4: Right or "East" Point (x_center, y_center + radius)
+            self._lefteye_landmarks[4,0] = self._lefteye[0] 
+            self._lefteye_landmarks[4,1] = self._lefteye[1] + self._lefteye[2]
+            
+        if normalize_right == True:
+            #Point 0: Center
+            self._righteye_landmarks[0,0] = self._righteye[0]
+            self._righteye_landmarks[0,1] = self._righteye[1]
+            #Point 1: Right or "East" Point (x_center + radius, y_center)
+            self._righteye_landmarks[1,0] = self._righteye[0] + self._righteye[2]
+            self._righteye_landmarks[1,1] = self._righteye[1]
+            #Point 2: Above or "North" Point (x_center, y_center - radius)
+            self._righteye_landmarks[2,0] = self._righteye[0] 
+            self._righteye_landmarks[2,1] = self._righteye[1] - self._righteye[2] #Since y increases as it goes down the radius is subtracted not added
+            #Point 3: Right or "East" Point (x_center - radius, y_center)
+            self._righteye_landmarks[3,0] = self._righteye[0] - self._righteye[2]
+            self._righteye_landmarks[3,1] = self._righteye[1]
+            #Point 4: Right or "East" Point (x_center, y_center + radius)
+            self._righteye_landmarks[4,0] = self._righteye[0] 
+            self._righteye_landmarks[4,1] = self._righteye[1] + self._righteye[2]
     
     
     def toggle_adjustingMidLine(self):
@@ -765,6 +854,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
             
         elif self._AdjustingMidLine == False:
             self._AdjustingMidLine = True
+            self._IsMidLineVisible = True
+            self.update_shape()
             
         else:
             pass
@@ -831,7 +922,12 @@ class ImageViewer(QtWidgets.QGraphicsView):
             
         self._points = [(x_1,y_1), (x_2,y_2), (x_m_new, y_m_new), (x_p1_new ,y_p1_new), (x_m_new, y_m_new), (x_p2_new, y_p2_new)]
         self.update_midLine()   
-
+        
+        
+    def reset_midline(self):
+        self._points = estimate_lines(self._image, self._lefteye, self._righteye)
+        self.update_shape()
+        
 
     def toggle_add_dots(self):
         if self._AddLandmarks == False:
@@ -863,17 +959,17 @@ class ImageViewer(QtWidgets.QGraphicsView):
     def update_shape(self):
         self.remove_dots()
         self.remove_lines()
-        # self._numPoints = len(self._shape)
         try:
             for i in range(len(self._shape)):
                 point = [self._shape[i,0], self._shape[i,1], 1]
                 self.draw_dot(point, int(self._shape.numpy()[i,2]))
             if self._lefteye != None and self._righteye != None:
-                self.show_iris(self._lefteye, self._righteye)
+                self.show_iris()
+                # self.show_iris_landmarks(self._lefteye_landmarks, self._righteye_landmarks)
             self.update_visualization() 
         except:
-            print('Shape does not exist')
-            print('self._shape = ', self._shape)
+            print('Error in update_shape')
+            # print('self._shape = ', self._shape)
     
             
     def update_visualization(self):
@@ -901,7 +997,6 @@ class ImageViewer(QtWidgets.QGraphicsView):
 
 
     def remove_dots(self):
-        # self._numPoints = 68
         for item in self._scene.items():
             if isinstance(item, QtWidgets.QGraphicsEllipseItem):
                 self._scene.removeItem(item)
