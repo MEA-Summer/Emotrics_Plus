@@ -14,7 +14,7 @@ from Metrics import get_measurements_from_data
 
 class MetricsWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, file_name):
+    def __init__(self, shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, reference_side, file_name):
         super(MetricsWindow, self) .__init__()
         self._shape = shape
         self._lefteye = left_pupil
@@ -22,16 +22,17 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self._points = points
         self._CalibrationType = CalibrationType
         self._CalibrationValue = CalibrationValue
+        self._reference_side = reference_side
         self._fileName = file_name
         
         self.initUI()
         
         
     def initUI(self):
-        self.ui = uic.loadUi('uis/single_metrics.ui', self)
+        self.ui = uic.loadUi('uis/single_metrics(test).ui', self)
         
         #Measurements
-        MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self._shape, self._lefteye, self._righteye, self._points, self._CalibrationType, self._CalibrationValue)
+        MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self._shape, self._lefteye, self._righteye, self._points, self._CalibrationType, self._CalibrationValue, self._reference_side)
         
         
         #Brow Height
@@ -125,23 +126,23 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(8, 3, dash)
         
         #Dental Show
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.DentalShow, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.InterlabialDistance, decimals=2)))
         self.resultTable.setItem(9, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.DentalShow, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.InterlabialDistance, decimals=2)))
         self.resultTable.setItem(9, 1, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.DentalShow, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.InterlabialDistance, decimals=2)))
         self.resultTable.setItem(9, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.DentalShow, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.InterlabialDistance, decimals=2)))
         self.resultTable.setItem(9, 3, val)
         
         #Dental Show Area
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.DentalShowArea, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsRight.InterlabialArea_of_the_Hemiface, decimals=2)))
         self.resultTable.setItem(10, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.DentalShowArea, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsLeft.InterlabialArea_of_the_Hemiface, decimals=2)))
         self.resultTable.setItem(10, 1, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.DentalShowArea, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.InterlabialArea_of_the_Hemiface, decimals=2)))
         self.resultTable.setItem(10, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.DentalShowArea, decimals=2)))
+        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.InterlabialArea_of_the_Hemiface, decimals=2)))
         self.resultTable.setItem(10, 3, val)
         
         #Lower Lip Height Deviation
@@ -154,8 +155,17 @@ class MetricsWindow(QtWidgets.QMainWindow):
         dash = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(11, 3, dash)
         
+        #Set up Column headers to show which side is which
+        if self._reference_side == 'Left':
+            self.columnHeader1.setText('Queried\n(Right)')
+            self.columnHeader2.setText('Reference\n(Left)')
+        elif self._reference_side == 'Right':
+            self.columnHeader1.setText('Reference\n(Right)')
+            self.columnHeader2.setText('Queried\n(Left)')
         
-        #Connecting the click button to the photos
+        #Connecting the selection method to the show the example photos
+        pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
+        self.metricsLabel.setPixmap(pixmap)
         self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
          

@@ -110,9 +110,10 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         #Previous Button
         self.previousButton.clicked.connect(self.previous)
         
+        #Reference Side button
+        self.referenceSideLeftButton.toggled.connect(self.leftSideSelected)
+        self.referenceSideRightButton.toggled.connect(self.rightSideSelected)
         #Tab 1: Main
-        
-        
         #Measurements
         
         #Button 1.1.1: Measurements
@@ -129,16 +130,16 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         
         #Save
         
-        #Button 1.3.1: Save Dots
+        #Button 1.3.2: Save Dots
         self.saveDotsButton.clicked.connect(self.save_results)
 
         
         #Tab 2:Settings
-        
         #Iris Settings
+        
         #Button 2.1.2: Match Eyes Right to Left
         self.matchEyesRtoLButton.clicked.connect(self.displayImage.matchEyesRtoL)
-        #Button 2.1.2: Match Eyes Left to Right
+        #Button 2.1.3: Match Eyes Left to Right
         self.matchEyesLtoRButton.clicked.connect(self.displayImage.matchEyesLtoR)
         
         #Landmark Settings
@@ -153,21 +154,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self.adjustMidlineButton.clicked.connect(self.displayImage.toggle_adjustingMidLine)
         #Button 2.2.5: Reset Midline 
         self.resetMidlineButton.clicked.connect(self.displayImage.reset_midline)
-        #Combo Box 2.2.4: Model ComboBox
-        # self.modelComboBox.addItem('FAN_MEEE')
-        # self.modelComboBox.addItem('FAN')
-        # self.modelComboBox.addItem('HRNet')
-        # self.modelComboBox.addItem('NLF_model')
-        # self.modelComboBox.activated[str].connect(self.changeModel)
-        # #Button 2.2.5: Landmark Color Button and Label
-        # self.landmarkColorButton.clicked.connect(self.changeDefaultColor)
-        # self.landmarkColorLabel.setStyleSheet('QWidget {background-color:rgb(255,0,0)}' )
-        # #Button 2.2.6: Landmark Color Button 2 and Label 2
-        # self.landmarkColorButton2.clicked.connect(self.changeSecondaryColor)
-        # self.landmarkColorLabel2.setStyleSheet('QWidget {background-color:rgb(0,0,255)}')
-        # #Button 2.2.7: Landmark Size Spin Box 
-        # self.landmarkSizeBox.setValue(self.displayImage._landmark_size)
-        # self.landmarkSizeBox.valueChanged.connect(self.changeLandmarkSize)
+        
         
         
         
@@ -271,7 +258,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 self.displayImage.toggle_midLine()
                 self.displayImage.toggle_midLine()
             #say to the window that presents the results that there is only 1 tab
-            self._new_window = MetricsWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self._file_name)
+            self._new_window = MetricsWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name)
             #show the window with the results 
             self._new_window.show()
         else:
@@ -293,6 +280,12 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self.landmarks.finished.connect(self.displayImage.reset_save_variables)
     
     
+    def leftSideSelected(self):
+        self.displayImage._reference_side = 'Left'
+    
+    def rightSideSelected(self):
+        self.displayImage._reference_side = 'Right'
+        
     def landmark_Setting(self):
         """This function opens a window for the landmark setting"""
         self.landmark_Setting_window = LandmarkSettingsWindow(self.Modelname, self.displayImage._landmark_color, self.displayImage._landmark_color_lower_lid,
