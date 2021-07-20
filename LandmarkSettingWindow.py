@@ -42,6 +42,9 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
         self.modelComboBox.setCurrentText(self._Model_name)
         self.modelComboBox.activated[str].connect(self.changeModelname)
         
+        #Set landmark size to current size
+        self.landmarkSizeSpinBox.setValue(int(self._landmark_size))
+        
         #Connect Buttons
         self.landmark1ColorButton.clicked.connect(self.get_Landmark1Color)
         self.landmark2ColorButton.clicked.connect(self.get_Landmark2Color)

@@ -16,10 +16,10 @@ from PyQt5 import QtGui
 from arch.FAN import FAN
 from arch.resnest.HeatMaps import model_resnest
 from ImageViewerandProcess2 import ImageViewer
-from LandmarkSetting1 import ShowSettings
+from Misc.LandmarkSetting1 import ShowSettings
 from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
-from Results_Window import ShowResults, CustomTabResult 
+from Misc.Results_Window import ShowResults, CustomTabResult 
 from Metrics import get_measurements_from_data
 from arch.mode_NLF import HeadBlock
 from arch.MobileNetV2 import mobilenet_v2

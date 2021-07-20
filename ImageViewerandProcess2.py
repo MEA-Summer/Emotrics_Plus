@@ -219,7 +219,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
             
             if event.button() == QtCore.Qt.RightButton:
                 if self._IsMidLineVisible == True:
-                    print('Checking if Mouse is over Midline')
+                    # print('Checking if Mouse is over Midline')
                     if self._IsMouseOverMidLine == True:
                         print('Moving Midline')
                         self._IsMidLineMoving = True
@@ -318,6 +318,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                         if temp_circle is not None and temp_iris is not None:
                                             self._lefteye = temp_circle
                                             self._lefteye_landmarks = temp_iris
+                                            self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
                                             # print('self._lefteye = ', self._lefteye,
                                             #       'self._lefteye_landmarks = ', self._lefteye_landmarks)
                                     elif np.sqrt(((x_mousePos - self._righteye[0])**2 + (y_mousePos - self._righteye[1])**2)) < self._landmark_size*2:
@@ -330,6 +331,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                         if temp_circle is not None and temp_iris is not None:
                                             self._righteye = temp_circle
                                             self._righteye_landmarks = temp_iris
+                                            self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
                                             # print('self._righteye = ', self._righteye,
                                             #       'self._righteye_landmarks = ', self._righteye_landmarks)
                                     self.update_shape()        
@@ -527,6 +529,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     self._righteye[0] = new_right_x
                     self._righteye[1] = new_right_y
                     self.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
+                    self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
+                    self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
                 
                 elif self._IsDragRight == True:
                     #find how much the mouse moved the eye                    
@@ -540,16 +544,20 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     self._righteye[0] = x_mousePos
                     self._righteye[1] = y_mousePos
                     self.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
+                    self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
+                    self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
             elif self._BothEyesTogether == False:
                 if self._IsDragLeft == True:
                     #update the iris info
                     self._lefteye[0] = x_mousePos
                     self._lefteye[1] = y_mousePos
                     self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
+                    self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
                 elif self._IsDragRight == True:
                     self._righteye[0] = x_mousePos
                     self._righteye[1] = y_mousePos
                     self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
+                    self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
             self.update_shape()
         
         else:

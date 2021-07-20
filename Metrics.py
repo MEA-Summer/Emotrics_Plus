@@ -31,6 +31,29 @@ def estimate_line(circle_left, circle_right):
     return m, points
 
 
+def find_rot_angle_and_center(points):
+    """This function take the midline and finds the 
+    rot_angle and the center. This is in replacement of the function estimate_line
+    which does the same thing but the values are for the originally calculated midline
+    and not the user adjusted one"""
+    
+    center_x, center_y = points[2]
+    center = [center_x, center_y] #this is to make sure it is a list and not tupule
+    top_point = points[3]
+    bottom_point = points[5]
+    
+    x_1, y_1 = top_point
+    x_2, y_2 = bottom_point
+    if (x_2-x_1) == 0:
+        rot_angle = 0
+    else:
+        m=(y_2-y_1)/(x_2-x_1)
+        rot_angle = np.arctan(m) - np.pi/2 #finds the angle of the line perpendicular to midline
+        if rot_angle < -np.pi/2:
+            rot_angle = rot_angle + np.pi #This makes sure the value is between pi/2 and - pi/2
+    return rot_angle, center
+    
+    
 def estimate_lines(InputImage,circle_left, circle_right):
     #function to estimate the line that connects the center of the eyes and a 
     #new, perpendicular line in the middle
@@ -132,8 +155,6 @@ def find_angle(Ax, Ay, Bx, By, Cx, Cy):
 def find_NLF(shape, points):
     right_NLF = shape[68:72]
     left_NLF = shape[72:76]
-    # print(right_NLF)
-    # print(left_NLF)
     right_NLF_x = None
     right_NLF_y = None
     left_NLF_x = None
@@ -155,49 +176,76 @@ def find_NLF(shape, points):
             left_NLF_x = np.append(left_NLF_x, float(x))
             left_NLF_y = np.append(left_NLF_y, float(y))        
         
-    # print('right_NLF_x = ', right_NLF_x)
-    # print('right_NLF_y = ', right_NLF_y)
-    # print('left_NLF_x = ', right_NLF_x)
-    # print('left_NLF_y = ', right_NLF_y)
-    """Find Line of Best Fit"""
-    m_right, b_right = np.polyfit(right_NLF_x, right_NLF_y, 1)
-    m_left, b_left = np.polyfit(left_NLF_x, left_NLF_y, 1)
-    
-    """Finding 2 point to draw"""
-    #Right
-    x1_right = right_NLF_x[0]
-    y1_right = m_right*x1_right + b_right
-    x2_right = right_NLF_x[-1]
-    y2_right = m_right*x2_right + b_right
-    #Left
-    x1_left = left_NLF_x[0]
-    y1_left = m_left*x1_left + b_left
-    x2_left = left_NLF_x[-1]
-    y2_left = m_left*x2_left + b_left
     
     #Finding Midline
     (mid1_x, mid1_y) = points[3]
     (mid2_x, mid2_y) = points[5]
     
     L_mid = line([mid1_x, mid1_y], [mid2_x, mid2_y])
-
-    #Find Intersection point
-    L_right = line([x1_right, y1_right], [x2_right, y2_right])
-    L_left = line([x1_left, y1_left], [x2_left, y2_left])
     
-    try:
-        (x_R_right, y_R_right) = intersection(L_right, L_mid)
-        angle_right = find_angle(x1_right, y1_right, x_R_right, y_R_right, mid1_x, mid1_y)
-    except:
+    #Checks if NLF was found by checking left of the line 
+    #and comparing it to the length of the eye
+    x1_eye, y1_eye, _ = shape[36]
+    x2_eye, y2_eye, _ = shape[39]
+    x1_right = right_NLF_x[0]
+    y1_right = right_NLF_y[0]
+    x2_right = right_NLF_x[-1]
+    y2_right = right_NLF_y[-1]
+    x1_left = left_NLF_x[0]
+    y1_left = left_NLF_y[0]
+    x2_left = left_NLF_x[-1]
+    y2_left = left_NLF_y[-1]
+    len_eye = np.sqrt((x1_eye-x2_eye)**2 + (y1_eye-y2_eye)**2)
+    NLF_right_len = np.sqrt((x1_right-x2_right)**2 + (y1_right-y2_right)**2)
+    NLF_left_len = np.sqrt((x1_left-x2_left)**2 + (y1_left-y2_left)**2)
+    
+    if NLF_right_len < len_eye/2:
+        # print('Left NLF not larger enough, therefore NLF was not found')
         (x_R_right, y_R_right) = (0,0)
         angle_right = 0
+    else:
+        """Find Line of Best Fit"""
+        m_right, b_right = np.polyfit(right_NLF_x, right_NLF_y, 1)
+        """Finding 2 point to draw"""
+        #Right
+        x1_right = right_NLF_x[0]
+        y1_right = m_right*x1_right + b_right
+        x2_right = right_NLF_x[-1]
+        y2_right = m_right*x2_right + b_right
+        #Find Intersection point
+        L_right = line([x1_right, y1_right], [x2_right, y2_right])
+        R_right = intersection(L_right, L_mid)   
+        if R_right == False:
+            print('No intersection found on right')
+            (x_R_right, y_R_right) = (0,0)
+            angle_right = 0
+        else:
+            (x_R_right, y_R_right) = R_right
+            angle_right = find_angle(x1_right, y1_right, x_R_right, y_R_right, mid1_x, mid1_y)
         
-    try:
-        (x_R_left, y_R_left) = intersection(L_left, L_mid)
-        angle_left = find_angle(x1_left, y1_left, x_R_left, y_R_left, mid1_x, mid1_y)
-    except:
+    if NLF_left_len < len_eye/2:
+        # print('Left NLF not larger enough, therefore NLF was not found')
         (x_R_left, y_R_left) = (0,0)
         angle_left = 0
+    else:
+        """Find Line of Best Fit"""
+        m_left, b_left = np.polyfit(left_NLF_x, left_NLF_y, 1)
+        """Finding 2 point to draw"""
+        #Left
+        x1_left = left_NLF_x[0]
+        y1_left = m_left*x1_left + b_left
+        x2_left = left_NLF_x[-1]
+        y2_left = m_left*x2_left + b_left
+        #Find Intersection point
+        L_left = line([x1_left, y1_left], [x2_left, y2_left])
+        R_left = intersection(L_left, L_mid)
+        if R_left == False:
+            print('No intersection found on left')
+            (x_R_left, y_R_left) = (0,0)
+            angle_left = 0
+        else:
+            (x_R_left, y_R_left) = R_left
+            angle_left = find_angle(x1_left, y1_left, x_R_left, y_R_left, mid1_x, mid1_y)
     
     if angle_right >= 80:
         (x_R_right, y_R_right) = (0,0)
@@ -306,35 +354,12 @@ def find_point_in_lips(points_upper, points_lower, points_upper_inside,
     
     #compute mouth openness and teeth show
     openness = new_rot_y
-    theet_show = cross_lip_rot_y_lower_inside-cross_lip_rot_y_upper_inside
-    if theet_show < 0:
-        theet_show = 0
+    teeth_show = cross_lip_rot_y_lower_inside-cross_lip_rot_y_upper_inside
+    if teeth_show < 0:
+        teeth_show = 0
 
     
-    return new_point_upper, new_point_lower, new_point_upper_inside, new_point_lower_inside, openness, theet_show
-
-def rotate_xy(x, y, rot_angle):
-    """This function finds the new x and y arrays if the x and y axis are rotated.
-       Additional Note: This function assumes that the first point is (0,0)"""
-    
-    """First convert points to magnitudes and angles"""
-    mags = mag(x, y)
-    theta = np.arctan(y/x)
-    new_theta = theta + rot_angle
-    new_x = mags*np.cos(new_theta)
-    new_y = mags*np.sin(new_theta)
-    
-    new_x[0] = 0
-    new_y[0] = 0
-    
-    #Test Line:
-    # print('mags =', mags, '\n',
-        # 'theta =', theta, '\n',
-        # 'new_theta = ', new_theta, '\n')
-        
-    return new_x, new_y
-
-
+    return new_point_upper, new_point_lower, new_point_upper_inside, new_point_lower_inside, openness, teeth_show
 
     
 def mouth_measures(center, commissure, rot_angle):
@@ -368,8 +393,8 @@ def deviation(pt1, pt2, center, rot_angle):
     x1_rot, y1_rot = rot_matrix.dot([x1-center[0], y1-center[1]])
     x2_rot, y2_rot = rot_matrix.dot([x2-center[0], y2-center[1]])
     distance = abs(y1_rot-y2_rot)
-
-    return distance 
+    
+    return y1_rot, y2_rot, distance 
 
 def find_mid_point_lips(corner_left, corner_right, center, rot_angle):
     x1=corner_left[0]
@@ -506,13 +531,101 @@ def area_inside_eye(points_upper, points_lower, rot_angle, center):
     area = np.trapz(vals_y_lower-vals_y_upper, vals_x_upper)
 
     return area
-        
+
+
+def upper_lip_slope(points_upper, rot_angle, center):
+
+    rot_matrix=np.array([[np.cos(rot_angle), np.sin(rot_angle)],
+                    [-np.sin(rot_angle), np.cos(rot_angle)]])
+
+    x_upper=points_upper[:,0]
+    y_upper=points_upper[:,1]
+
+    rot_x_upper,rot_y_upper=rot_matrix.dot([x_upper-center[0],y_upper-center[1]])
+
+    spline = UnivariateSpline(rot_x_upper,rot_y_upper, s=1)
+    vals_x_upper = np.linspace(rot_x_upper.min(), rot_x_upper.max(), 100, endpoint=True)
+
+    #To find where the midline intersects the spline
+    intersect_x = np.argmin(np.abs(vals_x_upper)) 
+    intersect_y = spline(intersect_x)
     
+    right_commissure_x = rot_x_upper[0]
+    right_commissure_y = rot_y_upper[0]
+    left_commissure_x = rot_x_upper[-1]
+    left_commissure_y = rot_y_upper[-1]
+
+    slope_right = find_angle(right_commissure_x, right_commissure_y,
+                             intersect_x, intersect_y,
+                             right_commissure_x, intersect_y)
+    slope_left = find_angle(left_commissure_x, left_commissure_y,
+                             intersect_x, intersect_y,
+                             left_commissure_x, intersect_y)
+    if right_commissure_y < intersect_y:
+        slope_right = -slope_right #make sure that if the commissure is above the intersect the angle is negative
+    if left_commissure_y < intersect_y:
+        slope_left = -slope_left #make sure that if the commissure is above the intersect the angle is negative
+    
+    return  slope_right, slope_left   
+
+
+def commissure_height(points_upper, rot_angle, center):
+
+    rot_matrix=np.array([[np.cos(rot_angle), np.sin(rot_angle)],
+                    [-np.sin(rot_angle), np.cos(rot_angle)]])
+
+    x_upper=points_upper[:,0]
+    y_upper=points_upper[:,1]
+
+    rot_x_upper,rot_y_upper=rot_matrix.dot([x_upper-center[0],y_upper-center[1]])
+
+    spline = UnivariateSpline(rot_x_upper,rot_y_upper, s=1)
+    vals_x_upper = np.linspace(rot_x_upper.min(), rot_x_upper.max(), 100, endpoint=True)
+
+    #To find where the midline intersects the spline
+    intersect_x = np.argmin(np.abs(vals_x_upper)) 
+    intersect_y = spline(intersect_x)
+    
+    right_commissure_y = rot_y_upper[0]
+    left_commissure_y = rot_y_upper[-1]
+
+    commissure_height_right = right_commissure_y - intersect_y 
+    commissure_height_left = left_commissure_y - intersect_y
+    difference = abs(commissure_height_right - commissure_height_left)
+
+    return  commissure_height_right, commissure_height_left, difference   
+
+
+def lower_Lip_Height(new_point_lower_inside_right, new_point_lower_inside_left, points_jaw, rot_angle, center):
+    low_lipper_right_top_x = new_point_lower_inside_right[0]
+    low_lipper_left_top_x = new_point_lower_inside_left[0]
+    
+    low_lipper_right_top_y = new_point_lower_inside_right[1]
+    low_lipper_left_top_y = new_point_lower_inside_left[1]
+    
+    #Jaw spline
+    x_lower_jaw = points_jaw[:,0]
+    y_lower_jaw = points_jaw[:,1]
+
+    spline_jaw = UnivariateSpline(x_lower_jaw, y_lower_jaw, s=1)
+
+    right_lip_height_bottom_y = spline_jaw(low_lipper_right_top_x)
+    left_lip_height_bottom_y = spline_jaw(low_lipper_left_top_x)
+    
+    lower_lip_height_right = abs(right_lip_height_bottom_y - low_lipper_right_top_y)
+    lower_lip_height_left = abs(left_lip_height_bottom_y - low_lipper_left_top_y)
+    difference = abs(lower_lip_height_right - lower_lip_height_left)
+    
+    return lower_lip_height_right, lower_lip_height_left, difference
+
+
 class FaceMeasurementsSide(object):
     
     def __init__(self):        
-        self.CommissureExcursion = 0 
-        self.SmileAngle = 0
+        self.CommissurePosition = 0 
+        self.CommisureHeight = 0
+        self.SmileAngle = 0 
+        self.UpperLipSlope = 0 #Needs to implemented
         self.MarginalReflexDistance1 = 0
         self.MarginalReflexDistance2 = 0 
         self.BrowHeight = 0 
@@ -521,16 +634,18 @@ class FaceMeasurementsSide(object):
         self.NLF_angle = 0
         self.InterlabialArea_of_the_Hemiface = 0
         self.EyeArea = 0
+        self.LowerLipHeight = 0 #Needs to implemented
         
 class FaceMeasurementsDeviation(object):
     
     def __init__(self):
-        self.CommisureHeightDeviation = 0
-        self.UpperLipHeightDeviation = 0
-        self.LowerLipHeightDeviation = 0
+        self.CommisureHeight = 0
+        self.UpperLipHeightDeviation = 0 #No longer used
+        self.LowerLipHeightDeviation = 0 #No longer used
         
-        self.CommissureExcursion = 0 
-        self.SmileAngle = 0
+        self.CommissurePosition = 0 
+        self.SmileAngle = 0 
+        self.UpperLipSlope = 0 #Needs to implemented
         self.MarginalReflexDistance1 = 0
         self.MarginalReflexDistance2 = 0 
         self.BrowHeight = 0 
@@ -539,6 +654,7 @@ class FaceMeasurementsDeviation(object):
         self.NLF_angle = 0
         self.InterlabialArea_of_the_Hemiface = 0
         self.EyeArea = 0
+        self.LowerLipHeight = 0 #Needs to implemented
 
 def get_measurements_from_data(shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, reference_side):
     
@@ -556,15 +672,20 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     ResultsLeft.NLF_angle = NLF_angles[1]
     ResultsDeviation.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])
     
+    rot_angle, center = find_rot_angle_and_center(points)
+    # #Testing new rot_angle mether
+    # print('rot_angle = ', rot_angle, '\n', 'center = ', center)
+    # slope, center = estimate_line(left_pupil, right_pupil)
+    # rot_angle=np.arctan(slope)
+    # print('rot_angle = ', rot_angle, '\n', 'center = ', center)
     
-    slope, center = estimate_line(left_pupil, right_pupil)
+    #Test
+    points_upper = shape[49:55,:]
+    ResultsRight.UpperLipSlope, ResultsLeft.UpperLipSlope = upper_lip_slope(points_upper, rot_angle, center)
+    ResultsDeviation.UpperLipSlope = abs(ResultsRight.UpperLipSlope - ResultsLeft.UpperLipSlope)
     
-    rot_angle=np.arctan(slope)
+    
     #Areas
-    slope, center = estimate_line(left_pupil, right_pupil)
-    rot_angle=np.arctan(slope)
-    
-    
     points_lower_innerlip = shape[[60,67,66,65,64],:]
     points_upper_innerlip = shape[60:65,:]
     area_right, area_left = area_inside_mouth(points_upper_innerlip, points_lower_innerlip, rot_angle, center)
@@ -608,7 +729,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     comm_exc_left, smile_angle_left, _ = mouth_measures(cross_lowerlip, shape[54], rot_angle)
     
-    ResultsLeft.CommissureExcursion = comm_exc_left
+    ResultsLeft.CommissurePosition = comm_exc_left
     if cross_lowerlip[1] >= shape[54,1]:
         ResultsLeft.SmileAngle = 90 + smile_angle_left
     else:
@@ -617,7 +738,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     comm_exc_right, smile_angle_right, _ = mouth_measures(cross_lowerlip, shape[48], rot_angle)
     
-    ResultsRight.CommissureExcursion = comm_exc_right
+    ResultsRight.CommissurePosition = comm_exc_right
     
     if cross_lowerlip[1] >= shape[48,1]:
         ResultsRight.SmileAngle = 90 + smile_angle_right
@@ -625,8 +746,12 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
         ResultsRight.SmileAngle = 90 + smile_angle_right
     #ResultsRight.CommissureHeight = comm_height_right
     
-    ResultsDeviation.CommisureHeightDeviation = deviation(shape[48],shape[54],center,rot_angle)
-    
+    # #Testing new commissure height method
+    # ResultsRight.CommisureHeight, ResultsLeft.CommisureHeight, ResultsDeviation.CommisureHeight = deviation(shape[48],shape[54],center,rot_angle)
+    # print('ResultsDeviation.CommisureHeight = ', ResultsDeviation.CommisureHeight, '\n')
+    points_upper = shape[49:55,:]
+    ResultsRight.CommisureHeight, ResultsLeft.CommisureHeight, ResultsDeviation.CommisureHeight = commissure_height(points_upper, rot_angle, center)
+    # print('ResultsDeviation.CommisureHeight = ', ResultsDeviation.CommisureHeight, '\n')
     
     #lower lip - inside
     x1_lowerlip_inside=shape[60,0]
@@ -655,7 +780,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     (new_point_upper_left, new_point_lower_left, new_point_upper_inside_left, 
      new_point_lower_inside_left, openness_left, 
-     theet_show_left) = find_point_in_lips(
+     teeth_show_left) = find_point_in_lips(
             np.column_stack((x1_upperlip,y1_upperlip)), 
             np.column_stack((x1_lowerlip,y1_lowerlip)), 
             np.column_stack((x1_upperlip_inside,y1_upperlip_inside)),
@@ -664,14 +789,14 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
             shape[54], 
             distance_left)
     
-    ResultsLeft.InterlabialDistance = theet_show_left   
+    ResultsLeft.InterlabialDistance = teeth_show_left   
     #_ , _ , ResultsLeft.UpperVermillionHeight = mouth_measures(cross_lowerlip, new_point_upper_left, rot_angle)
     #_ , _ , ResultsLeft.LowerVermillionHeight = mouth_measures(cross_lowerlip, new_point_lower_left, rot_angle)
     
     #point of contact with mouth and teeth show - right
     (new_point_upper_right, new_point_lower_right, new_point_upper_inside_right, 
      new_point_lower_inside_right, openness_right, 
-     theet_show_right) = find_point_in_lips(
+     teeth_show_right) = find_point_in_lips(
             np.column_stack((x1_upperlip,y1_upperlip)), 
             np.column_stack((x1_lowerlip,y1_lowerlip)), 
             np.column_stack((x1_upperlip_inside,y1_upperlip_inside)),
@@ -680,14 +805,20 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
             shape[48], 
             distance_right)
     
-    ResultsRight.InterlabialDistance = theet_show_right
+    ResultsRight.InterlabialDistance = teeth_show_right
     #_ , _ , ResultsRight.UpperVermillionHeight = mouth_measures(cross_lowerlip, new_point_upper_right, rot_angle)
     #_ , _ , ResultsRight.LowerVermillionHeight = mouth_measures(cross_lowerlip, new_point_lower_right, rot_angle)
     
-    ResultsDeviation.UpperLipHeightDeviation= deviation(new_point_upper_left,new_point_upper_right,center,rot_angle)
-    ResultsDeviation.LowerLipHeightDeviation= deviation(new_point_lower_left,new_point_lower_right,center,rot_angle)
+    _, _, ResultsDeviation.UpperLipHeightDeviation= deviation(new_point_upper_left,new_point_upper_right,center,rot_angle)
+    _, _, ResultsDeviation.LowerLipHeightDeviation= deviation(new_point_lower_left,new_point_lower_right,center,rot_angle)
 
-    
+    #Commissure Height (new method)
+    points_jaw = shape[5:12,:]
+    (ResultsRight.LowerLipHeight, ResultsLeft.LowerLipHeight, 
+     ResultsDeviation.LowerLipHeight) = lower_Lip_Height(new_point_lower_inside_right, 
+                                                         new_point_lower_inside_left, 
+                                                         points_jaw, rot_angle, center)
+
     #upper lid - left
     x1_upperlid_left=shape[42:46,0]
     y1_upperlid_left=shape[42:46,1]
@@ -705,7 +836,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     _ , _ , ResultsLeft.MarginalReflexDistance2 = mouth_measures(left_pupil[0:2], cross_lowerlid_left, rot_angle)
     
     
-    #brown- left
+    #brow- left
     x1_brown_left=shape[22:27,0]
     y1_brown_left=shape[22:27,1]
     cross_brown_left=rotate_axis(np.column_stack((x1_brown_left,y1_brown_left)),rot_angle,np.array([left_pupil[0],left_pupil[1]]))
@@ -731,7 +862,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     _ , _ , ResultsRight.MarginalReflexDistance2 = mouth_measures(right_pupil[0:2], cross_lowerlid_right, rot_angle)
     
     
-    #brown- right
+    #brow- right
     x1_brow_right=shape[17:22,0]
     y1_brow_right=shape[17:22,1]
     cross_brow_right=rotate_axis(np.column_stack((x1_brow_right,y1_brow_right)),rot_angle,np.array([right_pupil[0],right_pupil[1]]))
@@ -752,40 +883,45 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     
     
-    ResultsLeft.CommissureExcursion = ResultsLeft.CommissureExcursion*Calibration
+    ResultsLeft.CommissurePosition = ResultsLeft.CommissurePosition*Calibration
+    ResultsLeft.CommisureHeight = ResultsLeft.CommisureHeight*Calibration
     ResultsLeft.InterlabialDistance = ResultsLeft.InterlabialDistance*Calibration
     ResultsLeft.MarginalReflexDistance1 = ResultsLeft.MarginalReflexDistance1*Calibration
     ResultsLeft.MarginalReflexDistance2 = ResultsLeft.MarginalReflexDistance2*Calibration
     ResultsLeft.BrowHeight = ResultsLeft.BrowHeight*Calibration
     ResultsLeft.PalpebralFissureHeight = PalpebralFissureHeight_Left*Calibration
+    ResultsLeft.LowerLipHeight = ResultsLeft.LowerLipHeight*Calibration
     
     
-    ResultsRight.CommissureExcursion = ResultsRight.CommissureExcursion*Calibration
+    ResultsRight.CommissurePosition = ResultsRight.CommissurePosition*Calibration
+    ResultsRight.CommisureHeight = ResultsRight.CommisureHeight*Calibration
     ResultsRight.InterlabialDistance = ResultsRight.InterlabialDistance*Calibration
     ResultsRight.MarginalReflexDistance1 = ResultsRight.MarginalReflexDistance1*Calibration
     ResultsRight.MarginalReflexDistance2 = ResultsRight.MarginalReflexDistance2*Calibration
     ResultsRight.BrowHeight = ResultsRight.BrowHeight*Calibration
     ResultsRight.PalpebralFissureHeight = PalpebralFissureHeight_Right*Calibration
+    ResultsRight.LowerLipHeight = ResultsRight.LowerLipHeight*Calibration
     
-    ResultsDeviation.CommisureHeightDeviation = ResultsDeviation.CommisureHeightDeviation*Calibration
+    ResultsDeviation.CommisureHeight = ResultsDeviation.CommisureHeight*Calibration
     ResultsDeviation.UpperLipHeightDeviation = ResultsDeviation.UpperLipHeightDeviation*Calibration
     ResultsDeviation.LowerLipHeightDeviation = ResultsDeviation.LowerLipHeightDeviation*Calibration
     
     
-    ResultsDeviation.CommissureExcursion = abs(ResultsLeft.CommissureExcursion-ResultsRight.CommissureExcursion)
+    ResultsDeviation.CommissurePosition = abs(ResultsLeft.CommissurePosition-ResultsRight.CommissurePosition)
     ResultsDeviation.SmileAngle = abs(ResultsLeft.SmileAngle-ResultsRight.SmileAngle)
     ResultsDeviation.InterlabialDistance = abs(ResultsLeft.InterlabialDistance-ResultsRight.InterlabialDistance)
     ResultsDeviation.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1-ResultsRight.MarginalReflexDistance1)
     ResultsDeviation.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2-ResultsRight.MarginalReflexDistance2)
     ResultsDeviation.BrowHeight = abs(ResultsLeft.BrowHeight-ResultsRight.BrowHeight)
     ResultsDeviation.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)
-
+    ResultsDeviation.LowerLipHeight = ResultsDeviation.LowerLipHeight*Calibration
 
     if reference_side == 'Left': #left is the good side
         ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
         ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
         ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
-        ResultsPercentile.CommissureExcursion = abs(ResultsLeft.CommissureExcursion - ResultsRight.CommissureExcursion)*100/ResultsLeft.CommissureExcursion
+        ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
+        ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
         ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
         if ResultsLeft.InterlabialDistance >0:
             ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsLeft.InterlabialDistance   
@@ -800,17 +936,20 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
             ResultsPercentile.NLF_angle = 0
         else:
             #Makes sure to not divide by 0
-            try:
+            if NLF_angles[1] != 0:
                 ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[1])
-            except:
+            else:
                 ResultsPercentile.NLF_angle = 0
         ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
         ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
+        ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
+        ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
     elif reference_side == 'Right':
             ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsRight.BrowHeight
             ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsRight.MarginalReflexDistance1
             ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsRight.MarginalReflexDistance2
-            ResultsPercentile.CommissureExcursion = abs(ResultsLeft.CommissureExcursion - ResultsRight.CommissureExcursion)*100/ResultsRight.CommissureExcursion
+            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsRight.CommissurePosition
+            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsRight.CommisureHeight)
             ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle        
             if ResultsRight.InterlabialDistance > 0:
                 ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance
@@ -825,19 +964,22 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
                 ResultsPercentile.NLF_angle = 0
             else:
                 #Makes sure to not divide by 0
-                try:
+                if NLF_angles[0] != 0:
                     ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[0])
-                except:
+                else:
                     ResultsPercentile.NLF_angle = 0
             ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsRight.InterlabialArea_of_the_Hemiface)
             ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsRight.EyeArea)
+            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsRight.UpperLipSlope)
+            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsRight.LowerLipHeight
     else:  
         #If no heathly side is selected, then the old method is used
         if shape[57,0] >= cross_lowerlip[0] : #left is the good side (probably)
             ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
             ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
             ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
-            ResultsPercentile.CommissureExcursion = abs(ResultsLeft.CommissureExcursion - ResultsRight.CommissureExcursion)*100/ResultsLeft.CommissureExcursion
+            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
+            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
             ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
             if ResultsLeft.InterlabialDistance >0:
                 ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsLeft.InterlabialDistance   
@@ -852,17 +994,20 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
                 ResultsPercentile.NLF_angle = 0
             else:
                 #Makes sure to not divide by 0
-                try:
+                if NLF_angles[1] != 0:
                     ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[1])
-                except:
+                else:
                     ResultsPercentile.NLF_angle = 0
             ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
             ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
+            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
+            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
         else: #right is the good side 
             ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsRight.BrowHeight
             ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsRight.MarginalReflexDistance1
             ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsRight.MarginalReflexDistance2
-            ResultsPercentile.CommissureExcursion = abs(ResultsLeft.CommissureExcursion - ResultsRight.CommissureExcursion)*100/ResultsRight.CommissureExcursion
+            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsRight.CommissurePosition
+            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsRight.CommisureHeight)
             ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle        
             if ResultsRight.InterlabialDistance > 0:
                 ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance
@@ -877,12 +1022,14 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
                 ResultsPercentile.NLF_angle = 0
             else:
                 #Makes sure to not divide by 0
-                try:
+                if NLF_angles[0] != 0:
                     ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[0])
-                except:
+                else:
                     ResultsPercentile.NLF_angle = 0
             ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsRight.InterlabialArea_of_the_Hemiface)
             ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsRight.EyeArea)
+            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsRight.UpperLipSlope)
+            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsRight.LowerLipHeight
 
     
     return ResultsLeft, ResultsRight, ResultsDeviation, ResultsPercentile
