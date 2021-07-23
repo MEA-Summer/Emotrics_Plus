@@ -20,7 +20,7 @@ class GetLandmarks(QtCore.QThread):
     
     
     def __init__(self, image, shape, lefteye, righteye, savedshape, ModelName, Modelname_NLF, FaceDetector, FaceAlignment, model, model_FAN, model_NLF, net):
-        super(GetLandmarks, self).__init__()
+        super().__init__()
         self._image = image
         self._shape = torch.Tensor()
         self._savedShape = savedshape
@@ -41,8 +41,8 @@ class GetLandmarks(QtCore.QThread):
                 self._lefteye = lefteye
                 self._righteye = righteye
                 self._eyesDone = True
-        self._lefteye_landmarks = [0, 0, 0, 0, 0]
-        self._righteye_landmarks = [0, 0, 0, 0, 0]
+        self._lefteye_landmarks = np.array([[0,0],[0,0],[0,0],[0,0],[0,0]])
+        self._righteye_landmarks = np.array([[0,0],[0,0],[0,0],[0,0],[0,0]])
         self._boundingbox = [-1,-1,-1,-1]
         self.ModelName = ModelName
         self.ModelName_NLF = Modelname_NLF

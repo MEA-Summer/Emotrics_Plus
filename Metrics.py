@@ -152,7 +152,7 @@ def find_angle(Ax, Ay, Bx, By, Cx, Cy):
     
     return angle
    
-def find_NLF(shape, points):
+def find_NLF(shape, points, rot_angle):
     right_NLF = shape[68:72]
     left_NLF = shape[72:76]
     right_NLF_x = None
@@ -175,13 +175,7 @@ def find_NLF(shape, points):
         else:
             left_NLF_x = np.append(left_NLF_x, float(x))
             left_NLF_y = np.append(left_NLF_y, float(y))        
-        
     
-    #Finding Midline
-    (mid1_x, mid1_y) = points[3]
-    (mid2_x, mid2_y) = points[5]
-    
-    L_mid = line([mid1_x, mid1_y], [mid2_x, mid2_y])
     
     #Checks if NLF was found by checking left of the line 
     #and comparing it to the length of the eye
@@ -201,64 +195,69 @@ def find_NLF(shape, points):
     
     if NLF_right_len < len_eye/2:
         # print('Left NLF not larger enough, therefore NLF was not found')
-        (x_R_right, y_R_right) = (0,0)
         angle_right = 0
     else:
         """Find Line of Best Fit"""
         m_right, b_right = np.polyfit(right_NLF_x, right_NLF_y, 1)
-        """Finding 2 point to draw"""
-        #Right
-        x1_right = right_NLF_x[0]
-        y1_right = m_right*x1_right + b_right
-        x2_right = right_NLF_x[-1]
-        y2_right = m_right*x2_right + b_right
-        #Find Intersection point
-        L_right = line([x1_right, y1_right], [x2_right, y2_right])
-        R_right = intersection(L_right, L_mid)   
-        if R_right == False:
-            print('No intersection found on right')
-            (x_R_right, y_R_right) = (0,0)
-            angle_right = 0
-        else:
-            (x_R_right, y_R_right) = R_right
-            angle_right = find_angle(x1_right, y1_right, x_R_right, y_R_right, mid1_x, mid1_y)
+        angle = np.arctan(m_right)
+        angle_right = (np.pi/2 - abs(angle)) - rot_angle
+        angle_right = np.rad2deg(angle_right)
+        
+        # """Finding 2 point to draw"""
+        # #Right
+        # x1_right = right_NLF_x[0]
+        # y1_right = m_right*x1_right + b_right
+        # x2_right = right_NLF_x[-1]
+        # y2_right = m_right*x2_right + b_right
+        # #Find Intersection point
+        # L_right = line([x1_right, y1_right], [x2_right, y2_right])
+        # R_right = intersection(L_right, L_mid)   
+        # if R_right == False:
+        #     print('No intersection found on right')
+        #     (x_R_right, y_R_right) = (0,0)
+        #     angle_right = 0
+        # else:
+        #     (x_R_right, y_R_right) = R_right
+        #     angle_right = find_angle(x1_right, y1_right, x_R_right, y_R_right, mid1_x, mid1_y)
         
     if NLF_left_len < len_eye/2:
         # print('Left NLF not larger enough, therefore NLF was not found')
-        (x_R_left, y_R_left) = (0,0)
         angle_left = 0
     else:
         """Find Line of Best Fit"""
         m_left, b_left = np.polyfit(left_NLF_x, left_NLF_y, 1)
-        """Finding 2 point to draw"""
-        #Left
-        x1_left = left_NLF_x[0]
-        y1_left = m_left*x1_left + b_left
-        x2_left = left_NLF_x[-1]
-        y2_left = m_left*x2_left + b_left
-        #Find Intersection point
-        L_left = line([x1_left, y1_left], [x2_left, y2_left])
-        R_left = intersection(L_left, L_mid)
-        if R_left == False:
-            print('No intersection found on left')
-            (x_R_left, y_R_left) = (0,0)
-            angle_left = 0
-        else:
-            (x_R_left, y_R_left) = R_left
-            angle_left = find_angle(x1_left, y1_left, x_R_left, y_R_left, mid1_x, mid1_y)
+        angle = np.arctan(m_left)
+        angle_left = (np.pi/2 - abs(angle)) + rot_angle
+        angle_left = np.rad2deg(angle_left)
+        
+        
+        # """Finding 2 point to draw"""
+        # #Left
+        # x1_left = left_NLF_x[0]
+        # y1_left = m_left*x1_left + b_left
+        # x2_left = left_NLF_x[-1]
+        # y2_left = m_left*x2_left + b_left
+        # #Find Intersection point
+        # L_left = line([x1_left, y1_left], [x2_left, y2_left])
+        # R_left = intersection(L_left, L_mid)
+        # if R_left == False:
+        #     print('No intersection found on left')
+        #     (x_R_left, y_R_left) = (0,0)
+        #     angle_left = 0
+        # else:
+        #     (x_R_left, y_R_left) = R_left
+        #     angle_left = find_angle(x1_left, y1_left, x_R_left, y_R_left, mid1_x, mid1_y)
     
     if angle_right >= 80:
-        (x_R_right, y_R_right) = (0,0)
         angle_right = 0
         
     if angle_left >= 80:
-        (x_R_left, y_R_left) = (0,0)
         angle_left = 0   
     
-    points = [(x1_right, y1_right), (x_R_right, y_R_right), (x1_left, y1_left), (x_R_left, y_R_left)]
+    # points = [(x1_right, y1_right), (x_R_right, y_R_right), (x1_left, y1_left), (x_R_left, y_R_left)]
     angles = [angle_right, angle_left]
     
-    return points, angles
+    return angles
 
 
 def find_point_in_lips(points_upper, points_lower, points_upper_inside, 
@@ -665,12 +664,6 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     ResultsDeviation = FaceMeasurementsDeviation()
     ResultsPercentile = FaceMeasurementsDeviation()
     
-    #NLF Angle
-    _, NLF_angles = find_NLF(shape, points)
-    
-    ResultsRight.NLF_angle = NLF_angles[0]
-    ResultsLeft.NLF_angle = NLF_angles[1]
-    ResultsDeviation.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])
     
     rot_angle, center = find_rot_angle_and_center(points)
     # #Testing new rot_angle mether
@@ -678,6 +671,14 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     # slope, center = estimate_line(left_pupil, right_pupil)
     # rot_angle=np.arctan(slope)
     # print('rot_angle = ', rot_angle, '\n', 'center = ', center)
+    
+    #NLF Angle
+    NLF_angles = find_NLF(shape, points, rot_angle)
+    
+    ResultsRight.NLF_angle = NLF_angles[0]
+    ResultsLeft.NLF_angle = NLF_angles[1]
+    ResultsDeviation.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])
+    
     
     #Test
     points_upper = shape[49:55,:]

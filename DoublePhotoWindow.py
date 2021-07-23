@@ -2,10 +2,10 @@ from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtGui import QImage, QPainter
 import sys
 import numpy as np
-import cv2 
+# import cv2 
 from PIL import Image, ImageOps
 import torch
-import torch.nn as nn
+# import torch.nn as nn
 from face_alignment.detection.blazeface.net_blazeface import BlazeFace
 from lib.models import get_face_alignment_net
 from lib.config import config, merge_configs
@@ -15,32 +15,22 @@ from PyQt5 import QtGui
 #import yaml
 from arch.FAN import FAN
 from arch.resnest.HeatMaps import model_resnest
+from models.irislandmarks import IrisLandmarks
 from ImageViewerandProcess2 import ImageViewer
-from Misc.LandmarkSetting1 import ShowSettings
 from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
-from Misc.Results_Window import ShowResults, CustomTabResult 
-from Metrics import get_measurements_from_data
-from arch.mode_NLF import HeadBlock
-from arch.MobileNetV2 import mobilenet_v2
+from MetricsWindow import MetricsWindow
+from LandmarkSettingWindow import LandmarkSettingsWindow
 
 class DoublePhotoWindow(QtWidgets.QMainWindow):
     def __init__(self, *args, **kwargs):
         super(DoublePhotoWindow, self).__init__(*args, **kwargs)
         
-        """Start of Set up"""
-        if os.name == 'posix': #is a mac or linux
-            self.scriptDir = os.path.dirname(sys.argv[0])
-        else: #is a  windows 
-            self.scriptDir = os.getcwd()
-
-
-        #self.setWindowIcon(QtGui.QIcon(scriptDir + os.path.sep + 'include' +os.path.sep +'icon_color'+ os.path.sep + 'meei_3WR_icon.ico')
-        
         """Thread Creation"""
         # create Thread  to take care of the landmarks and iris estimation   
         self.thread_landmarks = QtCore.QThread()  # no parent!
         self.thread_landmarks2 = QtCore.QThread()
+        
         """Loading Models"""
         FaceDetector = BlazeFace()
         FaceDetector.load_state_dict(torch.load('./models/blazeface.pth'))
@@ -49,13 +39,11 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         
         # device = 'cuda' if torch.cuda.is_available() else 'cpu'
         #Face Detector
-        # FaceDetector.to(device)
         FaceDetector.eval();
         self.FaceDetector = FaceDetector
         
         #Face Alignment
         FaceAlignment = torch.jit.load('./models/2DFAN4-cd938726ad.zip')
-        # FaceAlignment.to(device)
         FaceAlignment.eval();
         self.FaceAlignment = FaceAlignment
         
@@ -65,30 +53,25 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         merge_configs(config, config_path)
         model = get_face_alignment_net(config)
         model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-        # model.to(device)
         model.eval();
         self.model = model
         
         #FAN_MEEE Model
         model_FAN = FAN(4)
         model_FAN.load_state_dict(torch.load('./arch/train160.pth.tar', map_location=torch.device('cpu')))
-        # model_FAN.to(device)
         model_FAN.eval();
         self.model_FAN = model_FAN
         
         #NLF Model
-        # backbone = mobilenet_v2()
-        # #backbone.load_state_dict(torch.load(r'D:\NeuroFace_FineTuning\pretrained_models\mobilenet_v2-b0353104.pth'), strict=False)
-        # nopoints = 8
-        # #head = HeadBlock(152, 152, nopoints)
-        # head = HeadBlock(1432, 1432, nopoints)
-        # model_NLF = nn.Sequential(backbone, head)
-        # model_NLF.load_state_dict(torch.load('./arch/NLF.pth', map_location=torch.device('cpu')))
-        # # model_NLF.to(device);
         model_NLF = model_resnest(out_channels=8, pretrained=False)
         model_NLF.load_state_dict(torch.load('./arch/heatmap_NSLF.pth', map_location=torch.device('cpu')))
         model_NLF.eval();
         self.model_NLF = model_NLF
+        
+        #Eye Model
+        device = 'cpu'
+        self.net = IrisLandmarks().to(device)
+        self.net.load_weights('./models/irislandmarks.pth')
         
         #Model Names
         self.Modelname = 'FAN_MEEE' #Default Model is FAN_MEEE
@@ -110,62 +93,75 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.load_file2()
         
     def initUI(self):
-        self.ui = uic.loadUi('uis/DoubleView.ui', self)
+        self.ui = uic.loadUi('uis/double.ui', self)
+        
         
         """Button Connection"""
         #New Photograph Button
-        self.loadNewPhotoButton.clicked.connect(self.load_file1)
+        self.loadNewPhoto1Button.clicked.connect(self.load_file1)
         self.loadNewPhoto2Button.clicked.connect(self.load_file2)
         #Previous Button
-        # self.previousButton.clicked.connect(self.previous)
+        self.previousButton.clicked.connect(self.previous)
         
+        #Reference Side button
+        self.referenceSideLeftButton.toggled.connect(self.leftSideSelected)
+        self.referenceSideRightButton.toggled.connect(self.rightSideSelected)
         #Tab 1: Main
-        
-        
         #Measurements
+        
         #Button 1.1.1: Measurements
-        self.measurementsButton.setIcon(QtGui.QIcon(self.scriptDir + os.path.sep + 'include' +os.path.sep +'icon_color'+ os.path.sep + 'ruler_icon.png'))
-        self.measurementsButton.setIconSize(self.measurementsButton.size())
-        self.measurementsButton.clicked.connect(self.create_new_window)
+        self.measurementsButton.clicked.connect(self.create_metrics_window)
         
         #Visualization
+        
         #Button 1.2.1: Toggle Dots
         self.toggleDotsButton.clicked.connect(self.displayImage.toggle_dots)
         self.toggleDotsButton.clicked.connect(self.displayImage2.toggle_dots)
-        self.toggleDotsButton.setText('Hide  \n Dots')
         #Button 1.2.2: Toggle Midline
         self.toggleMidlineButton.clicked.connect(self.displayImage.toggle_midLine)
         self.toggleMidlineButton.clicked.connect(self.displayImage2.toggle_midLine)
-        self.toggleMidlineButton.setText('View  \n Midline')
-        #Button 1.2.2: Toggle Midline
-        self.showNLFButton.clicked.connect(self.displayImage.show_NLF)
-        self.showNLFButton.clicked.connect(self.displayImage2.show_NLF)
-        self.showNLFButton.setText('View  \n NLF')
+        # #Button 1.2.3: Toggle NLF
+        # self.showNLFButton.clicked.connect(self.displayImage.show_NLF)
         
         #Save
-        #Button 1.3.1: Save Dots
+        
+        #Button 1.3.2: Save Dots
         self.saveDotsButton.clicked.connect(self.save_results)
-        self.saveDotsButton.setText('Save  \n Dots')
 
         
         #Tab 2:Settings
+        #Iris Settings
         
+        #Button 2.1.2: Match Eyes Right to Left
+        self.matchEyesRtoLButton.clicked.connect(self.displayImage.matchEyesRtoL)
+        self.matchEyesRtoLButton.clicked.connect(self.displayImage2.matchEyesRtoL)
+        #Button 2.1.3: Match Eyes Left to Right
+        self.matchEyesLtoRButton.clicked.connect(self.displayImage.matchEyesLtoR)
+        self.matchEyesLtoRButton.clicked.connect(self.displayImage2.matchEyesLtoR)
+        #Button 2.1.4: Match Eyes 1 to 2
+        self.matchEyes1to2Button.clicked.connect(self.matchEyes1to2)
+        #Button 2.1.5: Match Eyes 2 to 1
+        self.matchEyes2to1Button.clicked.connect(self.matchEyes2to1)
+
         
         #Landmark Settings
-        #Button 2.2.1: Add Dots
-        self.addDotsButton.clicked.connect(self.displayImage.toggle_add_dots)
-        self.addDotsButton.clicked.connect(self.displayImage2.toggle_add_dots)
-        self.addDotsButton.setText('Add  \n Dots')
-        #Button 2.2.1: Landmark Settings
-        self.landmarkSettingButton.clicked.connect(self.landmark_settings)
-        self.landmarkSettingButton.setIcon(QtGui.QIcon('landmarks_icon.png'))
-        self.landmarkSettingButton.setIconSize(self.measurementsButton.size())
         
-        #Midline Setting
-        #Button 2.3.1: Adjust Midline 
+        #Button 2.2.1: Landmark Settings
+        self.landmarkSettingsButton.clicked.connect(self.landmark_Setting)
+        #Button 2.2.2: Adjust Midline
         self.adjustMidlineButton.clicked.connect(self.displayImage.toggle_adjustingMidLine)
-        self.adjustMidlineButton.clicked.connect(self.displayImage2.toggle_adjustingMidLine)
-        self.adjustMidlineButton.setText('Adjust  \n Midline')
+        #Button 2.2.3: Reset Midline
+        self.resetMidlineButton.clicked.connect(self.displayImage.reset_midline)
+        #Button 2.2.4: Adjust Midline 2
+        self.adjustMidline2Button.clicked.connect(self.displayImage2.toggle_adjustingMidLine)
+        #Button 2.2.5: Reset Midline 2
+        self.resetMidline2Button.clicked.connect(self.displayImage2.reset_midline)
+        
+        
+        
+        
+        
+        
         """Shortcuts"""
         #Left arrow (Laterial)
         self.midLine_Laterial_move_left_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Ctrl+Left"), self)
@@ -180,7 +176,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         #Ctrl+Left arrow (Angular)
         self.midLine_Angular_move_left_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Left"), self)
         self.midLine_Angular_move_left_shortcut.activated.connect(self.displayImage.midLine_Angular_move_clockwise)
-        self.midLine_Angular_move_left_shortcut.activated.connect(self.displayImage2.midLine_Angular_move_clockwise)
+        self.midLine_Angular_move_left_shortcut.activated.connect(self.displayImage2.midLine_Angular_move_clockwise) 
         
         #Ctrl+Right arrow (Angular)
         self.midLine_Angular_move_right_shortcut = QtWidgets.QShortcut(QtGui.QKeySequence("Right"), self)
@@ -189,17 +185,17 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         
 
     def load_file1(self):
-        print('Loading First Photo')
+        
         #load a file using the widget
         name,_ = QtWidgets.QFileDialog.getOpenFileName(
-                self,'Load Image',
+                self,'Load Queried State Image',
                 '',"Image files (*.png *.jpg *.jpeg *.jfif *.tif *.tiff *.PNG *.JPG *.JPEG *.TIF *.TIFF)")
         self._imagePath = name
         name = Path(name)
-        if name.is_file:
+        if name.is_file():
             try:
                 #Displaying Image
-                image = Image.open(Path(name)).convert('RGB')
+                image = Image.open(name).convert('RGB')
                 image = ImageOps.exif_transpose(image)
                 image = np.array(image)
                 self.displayImage._image = image
@@ -208,11 +204,14 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 
                 os_name = os.path.normpath(self._imagePath)
                 self._file_name = os_name
-                self.displayImage._opencvimage = cv2.imread(os_name)
+                #self.displayImage._opencvimage = image#cv2.imread(os_name)
                 filename = os_name[:-4]
                 if filename[-1] == '.':
                     filename = filename[:-1]
                 file_txt = (filename + '.txt')
+                
+                # self._shapePath = Path(self._imagePath.stem + 'txt')
+
                 if os.path.isfile(file_txt):
                         shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
                         self.displayImage._lefteye = lefteye
@@ -230,6 +229,8 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                     self.displayImage._shape = None
                     self.displayImage._lefteye = None
                     self.displayImage._righteye = None
+                    self.displayImage._lefteye_landmarks = None
+                    self.displayImage._righteye_landmarks = None
                     self.displayImage._savedShape = False
                     #Displaying Landmarks
                     self.startLandmarkThread(image)
@@ -238,6 +239,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 H, W, C = self.displayImage._image.shape
                 area = H*W
                 self.displayImage._landmark_size = ((area)/(10**6))**.8
+                # self.landmarkSizeBox.setValue(int(self.displayImage._landmark_size)) #makes sure size change is displayed
                 # print('self.displayImage._scene.height() = ', self.displayImage._scene.height())
                 # print('self.displayImage._image.shape = ', self.displayImage._image.shape)
                 # print('self.displayImage._landmark_size =', self.displayImage._landmark_size)
@@ -245,7 +247,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 #Makes sure everything is up to date
                 self.displayImage.update_shape()
             except:
-                print('No file given')
+                print('Error in Loading file')
         else:
             self._imagePath = None
             pass
@@ -253,31 +255,34 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             # changephotoAction in the toolbar
             print('file ready')
     
+    
     def load_file2(self):
-        print('Loading Second Photo')
         #load a file using the widget
         name,_ = QtWidgets.QFileDialog.getOpenFileName(
-                self,'Load Image',
+                self,'Load Queried State Image',
                 '',"Image files (*.png *.jpg *.jpeg *.jfif *.tif *.tiff *.PNG *.JPG *.JPEG *.TIF *.TIFF)")
-        self._imagePath2 = name
+        self._imagePath = name
         name = Path(name)
-        if name.is_file:
+        if name.is_file():
             try:
                 #Displaying Image
-                image = Image.open(Path(name)).convert('RGB')
+                image = Image.open(name).convert('RGB')
                 image = ImageOps.exif_transpose(image)
                 image = np.array(image)
                 self.displayImage2._image = image
                 self.displayImage2.update_view()
                 self.displayImage2.clear_scene()
                 
-                os_name = os.path.normpath(self._imagePath2)
-                self._file_name2 = os_name
-                self.displayImage2._opencvimage = cv2.imread(os_name)
+                os_name = os.path.normpath(self._imagePath)
+                self._file_name = os_name
+                #self.displayImage2._opencvimage = image#cv2.imread(os_name)
                 filename = os_name[:-4]
                 if filename[-1] == '.':
                     filename = filename[:-1]
                 file_txt = (filename + '.txt')
+                
+                # self._shapePath = Path(self._imagePath.stem + 'txt')
+
                 if os.path.isfile(file_txt):
                         shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
                         self.displayImage2._lefteye = lefteye
@@ -295,6 +300,9 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                     self.displayImage2._shape = None
                     self.displayImage2._lefteye = None
                     self.displayImage2._righteye = None
+                    self.displayImage2._lefteye_landmarks = None
+                    self.displayImage2._righteye_landmarks = None
+                    self.displayImage2._savedShape = False
                     #Displaying Landmarks
                     self.startLandmarkThread2(image)
                     
@@ -302,6 +310,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 H, W, C = self.displayImage2._image.shape
                 area = H*W
                 self.displayImage2._landmark_size = ((area)/(10**6))**.8
+                # self.landmarkSizeBox.setValue(int(self.displayImage2._landmark_size)) #makes sure size change is displayed
                 # print('self.displayImage2._scene.height() = ', self.displayImage2._scene.height())
                 # print('self.displayImage2._image.shape = ', self.displayImage2._image.shape)
                 # print('self.displayImage2._landmark_size =', self.displayImage2._landmark_size)
@@ -309,7 +318,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 #Makes sure everything is up to date
                 self.displayImage2.update_shape()
             except:
-                print('No file given')
+                print('Error in Loading file')
         else:
             self._imagePath = None
             pass
@@ -318,167 +327,12 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             print('file ready')
 
 
-        
-    def create_new_window(self):
-        #this creates a new window to display all the facial metrics, there 
-        #are two modes, one if there is no Patient (self._Patient = None)
-        #and another if there is a patient (two photos)
-        
-                
-
-        #if the measurements window is already open then close it
-        if self._new_window is not None:
-            self._new_window.close()
-            self._new_window = None
-            
-        
-        #compute the facial metrics for the first photo and fill the information
-        #makes sure Midline points exist 
-        if self.displayImage._points == None:
-            self.displayImage.toggle_midLine()
-            self.displayImage.toggle_midLine()
-                
-        MeasurementsLeftFirst, MeasurementsRightFirst, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue)
-        
-        self._tab1_results  =  CustomTabResult()
-        
-        #filling t_new_window_tab1_results he info for the right
-        self._tab1_results._CE_right.setText('{0:.2f}'.format(MeasurementsRightFirst.CommissureExcursion))
-        self._tab1_results._SA_right.setText('{0:.2f}'.format(MeasurementsRightFirst.SmileAngle))
-        self._tab1_results._DS_right.setText('{0:.2f}'.format(MeasurementsRightFirst.DentalShow))
-        self._tab1_results._MRD1_right.setText('{0:.2f}'.format(MeasurementsRightFirst.MarginalReflexDistance1))
-        self._tab1_results._MRD2_right.setText('{0:.2f}'.format(MeasurementsRightFirst.MarginalReflexDistance2))
-        self._tab1_results._BH_right.setText('{0:.2f}'.format(MeasurementsRightFirst.BrowHeight))
-        self._tab1_results._PFH_right.setText('{0:.2f}'.format(MeasurementsRightFirst.PalpebralFissureHeight))
-        
-        #filling the info for the left
-        self._tab1_results._CE_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.CommissureExcursion))
-        self._tab1_results._SA_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.SmileAngle))
-        self._tab1_results._DS_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.DentalShow))
-        self._tab1_results._MRD1_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.MarginalReflexDistance1))
-        self._tab1_results._MRD2_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.MarginalReflexDistance2))
-        self._tab1_results._BH_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.BrowHeight))
-        self._tab1_results._PFH_left.setText('{0:.2f}'.format(MeasurementsLeftFirst.PalpebralFissureHeight))
-        
-        #deviation
-        self._tab1_results._CE_dev.setText('{0:.2f}'.format(MeasurementsDeviation.CommissureExcursion))
-        self._tab1_results._SA_dev.setText('{0:.2f}'.format(MeasurementsDeviation.SmileAngle))
-        self._tab1_results._MRD1_dev.setText('{0:.2f}'.format(MeasurementsDeviation.MarginalReflexDistance1))
-        self._tab1_results._MRD2_dev.setText('{0:.2f}'.format(MeasurementsDeviation.MarginalReflexDistance2))
-        self._tab1_results._BH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.BrowHeight))
-        self._tab1_results._DS_dev.setText('{0:.2f}'.format(MeasurementsDeviation.DentalShow))
-        self._tab1_results._CH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.CommisureHeightDeviation))
-        self._tab1_results._UVH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.UpperLipHeightDeviation))
-        self._tab1_results._LVH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.LowerLipHeightDeviation))
-        self._tab1_results._PFH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.PalpebralFissureHeight))
-        
-        self._tab1_results._CE_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.CommissureExcursion))
-        self._tab1_results._SA_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.SmileAngle))
-        self._tab1_results._MRD1_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.MarginalReflexDistance1))
-        self._tab1_results._MRD2_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.MarginalReflexDistance2))
-        self._tab1_results._BH_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.BrowHeight))
-        self._tab1_results._DS_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.DentalShow))
-        self._tab1_results._PFH_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.PalpebralFissureHeight))
-        
-        
-        delimiter = os.path.sep
-        temp=self._file_name.split(delimiter)
-        photo_name=temp[-1]
-        photo_name=photo_name[0:-4]
-        self._tab1_results._tab_name=photo_name
-    
-        
-        #compute the facial metrics for the second photo and fill the information 
-        #makes sure Midline points exist 
-        if self.displayImage2._points == None:
-            self.displayImage2.toggle_midLine()
-            self.displayImage2.toggle_midLine()
-                
-        MeasurementsLeftSecond, MeasurementsRightSecond, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self.displayImage2._shape, self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, self._CalibrationType, self._CalibrationValue)
-        
-        self._tab2_results  =  CustomTabResult()
-        
-        #filling t_new_window_tab1_results he info for the right
-        self._tab2_results._CE_right.setText('{0:.2f}'.format(MeasurementsRightSecond.CommissureExcursion))
-        self._tab2_results._SA_right.setText('{0:.2f}'.format(MeasurementsRightSecond.SmileAngle))
-        self._tab2_results._DS_right.setText('{0:.2f}'.format(MeasurementsRightSecond.DentalShow))
-        self._tab2_results._MRD1_right.setText('{0:.2f}'.format(MeasurementsRightSecond.MarginalReflexDistance1))
-        self._tab2_results._MRD2_right.setText('{0:.2f}'.format(MeasurementsRightSecond.MarginalReflexDistance2))
-        self._tab2_results._BH_right.setText('{0:.2f}'.format(MeasurementsRightSecond.BrowHeight))
-        self._tab2_results._PFH_right.setText('{0:.2f}'.format(MeasurementsRightSecond.PalpebralFissureHeight))
-
-        
-        #filling the info for the left
-        self._tab2_results._CE_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.CommissureExcursion))
-        self._tab2_results._SA_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.SmileAngle))
-        self._tab2_results._DS_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.DentalShow))
-        self._tab2_results._MRD1_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.MarginalReflexDistance1))
-        self._tab2_results._MRD2_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.MarginalReflexDistance2))
-        self._tab2_results._BH_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.BrowHeight))
-        self._tab2_results._PFH_left.setText('{0:.2f}'.format(MeasurementsLeftSecond.PalpebralFissureHeight))
-        
-        #deviation
-        self._tab2_results._CE_dev.setText('{0:.2f}'.format(MeasurementsDeviation.CommissureExcursion))
-        self._tab2_results._SA_dev.setText('{0:.2f}'.format(MeasurementsDeviation.SmileAngle))
-        self._tab2_results._MRD1_dev.setText('{0:.2f}'.format(MeasurementsDeviation.MarginalReflexDistance1))
-        self._tab2_results._MRD2_dev.setText('{0:.2f}'.format(MeasurementsDeviation.MarginalReflexDistance2))
-        self._tab2_results._BH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.BrowHeight))
-        self._tab2_results._DS_dev.setText('{0:.2f}'.format(MeasurementsDeviation.DentalShow))
-        self._tab2_results._CH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.CommisureHeightDeviation))
-        self._tab2_results._UVH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.UpperLipHeightDeviation))
-        self._tab2_results._LVH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.LowerLipHeightDeviation))
-        self._tab2_results._PFH_dev.setText('{0:.2f}'.format(MeasurementsDeviation.PalpebralFissureHeight))
-        
-        self._tab2_results._CE_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.CommissureExcursion))
-        self._tab2_results._SA_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.SmileAngle))
-        self._tab2_results._MRD1_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.MarginalReflexDistance1))
-        self._tab2_results._MRD2_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.MarginalReflexDistance2))
-        self._tab2_results._BH_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.BrowHeight))
-        self._tab2_results._DS_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.DentalShow))
-        self._tab2_results._PFH_dev_p.setText('{0:.2f}'.format(MeasurementsPercentual.PalpebralFissureHeight))
-        
-        
-        delimiter = os.path.sep
-        temp=self._file_name2.split(delimiter)
-        photo_name=temp[-1]
-        photo_name=photo_name[0:-4]
-        self._tab2_results._tab_name=photo_name
-        
-        
-        #compute the the different between both photos and fill the information 
-        self._tab3_results  =  CustomTabResult()
-        
-        #filling tab3_results with the difference between the two photos
-        self._tab3_results._CE_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.CommissureExcursion+MeasurementsRightSecond.CommissureExcursion))
-        self._tab3_results._SA_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.SmileAngle+MeasurementsRightSecond.SmileAngle))
-        self._tab3_results._DS_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.DentalShow+MeasurementsRightSecond.DentalShow))
-        self._tab3_results._MRD1_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.MarginalReflexDistance1+MeasurementsRightSecond.MarginalReflexDistance1))
-        self._tab3_results._MRD2_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.MarginalReflexDistance2+MeasurementsRightSecond.MarginalReflexDistance2))
-        self._tab3_results._BH_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.BrowHeight+MeasurementsRightSecond.BrowHeight))
-        self._tab3_results._PFH_right.setText('{0:.2f}'.format(-MeasurementsRightFirst.PalpebralFissureHeight+MeasurementsRightSecond.PalpebralFissureHeight))
-        
-        #filling the info for the left
-        self._tab3_results._CE_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.CommissureExcursion+MeasurementsLeftSecond.CommissureExcursion))
-        self._tab3_results._SA_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.SmileAngle+MeasurementsLeftSecond.SmileAngle))
-        self._tab3_results._DS_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.DentalShow+MeasurementsLeftSecond.DentalShow))
-        self._tab3_results._MRD1_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.MarginalReflexDistance1+MeasurementsLeftSecond.MarginalReflexDistance1))
-        self._tab3_results._MRD2_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.MarginalReflexDistance2+MeasurementsLeftSecond.MarginalReflexDistance2))
-        self._tab3_results._BH_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.BrowHeight+MeasurementsLeftSecond.BrowHeight))
-        self._tab3_results._PFH_left.setText('{0:.2f}'.format(-MeasurementsLeftFirst.PalpebralFissureHeight+MeasurementsLeftSecond.PalpebralFissureHeight))
-        
-        
-        #say to the window that presents the results that there are 3 tabs
-        self._new_window = ShowResults(self._tab1_results, self._tab2_results, self._tab3_results)
-        #show the window with the results
-        self._new_window.show()
-    
-  
     def startLandmarkThread(self, image):
         self.landmarks = GetLandmarks(image, self.displayImage._shape, 
                                       self.displayImage._lefteye, self.displayImage._righteye,
                                       self.displayImage._savedShape, self.Modelname, self.Modelname_NLF, 
                                       self.FaceDetector, self.FaceAlignment,
-                                      self.model, self.model_FAN, self.model_NLF)
+                                      self.model, self.model_FAN, self.model_NLF, self.net)
         self.landmarks.moveToThread(self.thread_landmarks)
         self.thread_landmarks.start()
         self.thread_landmarks.started.connect(self.landmarks.run) #runs thread
@@ -493,7 +347,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                                       self.displayImage2._lefteye, self.displayImage2._righteye,
                                       self.displayImage2._savedShape, self.Modelname, self.Modelname_NLF, 
                                       self.FaceDetector, self.FaceAlignment,
-                                      self.model, self.model_FAN, self.model_NLF)
+                                      self.model, self.model_FAN, self.model_NLF, self.net)
         self.landmarks2.moveToThread(self.thread_landmarks2)
         self.thread_landmarks2.start()
         self.thread_landmarks2.started.connect(self.landmarks2.run) #runs thread
@@ -502,90 +356,117 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.landmarks2.finished.connect(self.displayImage2.update_shape) #updates everything when done
         self.landmarks2.finished.connect(self.displayImage2.reset_save_variables)
     
+        
+    def create_metrics_window(self):
+        
+        
+        if max(self.displayImage._shape[:, 2]) >= 76:
+            #This is to make sure that the midline exist
+            if self.displayImage._points == None:
+                self.displayImage.toggle_midLine()
+                self.displayImage.toggle_midLine()
+            #say to the window that presents the results that there is only 1 tab
+            self._new_window = MetricsWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name)
+            #show the window with the results 
+            self._new_window.show()
+        else:
+            print('Shape is not greater or equal to 76')
     
-    def landmark_settings(self):
-        Settings = ShowSettings(self.Modelname, self.Modelname_NLF, int(self.displayImage._landmark_size))
-        Settings.exec_()
+    
+    def leftSideSelected(self):
+        self.displayImage._reference_side = 'Left'
+        self.displayImage2._reference_side = 'Left'
+    
+    def rightSideSelected(self):
+        self.displayImage._reference_side = 'Right'
+        self.displayImage2._reference_side = 'Right'
         
-        """Size"""
-        #check if the user decided to change the landmark size
-        user_size_landmark = Settings.tab2.selectLandmarkSize.text()
-        old_size_landmark = self.displayImage._landmark_size
-        is_landmark_changed = False
-        if user_size_landmark == "":
-            size_landmarks = old_size_landmark
-        elif int(user_size_landmark) ==  0: #used entered zero, just ignore it 
-            size_landmarks = old_size_landmark
-        else:
-            size_landmarks = int(user_size_landmark)
-            
-        if size_landmarks == old_size_landmark:
-            pass
-        else:
-            is_landmark_changed = True
-            #update landmark size information 
-            self.displayImage._landmark_size = size_landmarks
-            self.displayImage2._landmark_size = size_landmarks
+    def landmark_Setting(self):
+        """This function opens a window for the landmark setting"""
+        self.landmark_Setting_window = LandmarkSettingsWindow(self.Modelname, self.displayImage._landmark_color, self.displayImage._landmark_color_lower_lid,
+                                                              self.displayImage._iris_color, self.displayImage._midLine_color, self.displayImage._landmark_size)
+        self.landmark_Setting_window.show()
         
+        self.landmark_Setting_window.models.connect(self.changeModel)
+        self.landmark_Setting_window.colors.connect(self.changeColors)
+        self.landmark_Setting_window.size.connect(self.changeLandmarkSize)
         
-        """Color"""
-        #check if the user decided to change the landmark color
-        user_color_landmark = Settings.tab2.selectedColor
-        old_color_landmark = self.displayImage._landmark_color
-        is_landmark_color_changed = False
-        if user_color_landmark is None:
-            color_landmarks = old_color_landmark
-        else:
-            color_landmarks = user_color_landmark
-            
-        if color_landmarks == old_color_landmark:
-            pass
-        else:
-            is_landmark_color_changed = True
-            #update landmark size information 
-            self.displayImage._landmark_color = color_landmarks
-            self.displayImage2._landmark_color = color_landmarks
-        
-        """Model"""
-        #check if the user decided to change the landmark model
-        user_model = Settings.tab1.Modelname
-        user_model_NLF = Settings.tab1.NLF_Model
-        old_model = self.Modelname
-        old_model_NLF = self.Modelname_NLF
-        is_model_changed = False
-        
-        if user_model == old_model and user_model_NLF == old_model_NLF:
-            pass
-        else:
-            if user_model == old_model:
-                self.displayImage._savedShape = True
-                self.displayImage2._savedShape = True
+    
+    def changeModel(self, model, new_model_selected):
+        """This function is used when a new model is selected in the landmark settings"""
+        # try:
+        if new_model_selected == True:
+            if model == 'NLF_model':
+                self.Modelname = model
+                self.Modelname_NLF = False
             else:
-                self.displayImage._savedShape = False
-                self.displayImage2._savedShape = False
-            is_model_changed = True
-            self.Modelname = user_model
-            self.Modelname_NLF = user_model_NLF
-        
-        """Updates Dots"""
-        #update dots based on new settings
-        if is_model_changed == True:
+                self.Modelname = model
+                self.Modelname_NLF = True
+            self.displayImage._savedShape = False
             self.startLandmarkThread(self.displayImage._image)
+            self.displayImage2._savedShape = False
             self.startLandmarkThread2(self.displayImage2._image)
-        
-        elif is_landmark_color_changed == True or is_landmark_changed == True:
-            if self.displayImage._shape is not None:
-                self.displayImage.remove_dots()
-                self.displayImage.update_shape()
-                
-            if self.displayImage2._shape is not None:
-                self.displayImage2.remove_dots()
-                self.displayImage2.update_shape()
-    
         else:
-            pass
+            print('No new model selected')
+        # except:
+        #     print('Error in changeModel')
+        
     
+    def changeColors(self, landmark_color1, landmark_color2, eye_color, midline_color):
+        """This function is used when new colors are selected in the landmark settings"""
+        # try:
+        self.displayImage._landmark_color = landmark_color1
+        self.displayImage._landmark_color_lower_lid = landmark_color2
+        self.displayImage._landmark_color_lower_lips = landmark_color2
+        self.displayImage._iris_color = eye_color
+        self.displayImage._midLine_color = midline_color
+        self.displayImage.update_shape()
+        
+        self.displayImage2._landmark_color = landmark_color1
+        self.displayImage2._landmark_color_lower_lid = landmark_color2
+        self.displayImage2._landmark_color_lower_lips = landmark_color2
+        self.displayImage2._iris_color = eye_color
+        self.displayImage2._midLine_color = midline_color
+        self.displayImage2.update_shape()
+        # except:
+        #     print('Error in changeColors')
+        
+        
+    def changeLandmarkSize(self, size):
+        """This function is used when a new size is selected in the landmark settings"""
+        # try:
+        self.displayImage._landmark_size = size
+        self.displayImage.update_shape()
+        
+        self.displayImage2._landmark_size = size
+        self.displayImage2.update_shape()
+        # except:
+        #     print('Error in changeLandmarkSize')
+        #     print('Size Selected = ', size)    
     
+
+    def matchEyes1to2(self):
+        """This function is used when the button to match iris radius 1 to 2 is clicked.
+        The function takes the radius of both eyes in displayImage and matches them to the
+        radi in displayImage2"""
+        print('Matching Eyes 1 to 2')
+        self.displayImage2._lefteye[2] = self.displayImage._lefteye[2]
+        self.displayImage2._righteye[2] = self.displayImage._righteye[2]
+        self.displayImage2.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
+        self.displayImage2.update_shape()
+        
+        
+    def matchEyes2to1(self):
+        """This function is used when the button to match iris radius 2 to 1 is clicked.
+        The function takes the radius of both eyes in displayImage2 and matches them to the
+        radi in displayImage"""
+        print('Matching Eyes 2 to 1')
+        self.displayImage._lefteye[2] = self.displayImage2._lefteye[2]
+        self.displayImage._righteye[2] = self.displayImage2._righteye[2]
+        self.displayImage.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
+        self.displayImage.update_shape()
+        
+        
     def save_results(self):
         if self._imagePath is not None:
             name = os.path.normpath(self._imagePath)
@@ -629,8 +510,8 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                             QtWidgets.QMessageBox.Ok)  
     
     def previous(self):
-        app = QtWidgets.QApplication(sys.argv)
-        sys.exit(app.exec_())
+        # self.finished.emit()
+        self.close()
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

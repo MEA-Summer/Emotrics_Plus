@@ -312,18 +312,23 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                         position = 'left'
                                         if self._lefteye_landmarks is None:
                                             self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
+                                        if self._lefteye_landmarks[0,0] != self._lefteye[0]:
+                                            self.normalize_eye_landmarks(normalize_left=True, normalize_right=False)
                                         temp_circle, temp_iris = get_iris_manual(self._image, self._shape, self._lefteye_landmarks, 
                                                                self._landmark_size, position)
                                         new_window_opened = True
                                         if temp_circle is not None and temp_iris is not None:
                                             self._lefteye = temp_circle
                                             self._lefteye_landmarks = temp_iris
-                                            self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
+                                            if self._points != None:
+                                                self._points[1] = (self._lefteye[0], self._lefteye[1]) #Reset the interpupil line based on new eye location
                                             # print('self._lefteye = ', self._lefteye,
                                             #       'self._lefteye_landmarks = ', self._lefteye_landmarks)
                                     elif np.sqrt(((x_mousePos - self._righteye[0])**2 + (y_mousePos - self._righteye[1])**2)) < self._landmark_size*2:
                                         position = 'right'
                                         if self._righteye_landmarks is None:
+                                            self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
+                                        if self._righteye_landmarks[0,0] != self._righteye[0]:
                                             self.normalize_eye_landmarks(normalize_left=False, normalize_right=True)
                                         temp_circle, temp_iris = get_iris_manual(self._image, self._shape, self._righteye_landmarks, 
                                                                self._landmark_size, position)
@@ -331,7 +336,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                         if temp_circle is not None and temp_iris is not None:
                                             self._righteye = temp_circle
                                             self._righteye_landmarks = temp_iris
-                                            self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
+                                            if self._points != None:
+                                                self._points[0] = (self._righteye[0], self._righteye[1]) #Reset the interpupil line based on new eye location
                                             # print('self._righteye = ', self._righteye,
                                             #       'self._righteye_landmarks = ', self._righteye_landmarks)
                                     self.update_shape()        
@@ -515,6 +521,10 @@ class ImageViewer(QtWidgets.QGraphicsView):
             scenePos = self.mapToScene(event.pos())
             x_mousePos = scenePos.toPoint().x()
             y_mousePos = scenePos.toPoint().y()
+            
+            if self._points == None:
+                self.toggle_midLine()
+                self.toggle_midLine()
             
             if self._BothEyesTogether == True:
                 if self._IsDragLeft == True:
@@ -728,7 +738,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self._righteye_landmarks = righteye_landmarks
         #Since the landmarks should be the same size, only one for loop needs to be used
         try:
-            if self._lefteye_landmarks != [0, 0, 0, 0, 0] and self._righteye_landmarks != [0, 0, 0, 0, 0]:
+            if ( self._lefteye_landmarks != np.array([[0,0],[0,0],[0,0],[0,0],[0,0]]) 
+            and self._righteye_landmarks != np.array([[0,0],[0,0],[0,0],[0,0],[0,0]]) ):
                 for i in range(5):
                     left_point = [self._lefteye_landmarks[i,0], self._lefteye_landmarks[i,1], 1]
                     right_point = [self._righteye_landmarks[i,0], self._righteye_landmarks[i,1], 1]
@@ -739,12 +750,14 @@ class ImageViewer(QtWidgets.QGraphicsView):
         
     def toggle_midLine(self):
         if self._IsMidLineVisible == False and self._points == None:
-            self._points = estimate_lines(self._image, self._lefteye, self._righteye)
-            self.draw_line((self._points[0], self._points[1]))
-            self.draw_line((self._points[2], self._points[3]))
-            self.draw_line((self._points[4], self._points[5]))
-            self._IsMidLineVisible = True
-            
+            try:
+                self._points = estimate_lines(self._image, self._lefteye, self._righteye)
+                self.draw_line((self._points[0], self._points[1]))
+                self.draw_line((self._points[2], self._points[3]))
+                self.draw_line((self._points[4], self._points[5]))
+                self._IsMidLineVisible = True
+            except:
+                print('Error in toggle_midline, estimate_lines failed')
         elif self._IsMidLineVisible == False and self._points != None:
             self.draw_line((self._points[0], self._points[1]))
             self.draw_line((self._points[2], self._points[3]))

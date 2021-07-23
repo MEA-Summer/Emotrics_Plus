@@ -21,6 +21,7 @@ from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
 from MetricsWindow import MetricsWindow
 from LandmarkSettingWindow import LandmarkSettingsWindow
+from MetricsSettingsWindow import MetricsSettingsWindow
 # from Metrics import get_measurements_from_data
 
 class SinglePhotoWindow(QtWidgets.QMainWindow):
@@ -156,9 +157,11 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         #Button 2.2.5: Reset Midline 
         self.resetMidlineButton.clicked.connect(self.displayImage.reset_midline)
         
+        #Measurement and Save Settings
         
-        
-        
+        #Button 2.3.2: Landmark Settings
+        self.metricsSettingsButton.clicked.connect(self.metrics_settings)
+
         
         """Shortcuts"""
         #Left arrow (Laterial)
@@ -251,8 +254,8 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
     
     
     def create_metrics_window(self):
-        
-        
+        """This function is used when the user clicks the measurement button.
+        This function opens up a window and displays the metrics of the photo"""
         if max(self.displayImage._shape[:, 2]) >= 76:
             #This is to make sure that the midline exist
             if self.displayImage._points == None:
@@ -264,8 +267,8 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
             self._new_window.show()
         else:
             print('Shape is not greater or equal to 76')
+    
             
-        
     def startLandmarkThread(self, image):
         self.landmarks = GetLandmarks(image, self.displayImage._shape, 
                                       self.displayImage._lefteye, self.displayImage._righteye,
@@ -284,8 +287,10 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
     def leftSideSelected(self):
         self.displayImage._reference_side = 'Left'
     
+    
     def rightSideSelected(self):
         self.displayImage._reference_side = 'Right'
+     
         
     def landmark_Setting(self):
         """This function opens a window for the landmark setting"""
@@ -296,7 +301,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self.landmark_Setting_window.models.connect(self.changeModel)
         self.landmark_Setting_window.colors.connect(self.changeColors)
         self.landmark_Setting_window.size.connect(self.changeLandmarkSize)
-        
+    
     
     def changeModel(self, model, new_model_selected):
         """This function is used when a new model is selected in the landmark settings"""
@@ -337,8 +342,27 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         # except:
         #     print('Error in changeLandmarkSize')
         #     print('Size Selected = ', size)    
+        
     
-
+    def metrics_settings(self):
+        """This function is used when the user clicks the measurement settings button.
+        This function opens up a window and allows the user to change the calibration type"""
+        self.metrics_Setting_window = MetricsSettingsWindow(self._CalibrationType, self._CalibrationValue)
+        self.metrics_Setting_window.show()
+        self.metrics_Setting_window.Calibration_Type.connect(self.changeCalibrationType)
+        self.metrics_Setting_window.Calibration_Value.connect(self.changeCalibrationValue)
+        
+        
+    def changeCalibrationValue(self, CalibrationValue):
+       """This function is used when a new Calibration Value is selected in the metrics settings"""
+       self._CalibrationValue = CalibrationValue
+       
+        
+    def changeCalibrationType(self, CalibrationType):
+       """This function is used when a new Calibration Value is selected in the metrics settings"""
+       self._CalibrationType = CalibrationType
+       
+         
     def save_results(self):
         if self._imagePath is not None:
             name = os.path.normpath(self._imagePath)
@@ -373,14 +397,6 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
             print(marked_image.save(photo_name,'JPG'))
         
         
-    
-    def about_app(self):
-        
-        #show a window with some information
-        QtWidgets.QMessageBox.information(self, 'Emotrics', 
-                            'Emotrics is a tool for estimation of objective facial measurements, it uses machine learning to automatically localize facial landmarks in photographs. Its objective is to reduce subjectivity in the evaluation of facial palsy.\n\nEmotrics was developed by: Diego L. Guarin, PhD. at the Facial Nerve Centre, Massachusetts Eye and Ear Infirmary; part of Harvard Medical School.\n\nA tutorial can be found by searching for Emotrics on YouTube.\n\nThis is an open source software provided with absolutely no guarantees. You can run, study, share and modify the software. It is distributed under the GNU General Public License.\n\nThis software was written in Python, source code and additional information can be found in github.com/dguari1/Emotrics ', 
-                            QtWidgets.QMessageBox.Ok)  
-    
     def previous(self):
         # self.finished.emit()
         self.close()
