@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1671</width>
-    <height>1011</height>
+    <height>1009</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -262,7 +262,7 @@
              </widget>
             </item>
             <item row="10" column="2" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_3">
+             <widget class="QPushButton" name="saveMeasurementsButton">
               <property name="minimumSize">
                <size>
                 <width>80</width>
@@ -414,7 +414,7 @@
              </widget>
             </item>
             <item row="10" column="0" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_42">
+             <widget class="QPushButton" name="screenShotButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -586,7 +586,7 @@
              <number>4</number>
             </property>
             <item row="11" column="3" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_4">
+             <widget class="QPushButton" name="metricsSettingsButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1100,7 +1100,7 @@
              </widget>
             </item>
             <item row="2" column="2" alignment="Qt::AlignHCenter">
-             <widget class="QPushButton" name="pushButton_26">
+             <widget class="QPushButton" name="importIrisButton">
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>

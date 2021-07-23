@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>478</width>
-    <height>353</height>
+    <width>533</width>
+    <height>305</height>
    </rect>
   </property>
   <property name="minimumSize">
@@ -26,7 +26,20 @@
    <layout class="QVBoxLayout" name="verticalLayout">
     <item>
      <layout class="QGridLayout" name="gridLayout_6">
-      <item row="2" column="3" colspan="2">
+      <item row="3" column="0">
+       <spacer name="horizontalSpacer">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
+        </property>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
+        </property>
+       </spacer>
+      </item>
+      <item row="1" column="3" colspan="2">
        <widget class="QPushButton" name="landmark1ColorButton">
         <property name="minimumSize">
          <size>
@@ -46,26 +59,15 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
         <property name="text">
          <string>Select Color</string>
         </property>
        </widget>
       </item>
-      <item row="6" column="1">
-       <widget class="QLabel" name="label_19">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Adjust Size of Landmarks:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="9" column="1" colspan="4">
+      <item row="7" column="1" colspan="4">
        <widget class="Line" name="line_17">
         <property name="lineWidth">
          <number>0</number>
@@ -76,20 +78,23 @@
        </widget>
       </item>
       <item row="5" column="1">
-       <widget class="QLabel" name="label_17">
+       <widget class="QLabel" name="label_19">
         <property name="font">
          <font>
           <family>Times New Roman</family>
           <pointsize>12</pointsize>
-          <italic>true</italic>
+          <italic>false</italic>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
         <property name="text">
-         <string>Adjust Color of Eye:</string>
+         <string>Adjust Size of Landmarks:</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="2" alignment="Qt::AlignHCenter">
+      <item row="3" column="2" alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="midlineColorLabel">
         <property name="minimumSize">
          <size>
@@ -111,8 +116,59 @@
         </property>
        </widget>
       </item>
+      <item row="2" column="1">
+       <widget class="QLabel" name="label_13">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+          <italic>false</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
+        <property name="text">
+         <string>Adjust Color of Landmarks:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="1" colspan="2">
+       <widget class="QLabel" name="label_21">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+          <italic>false</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
+        <property name="text">
+         <string>Change Estimated Landmark Models:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QLabel" name="label_12">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+          <italic>false</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
+        <property name="text">
+         <string>Adjust Color of Landmarks:</string>
+        </property>
+       </widget>
+      </item>
       <item row="4" column="3" colspan="2">
-       <widget class="QPushButton" name="midlineColorButton">
+       <widget class="QPushButton" name="eyeColorButton">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -131,48 +187,15 @@
           <pointsize>10</pointsize>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
         <property name="text">
          <string>Select Color</string>
         </property>
        </widget>
       </item>
-      <item row="4" column="1">
-       <widget class="QLabel" name="label_15">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Adjust Color of Midline:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="3" column="2" alignment="Qt::AlignHCenter">
-       <widget class="QLabel" name="landmark2ColorLabel">
-        <property name="minimumSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>20</width>
-          <height>20</height>
-         </size>
-        </property>
-        <property name="frameShape">
-         <enum>QFrame::Box</enum>
-        </property>
-        <property name="text">
-         <string/>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="2" alignment="Qt::AlignHCenter">
+      <item row="4" column="2" alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="eyeColorLabel">
         <property name="minimumSize">
          <size>
@@ -194,7 +217,102 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="3" colspan="2" alignment="Qt::AlignLeft">
+      <item row="2" column="2" alignment="Qt::AlignHCenter">
+       <widget class="QLabel" name="landmark2ColorLabel">
+        <property name="minimumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="frameShape">
+         <enum>QFrame::Box</enum>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="2" alignment="Qt::AlignLeft">
+       <widget class="QSpinBox" name="landmarkSizeSpinBox">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="minimum">
+         <number>1</number>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="1">
+       <widget class="QLabel" name="label_15">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>12</pointsize>
+          <italic>false</italic>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
+        <property name="text">
+         <string>Adjust Color of Midline:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="3" colspan="2">
+       <widget class="QPushButton" name="midlineColorButton">
+        <property name="minimumSize">
+         <size>
+          <width>0</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>16777215</width>
+          <height>25</height>
+         </size>
+        </property>
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+          <pointsize>10</pointsize>
+         </font>
+        </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
+        </property>
+        <property name="text">
+         <string>Select Color</string>
+        </property>
+       </widget>
+      </item>
+      <item row="0" column="3" colspan="2" alignment="Qt::AlignLeft">
        <widget class="QComboBox" name="modelComboBox">
         <property name="sizePolicy">
          <sizepolicy hsizetype="Minimum" vsizetype="Fixed">
@@ -222,48 +340,8 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="0">
-       <spacer name="horizontalSpacer">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="5">
-       <spacer name="horizontalSpacer_2">
-        <property name="orientation">
-         <enum>Qt::Horizontal</enum>
-        </property>
-        <property name="sizeHint" stdset="0">
-         <size>
-          <width>40</width>
-          <height>20</height>
-         </size>
-        </property>
-       </spacer>
-      </item>
-      <item row="3" column="1">
-       <widget class="QLabel" name="label_13">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Adjust Color of Landmarks:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="6" column="2" alignment="Qt::AlignLeft">
-       <widget class="QSpinBox" name="landmarkSizeSpinBox">
+      <item row="2" column="3" colspan="2">
+       <widget class="QPushButton" name="landmark2ColorButton">
         <property name="minimumSize">
          <size>
           <width>0</width>
@@ -282,32 +360,32 @@
           <pointsize>10</pointsize>
          </font>
         </property>
-        <property name="minimum">
-         <number>1</number>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(0, 0, 0);</string>
         </property>
-        <property name="displayIntegerBase">
-         <number>10</number>
+        <property name="text">
+         <string>Select Color</string>
         </property>
        </widget>
       </item>
-      <item row="0" column="1" colspan="4">
-       <widget class="QLabel" name="label_23">
+      <item row="4" column="1">
+       <widget class="QLabel" name="label_17">
         <property name="font">
          <font>
           <family>Times New Roman</family>
-          <pointsize>18</pointsize>
-          <weight>50</weight>
+          <pointsize>12</pointsize>
           <italic>false</italic>
-          <bold>false</bold>
-          <underline>false</underline>
          </font>
         </property>
+        <property name="styleSheet">
+         <string notr="true">color: rgb(68, 85, 95);</string>
+        </property>
         <property name="text">
-         <string>Landmark Settings:</string>
+         <string>Adjust Color of Eye:</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="2" alignment="Qt::AlignHCenter">
+      <item row="1" column="2" alignment="Qt::AlignHCenter">
        <widget class="QLabel" name="landmark1ColorLabel">
         <property name="minimumSize">
          <size>
@@ -332,97 +410,42 @@
         </property>
        </widget>
       </item>
-      <item row="3" column="3" colspan="2">
-       <widget class="QPushButton" name="landmark2ColorButton">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Select Color</string>
-        </property>
-       </widget>
-      </item>
-      <item row="2" column="1">
-       <widget class="QLabel" name="label_12">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
-          <italic>true</italic>
-         </font>
-        </property>
-        <property name="text">
-         <string>Adjust Color of Landmarks:</string>
-        </property>
-       </widget>
-      </item>
-      <item row="5" column="3" colspan="2">
-       <widget class="QPushButton" name="eyeColorButton">
-        <property name="minimumSize">
-         <size>
-          <width>0</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>25</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>10</pointsize>
-         </font>
-        </property>
-        <property name="text">
-         <string>Select Color</string>
-        </property>
-       </widget>
-      </item>
-      <item row="8" column="2">
+      <item row="6" column="3">
        <widget class="QPushButton" name="doneButton">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+         </font>
+        </property>
         <property name="text">
          <string>Done</string>
         </property>
        </widget>
       </item>
-      <item row="8" column="4">
+      <item row="6" column="4">
        <widget class="QPushButton" name="cancelButton">
+        <property name="font">
+         <font>
+          <family>Times New Roman</family>
+         </font>
+        </property>
         <property name="text">
          <string>Cancel</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="1" colspan="2">
-       <widget class="QLabel" name="label_21">
-        <property name="font">
-         <font>
-          <family>Times New Roman</family>
-          <pointsize>12</pointsize>
-          <italic>true</italic>
-         </font>
+      <item row="6" column="5">
+       <spacer name="horizontalSpacer_2">
+        <property name="orientation">
+         <enum>Qt::Horizontal</enum>
         </property>
-        <property name="text">
-         <string>Change Estimated Landmark Models:</string>
+        <property name="sizeHint" stdset="0">
+         <size>
+          <width>40</width>
+          <height>20</height>
+         </size>
         </property>
-       </widget>
+       </spacer>
       </item>
      </layout>
     </item>
@@ -433,7 +456,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>478</width>
+     <width>533</width>
      <height>26</height>
     </rect>
    </property>
