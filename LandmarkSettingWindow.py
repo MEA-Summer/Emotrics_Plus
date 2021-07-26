@@ -1,6 +1,4 @@
-import os
-import sys
-from PyQt5 import QtWidgets, QtCore, QtGui, uic
+from PyQt5 import QtWidgets, QtCore, uic
 
 
 class LandmarkSettingsWindow(QtWidgets.QMainWindow):

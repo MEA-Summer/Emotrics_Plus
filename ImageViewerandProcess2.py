@@ -7,9 +7,7 @@ Created on Wed Aug 16 10:53:19 2017
 
 import numpy as np
 import torch
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
 from scipy.spatial.distance import cdist
 
 from Metrics import estimate_lines, find_NLF

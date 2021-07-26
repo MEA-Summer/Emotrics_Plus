@@ -2,17 +2,14 @@ from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtGui import QImage, QPainter
 import sys
 import numpy as np
-# import cv2 
 from PIL import Image, ImageOps
 import torch
-# import torch.nn as nn
 from face_alignment.detection.blazeface.net_blazeface import BlazeFace
 from lib.models import get_face_alignment_net
 from lib.config import config, merge_configs
 import os 
 from pathlib import Path
 from PyQt5 import QtGui
-#import yaml
 from arch.FAN import FAN
 from arch.resnest.HeatMaps import model_resnest
 from models.irislandmarks import IrisLandmarks

@@ -7,7 +7,7 @@ Created on Wed May  5 15:35:46 2021
 from PyQt5 import QtCore
 from PyQt5.QtCore import pyqtSignal 
 import numpy as np
-import cv2 
+# import cv2 
 import torch
 from face_alignment.detection.blazeface.utils import resize_and_crop_image
 from face_alignment.utils import crop, get_preds_fromhm

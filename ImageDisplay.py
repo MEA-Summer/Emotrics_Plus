@@ -4,11 +4,8 @@ Created on Fri Jul 23 00:56:37 2021
 
 @author: lukem
 """
-import numpy as np
-import torch
-from PyQt5 import QtWidgets
-from PyQt5 import QtGui
-from PyQt5 import QtCore
+from PyQt5 import QtWidgets, QtGui, QtCore
+
 
 class ImageDisplay(QtWidgets.QGraphicsView):       
     

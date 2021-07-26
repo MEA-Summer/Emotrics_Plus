@@ -6,10 +6,8 @@ Created on Fri Jul  9 13:00:27 2021
 """
 
 
-import os
-import sys
 import numpy as np
-from PyQt5 import QtWidgets, QtGui, QtCore, uic
+from PyQt5 import QtWidgets, QtGui, uic
 from Metrics import get_measurements_from_data
 
 class MetricsWindow(QtWidgets.QMainWindow):
