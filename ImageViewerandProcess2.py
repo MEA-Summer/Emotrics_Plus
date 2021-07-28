@@ -92,10 +92,13 @@ class ImageViewer(QtWidgets.QGraphicsView):
 
         #QtWidgets.QGraphicsView.RubberBandDrag
    
-    
+
+    ##############################
     ##############################
     """Basic Functions"""
     ##############################
+    ##############################
+    
     
     def setPhoto(self, pixmap = None):
         #this function puts an image in the scece (if pixmap is not None), it
@@ -177,9 +180,10 @@ class ImageViewer(QtWidgets.QGraphicsView):
             #show the photo
             self.setPhoto(img_show)
   
-    
+    ##############################
     ##############################  
     """Event Functions"""    
+    ##############################
     ##############################
     
     
@@ -575,9 +579,10 @@ class ImageViewer(QtWidgets.QGraphicsView):
 
         QtWidgets.QGraphicsView.mouseMoveEvent(self, event)
     
-    
+    ##############################
     ##############################       
     """Draw Functions"""
+    ##############################
     ##############################
     
     
@@ -628,6 +633,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self._scene.addItem(Ellipse)
         
         #Adds Label to the Circle
+
         Label = QtWidgets.QGraphicsSimpleTextItem('', parent=Ellipse)
         #Check whether to adjust text size or not
         if self._landmark_size > 3:
@@ -636,7 +642,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
             Label.setFont(Font)
         Label.setBrush(self._label_color)
         Label.setText(str(ID))
-        self._scene.addItem(Label)
+        # self._scene.addItem(Label)
     
         
     def draw_circle(self, CircleInformation):
@@ -692,9 +698,11 @@ class ImageViewer(QtWidgets.QGraphicsView):
             Label.setPos(point_1[0],point_1[1])
             self._scene.addItem(Label)
     
-    
+
+    ##############################
     ##############################
     """Visualization Functions"""
+    ##############################
     ##############################
     
     
@@ -807,9 +815,10 @@ class ImageViewer(QtWidgets.QGraphicsView):
                 self.update_midLine() #Then checks if the midline needs to be added back
                 self._IsNLFVisible = False
     
-    
+    ##############################
     ##############################
     """Adjustment Functions"""
+    ##############################
     ##############################
     
     
@@ -969,10 +978,12 @@ class ImageViewer(QtWidgets.QGraphicsView):
             self.update_shape()
         except:
             print('No more dots')
-        
-        
+
+
+    ##############################   
     ##############################    
     """Update Functions"""
+    ##############################
     ##############################
     
     
