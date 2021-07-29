@@ -1,0 +1,756 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>MainWindow</class>
+ <widget class="QMainWindow" name="MainWindow">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>1650</width>
+    <height>623</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <property name="styleSheet">
+   <string notr="true">background-color: rgb(255, 255, 255);</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <layout class="QFormLayout" name="formLayout">
+    <item row="0" column="0">
+     <widget class="QTabWidget" name="tabWidget">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">background-color: rgb(255, 255, 255);</string>
+      </property>
+      <property name="currentIndex">
+       <number>0</number>
+      </property>
+      <widget class="QWidget" name="tab">
+       <attribute name="title">
+        <string>Two Side Comparison (Pre-State vs. Post-State)</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_3">
+        <item row="0" column="0">
+         <widget class="ImageDisplay" name="tab1Display">
+          <property name="minimumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QTableWidget" name="twoSideComparisonTable">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QHeaderView::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+            padding:4px;
+}
+
+  QTableCornerButton::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+}</string>
+          </property>
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>315</number>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>Brow Height (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 1 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 2 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Palpebral Fissure Width (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Eye Area (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Nasolabial Fold Angle (deg):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Upper Lip Slope (deg)</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Height with Respect to Upper Lip Vermilion Border (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Distance (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Area of the Hemiface (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Position with Respect to Midline Lower Lip (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Lower Lip Height  (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>Absolute Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Percentage Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_2">
+       <attribute name="title">
+        <string>Queried Side Comparison</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout_2">
+        <item row="0" column="2">
+         <widget class="QTableWidget" name="affectSideComparisonTable">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QHeaderView::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+            padding:4px;
+}
+
+  QTableCornerButton::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+}</string>
+          </property>
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>315</number>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>Brow Height (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 1 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 2 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Palpebral Fissure Width (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Eye Area (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Nasolabial Fold Angle (deg):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Upper Lip Slope (deg)</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Height with Respect to Upper Lip Vermilion Border (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Distance (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Area of the Hemiface (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Position with Respect to Midline Lower Lip (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Lower Lip Height  (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>Absolute Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Percentage Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="ImageDisplay" name="tab2Display">
+          <property name="minimumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+      <widget class="QWidget" name="tab_3">
+       <attribute name="title">
+        <string>Reference Side Comparison</string>
+       </attribute>
+       <layout class="QGridLayout" name="gridLayout">
+        <item row="0" column="0">
+         <widget class="ImageDisplay" name="tab3Display">
+          <property name="minimumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+          <property name="maximumSize">
+           <size>
+            <width>326</width>
+            <height>430</height>
+           </size>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1">
+         <widget class="QTableWidget" name="normalSideComparisonTable">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <property name="minimumSize">
+           <size>
+            <width>0</width>
+            <height>0</height>
+           </size>
+          </property>
+          <property name="font">
+           <font>
+            <family>Times New Roman</family>
+            <pointsize>12</pointsize>
+           </font>
+          </property>
+          <property name="styleSheet">
+           <string notr="true">QHeaderView::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+            padding:4px;
+}
+
+  QTableCornerButton::section{
+            border-top:0px solid #D8D8D8;
+            border-left:0px solid #D8D8D8;
+            border-right:1px solid #D8D8D8;
+            border-bottom: 1px solid #D8D8D8;
+            background-color:white;
+}</string>
+          </property>
+          <property name="lineWidth">
+           <number>0</number>
+          </property>
+          <property name="verticalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="horizontalScrollBarPolicy">
+           <enum>Qt::ScrollBarAlwaysOff</enum>
+          </property>
+          <property name="sizeAdjustPolicy">
+           <enum>QAbstractScrollArea::AdjustToContents</enum>
+          </property>
+          <attribute name="horizontalHeaderDefaultSectionSize">
+           <number>315</number>
+          </attribute>
+          <row>
+           <property name="text">
+            <string>Brow Height (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 1 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Marginal Reflex Distance 2 (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Palpebral Fissure Width (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Eye Area (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Nasolabial Fold Angle (deg):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Upper Lip Slope (deg)</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Height with Respect to Upper Lip Vermilion Border (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Distance (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Interlabial Area of the Hemiface (mm^2):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Commissure Position with Respect to Midline Lower Lip (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <row>
+           <property name="text">
+            <string>Lower Lip Height  (mm):</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </row>
+          <column>
+           <property name="text">
+            <string>Absolute Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+          <column>
+           <property name="text">
+            <string>Percentage Differences</string>
+           </property>
+           <property name="font">
+            <font>
+             <family>Times New Roman</family>
+             <pointsize>12</pointsize>
+            </font>
+           </property>
+          </column>
+         </widget>
+        </item>
+       </layout>
+      </widget>
+     </widget>
+    </item>
+   </layout>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>1650</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ImageDisplay</class>
+   <extends>QGraphicsView</extends>
+   <header>ImageDisplay.h</header>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>
