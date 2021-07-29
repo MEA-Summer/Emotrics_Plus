@@ -681,7 +681,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     
     #Test
-    points_upper = shape[49:55,:]
+    points_upper = shape[48:55,:]
     ResultsRight.UpperLipSlope, ResultsLeft.UpperLipSlope = upper_lip_slope(points_upper, rot_angle, center)
     ResultsDeviation.UpperLipSlope = abs(ResultsRight.UpperLipSlope - ResultsLeft.UpperLipSlope)
     
@@ -750,7 +750,7 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     # #Testing new commissure height method
     # ResultsRight.CommisureHeight, ResultsLeft.CommisureHeight, ResultsDeviation.CommisureHeight = deviation(shape[48],shape[54],center,rot_angle)
     # print('ResultsDeviation.CommisureHeight = ', ResultsDeviation.CommisureHeight, '\n')
-    points_upper = shape[49:55,:]
+    points_upper = shape[48:55,:]
     ResultsRight.CommisureHeight, ResultsLeft.CommisureHeight, ResultsDeviation.CommisureHeight = commissure_height(points_upper, rot_angle, center)
     # print('ResultsDeviation.CommisureHeight = ', ResultsDeviation.CommisureHeight, '\n')
     

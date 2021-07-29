@@ -263,7 +263,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
             #show the window with the results 
             self._new_window.show()
         else:
-            print('Shape is not greater or equal to 76')
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Not enough Landmarks. \nMust be 76 or more Landmarks', 
+                            QtWidgets.QMessageBox.Ok)
     
             
     def startLandmarkThread(self, image):
