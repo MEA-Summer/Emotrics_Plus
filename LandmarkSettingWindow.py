@@ -33,11 +33,12 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
         self.midlineColorLabel.setStyleSheet('QWidget {background-color:%s}' %self._color_midline.name())
         
         #Add model names to combo box
+        self.modelComboBox.addItem('')
         self.modelComboBox.addItem('FAN_MEEE')
         self.modelComboBox.addItem('FAN')
         self.modelComboBox.addItem('HRNet')
         self.modelComboBox.addItem('NLF_model')
-        self.modelComboBox.setCurrentText(self._Model_name)
+        # self.modelComboBox.setCurrentText(self._Model_name)
         self.modelComboBox.activated[str].connect(self.changeModelname)
         
         #Set landmark size to current size
@@ -68,8 +69,9 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
         
         
     def changeModelname(self, modelname):
-        self._new_Model_selected = True
-        self._Model_name = modelname
+        if modelname != '':
+            self._new_Model_selected = True
+            self._Model_name = modelname
         
         
     def get_Landmark1Color(self):

@@ -106,13 +106,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.ui = uic.loadUi('uis/double.ui', self)
         """Pre-Selection"""
         #Add task assignments into combo to be selected later
-        self.photo1ComboBox.addItem('Pre-Op State')
-        self.photo1ComboBox.addItem('Resting State')
-        self.photo1ComboBox.activated[str].connect(self.newPhoto1TitleSelected)
-
-        self.photo2ComboBox.addItem('Post-Op State')
-        self.photo2ComboBox.addItem('Expression State')
-        self.photo2ComboBox.activated[str].connect(self.newPhoto2TitleSelected)
+        
 
 
         
@@ -345,12 +339,12 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
     def setTask(self, task):
         if task == 'Pre-Op vs Post-Op':
             self._task = task
-            self.photo1ComboBox.setCurrentText('Pre-Op State')
-            self.photo2ComboBox.setCurrentText('Post-Op State')
+            self.photo1Label.setText('Pre-Op State')
+            self.photo2Label.setext('Post-Op State')
         elif task == 'Resting vs Expression':
             self._task = task
-            self.photo1ComboBox.setCurrentText('Resting State')
-            self.photo2ComboBox.setCurrentText('Expression State')
+            self.photo1Label.setText('Resting State')
+            self.photo2Label.setText('Expression State')
         else:
             print('Invalid Task')
 
