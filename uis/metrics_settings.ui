@@ -7,11 +7,15 @@
     <x>0</x>
     <y>0</y>
     <width>367</width>
-    <height>183</height>
+    <height>214</height>
    </rect>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Measurement Settings</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../icons/Home_logo_square.jpg</normaloff>../icons/Home_logo_square.jpg</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>

@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>530</width>
-    <height>620</height>
+    <width>679</width>
+    <height>623</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -16,241 +16,48 @@
     <verstretch>0</verstretch>
    </sizepolicy>
   </property>
+  <property name="minimumSize">
+   <size>
+    <width>679</width>
+    <height>623</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>679</width>
+    <height>623</height>
+   </size>
+  </property>
   <property name="windowTitle">
    <string>Selection Window</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../icons/Home_logo_square.jpg</normaloff>../icons/Home_logo_square.jpg</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="3" column="0">
-     <widget class="QPushButton" name="addPhoto1Button">
-      <property name="minimumSize">
-       <size>
-        <width>250</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-		image: url(/Users/kee_b/OneDrive/바탕 화면/Untitled-upload.jpg)
-}
-</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../icons/upload.jpg</normaloff>../icons/upload.jpg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>200</width>
-        <height>250</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="4">
-     <widget class="QLabel" name="label">
+    <item row="9" column="0" alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="previousButton">
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>16</pointsize>
+        <pointsize>12</pointsize>
        </font>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Please Select the Task:</string>
+       <string>Previous</string>
       </property>
      </widget>
     </item>
-    <item row="6" column="0" alignment="Qt::AlignHCenter">
-     <widget class="QRadioButton" name="rightSideReferenceButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Right </string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
-     <widget class="QTextBrowser" name="photo1TextBrowser">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>5</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>18</pointsize>
-       </font>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" colspan="3">
-     <widget class="QTextBrowser" name="Photo2TextBrowser">
-      <property name="minimumSize">
-       <size>
-        <width>0</width>
-        <height>5</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>18</pointsize>
-       </font>
-      </property>
-      <property name="verticalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-      <property name="horizontalScrollBarPolicy">
-       <enum>Qt::ScrollBarAlwaysOff</enum>
-      </property>
-     </widget>
-    </item>
-    <item row="5" column="0" colspan="4">
-     <widget class="QLabel" name="label_11">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Please Select the Reference Side:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="1" column="0" colspan="4">
-     <widget class="QPushButton" name="PreVsPostButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Compare Pre-Op vs Post-Op Photograph</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="1" colspan="3">
-     <widget class="QPushButton" name="addPhoto2Button">
-      <property name="minimumSize">
-       <size>
-        <width>250</width>
-        <height>300</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>250</width>
-        <height>16777215</height>
-       </size>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton {
-		image: url(/Users/kee_b/OneDrive/바탕 화면/Untitled-upload.jpg)
-}
-</string>
-      </property>
-      <property name="text">
-       <string/>
-      </property>
-      <property name="icon">
-       <iconset>
-        <normaloff>../icons/upload.jpg</normaloff>../icons/upload.jpg</iconset>
-      </property>
-      <property name="iconSize">
-       <size>
-        <width>200</width>
-        <height>250</height>
-       </size>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="0" colspan="4">
-     <widget class="QPushButton" name="ExpressionVsRestingButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Compare Expression vs Resting Photograph</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="1" alignment="Qt::AlignLeft">
-     <widget class="QPushButton" name="nextButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Next</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="2">
-     <widget class="QRadioButton" name="leftSideReferenceButton">
+    <item row="8" column="1" colspan="2" alignment="Qt::AlignHCenter">
+     <widget class="QRadioButton" name="leftSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
@@ -271,8 +78,52 @@
       </property>
      </widget>
     </item>
-    <item row="7" column="0" alignment="Qt::AlignRight">
-     <widget class="QPushButton" name="previousButton">
+    <item row="0" column="0" colspan="2">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Please Select the Task:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1" colspan="2" alignment="Qt::AlignLeft">
+     <widget class="QPushButton" name="nextButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="0">
+     <widget class="QPushButton" name="loadPhoto1Button">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>325</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -283,9 +134,152 @@
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Previous</string>
+       <string>Click to Upload Pre-Op Photograph</string>
       </property>
      </widget>
+    </item>
+    <item row="1" column="0" colspan="3">
+     <widget class="QPushButton" name="PrevsPostButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Compare Pre-Op vs Post-Op Photograph</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+      <property name="autoRepeat">
+       <bool>false</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="autoRepeatDelay">
+       <number>0</number>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="0" colspan="3">
+     <widget class="QPushButton" name="RestingvsExpressionButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Compare Resting vs Expression Photograph</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="autoRepeatDelay">
+       <number>0</number>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="0">
+     <widget class="QComboBox" name="ExpressionComboBox"/>
+    </item>
+    <item row="6" column="0" colspan="3">
+     <widget class="QLabel" name="label_11">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Please Select the Reference Side:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="0" alignment="Qt::AlignHCenter">
+     <widget class="QRadioButton" name="rightSideButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Right </string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QPushButton" name="loadPhoto2Button">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>325</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Click to Upload Post-Op Photograph</string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="0">
+     <widget class="ImageDisplay" name="photo1Display"/>
+    </item>
+    <item row="3" column="1">
+     <widget class="ImageDisplay" name="photo2Display"/>
     </item>
    </layout>
   </widget>
@@ -294,13 +288,20 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>530</width>
+     <width>679</width>
      <height>26</height>
     </rect>
    </property>
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>ImageDisplay</class>
+   <extends>QGraphicsView</extends>
+   <header>ImageDisplay.h</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
 </ui>
