@@ -24,7 +24,7 @@ class SelectionWindow(QtWidgets.QMainWindow):
         
         
     def initUI(self):
-        self.ui = uic.loadUi('uis\select_new.ui', self)
+        self.ui = uic.loadUi('uis\select.ui', self)
         
         """Button Connection"""
         self.loadPhoto1Button.clicked.connect(self.load_file1)
