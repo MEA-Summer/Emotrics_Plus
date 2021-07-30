@@ -1035,7 +1035,3 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     
     return ResultsLeft, ResultsRight, ResultsDeviation, ResultsPercentile
     
-
-    
-    
-    

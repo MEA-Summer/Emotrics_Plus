@@ -1053,5 +1053,3 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self._savedShape = False
         
            
-        
-        

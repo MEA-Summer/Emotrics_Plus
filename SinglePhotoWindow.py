@@ -408,6 +408,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self.finished.emit()
         self.close()
 
+
 def main():
     app = QtWidgets.QApplication(sys.argv)
     main = SinglePhotoWindow()

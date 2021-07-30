@@ -223,6 +223,3 @@ class MetricsWindow(QtWidgets.QMainWindow):
                 self.metricsLabel.update_view()
             
         
-        
-        
-        
