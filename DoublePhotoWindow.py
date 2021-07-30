@@ -1,3 +1,4 @@
+from SelectionWindow import SelectionWindow
 from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtGui import QImage, QPainter
 import sys
@@ -16,10 +17,12 @@ from models.irislandmarks import IrisLandmarks
 from ImageViewerandProcess2 import ImageViewer
 from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
-from MetricsWindow import MetricsWindow
+from MetricsDoubleWindow import MetricsDoubleWindow
 from LandmarkSettingWindow import LandmarkSettingsWindow
+from MetricsSettingsWindow import MetricsSettingsWindow
 
 class DoublePhotoWindow(QtWidgets.QMainWindow):
+    finished = QtCore.pyqtSignal()
     def __init__(self, *args, **kwargs):
         super(DoublePhotoWindow, self).__init__(*args, **kwargs)
         
@@ -79,6 +82,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self._CalibrationType = 'Iris'
         self._CalibrationValue = 11.77
         self._file_name = None
+        self._task = 'Pre-Op vs Post-Op'
         
         ########################
         """Set Up the UI form"""
@@ -86,12 +90,31 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.initUI()
         
         """Loads first image on entry"""
-        self.load_file1()
-        self.load_file2()
-        
+        # self.load_file1()
+        # self.load_file2()
+        # self.getSelection()
+
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Set-up Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+
     def initUI(self):
         self.ui = uic.loadUi('uis/double.ui', self)
-        
+        """Pre-Selection"""
+        #Add task assignments into combo to be selected later
+        self.photo1ComboBox.addItem('Pre-Op State')
+        self.photo1ComboBox.addItem('Resting State')
+        self.photo1ComboBox.activated[str].connect(self.newPhoto1TitleSelected)
+
+        self.photo2ComboBox.addItem('Post-Op State')
+        self.photo2ComboBox.addItem('Expression State')
+        self.photo2ComboBox.activated[str].connect(self.newPhoto2TitleSelected)
+
+
         
         """Button Connection"""
         #New Photograph Button
@@ -123,7 +146,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         #Save
         
         #Button 1.3.2: Save Dots
-        self.saveDotsButton.clicked.connect(self.save_results)
+        # self.saveDotsButton.clicked.connect(self.save_results)
 
         
         #Tab 2:Settings
@@ -154,7 +177,10 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         #Button 2.2.5: Reset Midline 2
         self.resetMidline2Button.clicked.connect(self.displayImage2.reset_midline)
         
+        #Measurement and Save Settings
         
+        #Button 2.3.2: Landmark Settings
+        self.metricsSettingsButton.clicked.connect(self.metrics_settings)
         
         
         
@@ -180,6 +206,161 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.midLine_Angular_move_right_shortcut.activated.connect(self.displayImage.midLine_Angular_move_counterclockwise)
         self.midLine_Angular_move_right_shortcut.activated.connect(self.displayImage2.midLine_Angular_move_counterclockwise)
         
+
+    def setPhoto1(self, name):
+        try:
+            self._imagePath1 = name
+            name = Path(name)
+            #Displaying Image
+            image = Image.open(name).convert('RGB')
+            image = ImageOps.exif_transpose(image)
+            image = np.array(image)
+            self.displayImage._image = image
+            self.displayImage.update_view()
+            self.displayImage.clear_scene()
+            
+            os_name = os.path.normpath(self._imagePath1)
+            self._file_name = os_name
+            #self.displayImage._opencvimage = image#cv2.imread(os_name)
+            filename = os_name[:-4]
+            if filename[-1] == '.':
+                filename = filename[:-1]
+            file_txt = (filename + '.txt')
+            
+            # self._shapePath = Path(self._imagePath1.stem + 'txt')
+
+            if os.path.isfile(file_txt):
+                    shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
+                    self.displayImage._lefteye = lefteye
+                    self.displayImage._righteye = righteye 
+                    self.displayImage._shape = shape
+                    self.displayImage._boundingbox = boundingbox
+                    self.displayImage._points = None
+                    self.displayImage._savedShape = True #Makes sure imported dots are not altered if NLF is calculated
+                    #Checks if NLF landmarks need to be calculated
+                    if self.Modelname_NLF == True and len(self.displayImage._shape) == 68:
+                        self.startLandmarkThread(image)
+                    # self.displayImage.update_shape()
+            else:
+                #Resets Shape and Eyes
+                self.displayImage._shape = None
+                self.displayImage._lefteye = None
+                self.displayImage._righteye = None
+                self.displayImage._lefteye_landmarks = None
+                self.displayImage._righteye_landmarks = None
+                self.displayImage._savedShape = False
+                #Displaying Landmarks
+                self.startLandmarkThread(image)
+                
+            #Automatically find landmark size based on size of scene
+            H, W, C = self.displayImage._image.shape
+            area = H*W
+            self.displayImage._landmark_size = ((area)/(10**6))**.8
+            # self.landmarkSizeBox.setValue(int(self.displayImage._landmark_size)) #makes sure size change is displayed
+            # print('self.displayImage._scene.height() = ', self.displayImage._scene.height())
+            # print('self.displayImage._image.shape = ', self.displayImage._image.shape)
+            # print('self.displayImage._landmark_size =', self.displayImage._landmark_size)
+            
+            #Makes sure everything is up to date
+            self.displayImage.update_shape()
+        except:
+            print('Error in Loading file')
+
+
+    def setPhoto2(self, name):
+        try:
+            self._imagePath2 = name
+            name = Path(name)
+            #Displaying Image
+            image = Image.open(name).convert('RGB')
+            image = ImageOps.exif_transpose(image)
+            image = np.array(image)
+            self.displayImage2._image = image
+            self.displayImage2.update_view()
+            self.displayImage2.clear_scene()
+            
+            os_name = os.path.normpath(self._imagePath2)
+            self._file_name = os_name
+            #self.displayImage2._opencvimage = image#cv2.imread(os_name)
+            filename = os_name[:-4]
+            if filename[-1] == '.':
+                filename = filename[:-1]
+            file_txt = (filename + '.txt')
+            
+            # self._shapePath = Path(self._imagePath2.stem + 'txt')
+
+            if os.path.isfile(file_txt):
+                    shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
+                    self.displayImage2._lefteye = lefteye
+                    self.displayImage2._righteye = righteye 
+                    self.displayImage2._shape = shape
+                    self.displayImage2._boundingbox = boundingbox
+                    self.displayImage2._points = None
+                    self.displayImage2._savedShape = True #Makes sure imported dots are not altered if NLF is calculated
+                    #Checks if NLF landmarks need to be calculated
+                    if self.Modelname_NLF == True and len(self.displayImage2._shape) == 68:
+                        self.startLandmarkThread2(image)
+                    # self.displayImage2.update_shape()
+            else:
+                #Resets Shape and Eyes
+                self.displayImage2._shape = None
+                self.displayImage2._lefteye = None
+                self.displayImage2._righteye = None
+                self.displayImage2._lefteye_landmarks = None
+                self.displayImage2._righteye_landmarks = None
+                self.displayImage2._savedShape = False
+                #Displaying Landmarks
+                self.startLandmarkThread2(image)
+                
+            #Automatically find landmark size based on size of scene
+            H, W, C = self.displayImage2._image.shape
+            area = H*W
+            self.displayImage2._landmark_size = ((area)/(10**6))**.8
+            # self.landmarkSizeBox.setValue(int(self.displayImage2._landmark_size)) #makes sure size change is displayed
+            # print('self.displayImage2._scene.height() = ', self.displayImage2._scene.height())
+            # print('self.displayImage2._image.shape = ', self.displayImage2._image.shape)
+            # print('self.displayImage2._landmark_size =', self.displayImage2._landmark_size)
+            
+            #Makes sure everything is up to date
+            self.displayImage2.update_shape()
+        except:
+            print('Error in Loading file')
+
+
+    def setReferenceSide(self, side):
+        if side == 'Left':
+            self.displayImage._reference_side = 'Left'
+            self.displayImage2._reference_side = 'Left'
+            self.referenceSideLeftButton.setChecked(True)
+            self.referenceSideRightButton.setChecked(False)
+        elif side == 'Right':
+            self.displayImage._reference_side = 'Right'
+            self.displayImage2._reference_side = 'Right'
+            self.referenceSideLeftButton.setChecked(False)
+            self.referenceSideRightButton.setChecked(True)
+        else:
+            print('Invalid Reference Side')
+
+
+    def setTask(self, task):
+        if task == 'Pre-Op vs Post-Op':
+            self._task = task
+            self.photo1ComboBox.setCurrentText('Pre-Op State')
+            self.photo2ComboBox.setCurrentText('Post-Op State')
+        elif task == 'Resting vs Expression':
+            self._task = task
+            self.photo1ComboBox.setCurrentText('Resting State')
+            self.photo2ComboBox.setCurrentText('Expression State')
+        else:
+            print('Invalid Task')
+
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Loading Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
 
     def load_file1(self):
         
@@ -353,21 +534,34 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.landmarks2.finished.connect(self.displayImage2.update_shape) #updates everything when done
         self.landmarks2.finished.connect(self.displayImage2.reset_save_variables)
     
-        
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Metrics Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+    
     def create_metrics_window(self):
         
         
-        if max(self.displayImage._shape[:, 2]) >= 76:
+        if max(self.displayImage._shape[:, 2]) >= 76 and max(self.displayImage2._shape[:, 2]) >= 76:
             #This is to make sure that the midline exist
             if self.displayImage._points == None:
                 self.displayImage.toggle_midLine()
                 self.displayImage.toggle_midLine()
+            #This is to make sure that the midline exist
+            if self.displayImage2._points == None:
+                self.displayImage2.toggle_midLine()
+                self.displayImage2.toggle_midLine()
             #say to the window that presents the results that there is only 1 tab
-            self._new_window = MetricsWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name)
+            self._new_window = MetricsDoubleWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self.displayImage2._shape, self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._task)
             #show the window with the results 
             self._new_window.show()
         else:
-            print('Shape is not greater or equal to 76')
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Not enough Landmarks. \nEach photo must be 76 or more Landmarks', 
+                            QtWidgets.QMessageBox.Ok)
     
     
     def leftSideSelected(self):
@@ -377,7 +571,32 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
     def rightSideSelected(self):
         self.displayImage._reference_side = 'Right'
         self.displayImage2._reference_side = 'Right'
-        
+    
+
+    def newPhoto1TitleSelected(self, title):
+        if title == 'Pre-Op State':
+            self._task = 'Pre-Op vs Post-Op'
+            self.photo2ComboBox.setCurrentText('Post-Op State')
+        elif title == 'Resting State':
+            self._task = 'Resting vs Expression'
+            self.photo2ComboBox.setCurrentText('Expression State')
+    
+
+    def newPhoto2TitleSelected(self, title):
+        if title == 'Post-Op State':
+            self._task = 'Pre-Op vs Post-Op'
+            self.photo1ComboBox.setCurrentText('Pre-Op State')
+        elif title == 'Expression State':
+            self._task = 'Resting vs Expression'
+            self.photo1ComboBox.setCurrentText('Resting State')
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Landmark Settings Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+    
     def landmark_Setting(self):
         """This function opens a window for the landmark setting"""
         self.landmark_Setting_window = LandmarkSettingsWindow(self.Modelname, self.displayImage._landmark_color, self.displayImage._landmark_color_lower_lid,
@@ -442,6 +661,13 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         #     print('Size Selected = ', size)    
     
 
+    ########################################################################################################################
+    ########################################################################################################################
+    """Eye Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+
     def matchEyes1to2(self):
         """This function is used when the button to match iris radius 1 to 2 is clicked.
         The function takes the radius of both eyes in displayImage and matches them to the
@@ -462,8 +688,41 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.displayImage._righteye[2] = self.displayImage2._righteye[2]
         self.displayImage.normalize_eye_landmarks(normalize_left=True, normalize_right=True)
         self.displayImage.update_shape()
+    
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Metrics Settings Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+
+    def metrics_settings(self):
+        """This function is used when the user clicks the measurement settings button.
+        This function opens up a window and allows the user to change the calibration type"""
+        self.metrics_Setting_window = MetricsSettingsWindow(self._CalibrationType, self._CalibrationValue)
+        self.metrics_Setting_window.show()
+        self.metrics_Setting_window.Calibration_Type.connect(self.changeCalibrationType)
+        self.metrics_Setting_window.Calibration_Value.connect(self.changeCalibrationValue)
         
         
+    def changeCalibrationValue(self, CalibrationValue):
+       """This function is used when a new Calibration Value is selected in the metrics settings"""
+       self._CalibrationValue = CalibrationValue
+       
+        
+    def changeCalibrationType(self, CalibrationType):
+       """This function is used when a new Calibration Value is selected in the metrics settings"""
+       self._CalibrationType = CalibrationType
+    
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Saving Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+       
     def save_results(self):
         if self._imagePath is not None:
             name = os.path.normpath(self._imagePath)
@@ -496,19 +755,19 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             print(marked_image.save(photo_name,'JPG'))
             marked_image.save(photo_name,'JPG')
             print(marked_image.save(photo_name,'JPG'))
-        
-        
-    
-    def about_app(self):
-        
-        #show a window with some information
-        QtWidgets.QMessageBox.information(self, 'Emotrics', 
-                            'Emotrics is a tool for estimation of objective facial measurements, it uses machine learning to automatically localize facial landmarks in photographs. Its objective is to reduce subjectivity in the evaluation of facial palsy.\n\nEmotrics was developed by: Diego L. Guarin, PhD. at the Facial Nerve Centre, Massachusetts Eye and Ear Infirmary; part of Harvard Medical School.\n\nA tutorial can be found by searching for Emotrics on YouTube.\n\nThis is an open source software provided with absolutely no guarantees. You can run, study, share and modify the software. It is distributed under the GNU General Public License.\n\nThis software was written in Python, source code and additional information can be found in github.com/dguari1/Emotrics ', 
-                            QtWidgets.QMessageBox.Ok)  
-    
+   
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Closing Function"""
+    ########################################################################################################################
+    ########################################################################################################################
+
+
     def previous(self):
-        # self.finished.emit()
+        self.finished.emit()
         self.close()
+
 
 def main():
     app = QtWidgets.QApplication(sys.argv)

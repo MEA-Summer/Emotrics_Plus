@@ -22,7 +22,7 @@ from MetricsSettingsWindow import MetricsSettingsWindow
 
 
 class SinglePhotoWindow(QtWidgets.QMainWindow):
-    # finished = QtCore.pyqtSignal()
+    finished = QtCore.pyqtSignal()
     def __init__(self, *args, **kwargs):
         super(SinglePhotoWindow, self).__init__(*args, **kwargs)
         
@@ -91,13 +91,21 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self._CalibrationValue = 11.77
         self._file_name = None
         
-        ########################
+        ################################################
         """Set Up the UI form"""
-        ########################
+        ################################################
         self.initUI()
         
         """Loads first image on entry"""
         self.load_file()
+        # #If no file is selected on there is an error, return to home screen **Incomplete**
+        # if self.displayImage._image != None:
+        #     pass
+        # else:
+        #     print('Returning to Home Window')
+        #     self.close()
+
+
         
     def initUI(self):
         self.ui = uic.loadUi('uis/single.ui', self)
@@ -241,13 +249,13 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 #Makes sure everything is up to date
                 self.displayImage.update_shape()
             except:
-                print('Error in Loading file')
+                QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Error in Loading file', 
+                            QtWidgets.QMessageBox.Ok)
         else:
-            self._imagePath = None
-            pass
-            #the user will load an single image so get rid of Patient and the
-            # changephotoAction in the toolbar
-            print('file ready')
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                            'No file selected', 
+                            QtWidgets.QMessageBox.Ok)
     
     
     def create_metrics_window(self):
@@ -264,7 +272,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
             self._new_window.show()
         else:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                            'Not enough Landmarks. \nMust be 76 or more Landmarks', 
+                            'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
                             QtWidgets.QMessageBox.Ok)
     
             
@@ -397,7 +405,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         
         
     def previous(self):
-        # self.finished.emit()
+        self.finished.emit()
         self.close()
 
 def main():

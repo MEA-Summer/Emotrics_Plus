@@ -163,9 +163,9 @@ class MetricsWindow(QtWidgets.QMainWindow):
             self.resultTable.horizontalHeaderItem(1).setText('Queried (Affected)\nLeft Side')
         
         #Connecting the selection method to the show the example photos
-        # pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
-        # self.metricsLabel.setPhoto(pixmap)
-        # self.metricsLabel.update_view()
+        pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
+        self.metricsLabel.setPhoto(pixmap)
+        self.metricsLabel.update_view()
         self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
          
