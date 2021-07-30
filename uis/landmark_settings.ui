@@ -150,7 +150,7 @@
          <string notr="true">color: rgb(68, 85, 95);</string>
         </property>
         <property name="text">
-         <string>Change Estimated Landmark Models:</string>
+         <string>Run New Landmark Model:</string>
         </property>
        </widget>
       </item>
