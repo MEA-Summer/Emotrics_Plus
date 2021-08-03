@@ -35,7 +35,12 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self.RestingvsExpressionButton.clicked.connect(self.RestingvsExpressionSelect)
         self.previousButton.clicked.connect(self.previous)
         self.nextButton.clicked.connect(self.next)
-
+        # pixmap = QtGui.QPixmap('icons\upload.jpg')
+        # self.photo1Display.setPhoto(pixmap)
+        # self.photo1Display.update_view()
+        # pixmap = QtGui.QPixmap('icons\upload.jpg')
+        # self.photo2Display.setPhoto(pixmap)
+        # self.photo2Display.update_view()
 
 
     def load_file1(self):

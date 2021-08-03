@@ -340,7 +340,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         if task == 'Pre-Op vs Post-Op':
             self._task = task
             self.photo1Label.setText('Pre-Op State')
-            self.photo2Label.setext('Post-Op State')
+            self.photo2Label.setText('Post-Op State')
         elif task == 'Resting vs Expression':
             self._task = task
             self.photo1Label.setText('Resting State')

@@ -165,7 +165,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         #Connecting the selection method to the show the example photos
         pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
         self.metricsLabel.setPhoto(pixmap)
-        self.metricsLabel.update_view()
+        # self.metricsLabel.update_view()
         self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
          
