@@ -307,7 +307,7 @@ Left Side</string>
          </widget>
         </item>
         <item row="0" column="1">
-         <widget class="ImageDisplay" name="metricsLabel1">
+         <widget class="MetricsDisplay" name="metricsLabel1">
           <property name="minimumSize">
            <size>
             <width>326</width>
@@ -330,7 +330,7 @@ Left Side</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout">
         <item row="0" column="0">
-         <widget class="ImageDisplay" name="metricsLabel2">
+         <widget class="MetricsDisplay" name="metricsLabel2">
           <property name="minimumSize">
            <size>
             <width>326</width>
@@ -592,7 +592,7 @@ Left Side</string>
        </attribute>
        <layout class="QGridLayout" name="gridLayout_3">
         <item row="0" column="0">
-         <widget class="ImageDisplay" name="metricsLabel3">
+         <widget class="MetricsDisplay" name="metricsLabel3">
           <property name="minimumSize">
            <size>
             <width>326</width>
@@ -878,9 +878,9 @@ Percentage Differences</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ImageDisplay</class>
+   <class>MetricsDisplay</class>
    <extends>QGraphicsView</extends>
-   <header>ImageDisplay.h</header>
+   <header>MetricsDisplay.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>533</width>
+    <width>543</width>
     <height>305</height>
    </rect>
   </property>
@@ -150,7 +150,7 @@
          <string notr="true">color: rgb(68, 85, 95);</string>
         </property>
         <property name="text">
-         <string>Run New Landmark Model:</string>
+         <string>Estimate Landmarks with New Model:</string>
         </property>
        </widget>
       </item>
@@ -460,7 +460,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>533</width>
+     <width>543</width>
      <height>26</height>
     </rect>
    </property>

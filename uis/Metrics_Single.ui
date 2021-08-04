@@ -35,7 +35,7 @@
   <widget class="QWidget" name="centralwidget">
    <layout class="QHBoxLayout" name="horizontalLayout">
     <item>
-     <widget class="ImageDisplay" name="metricsLabel">
+     <widget class="MetricsDisplay" name="metricsLabel">
       <property name="minimumSize">
        <size>
         <width>326</width>
@@ -302,9 +302,9 @@ Side</string>
  </widget>
  <customwidgets>
   <customwidget>
-   <class>ImageDisplay</class>
+   <class>MetricsDisplay</class>
    <extends>QGraphicsView</extends>
-   <header>ImageDisplay.h</header>
+   <header>MetricsDisplay.h</header>
   </customwidget>
  </customwidgets>
  <resources/>

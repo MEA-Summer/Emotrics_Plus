@@ -24,7 +24,7 @@
   </property>
   <property name="maximumSize">
    <size>
-    <width>679</width>
+    <width>686</width>
     <height>623</height>
    </size>
   </property>
@@ -40,77 +40,7 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="9" column="0" alignment="Qt::AlignRight">
-     <widget class="QPushButton" name="previousButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>12</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Previous</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1" colspan="2" alignment="Qt::AlignHCenter">
-     <widget class="QRadioButton" name="leftSideButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Left </string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="0" colspan="2">
-     <widget class="QLabel" name="label">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Please Select the Task:</string>
-      </property>
-     </widget>
-    </item>
-    <item row="9" column="1" colspan="2" alignment="Qt::AlignLeft">
-     <widget class="QPushButton" name="nextButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Next</string>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="0">
+    <item row="4" column="1" alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="loadPhoto1Button">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -138,8 +68,42 @@
       </property>
      </widget>
     </item>
-    <item row="1" column="0" colspan="3">
-     <widget class="QPushButton" name="PrevsPostButton">
+    <item row="9" column="2" colspan="2" alignment="Qt::AlignLeft">
+     <widget class="QPushButton" name="nextButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="3" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="RestingvsExpressionButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -147,7 +111,59 @@
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
+       <string notr="true">QPushButton::checked 
+{
+background-color : rgb(170, 170, 170);
+}</string>
+      </property>
+      <property name="text">
+       <string>Compare Resting vs Expression Photograph</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="autoRepeatDelay">
+       <number>0</number>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1" colspan="3" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="PrevsPostButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton::checked 
+{
+background-color : rgb(170, 170, 170);
+}</string>
       </property>
       <property name="text">
        <string>Compare Pre-Op vs Post-Op Photograph</string>
@@ -172,38 +188,20 @@
       </property>
      </widget>
     </item>
-    <item row="2" column="0" colspan="3">
-     <widget class="QPushButton" name="RestingvsExpressionButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
+    <item row="3" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
       </property>
-      <property name="text">
-       <string>Compare Resting vs Expression Photograph</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoExclusive">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatDelay">
-       <number>0</number>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>0</number>
-      </property>
-     </widget>
+     </spacer>
     </item>
-    <item row="5" column="0">
-     <widget class="QComboBox" name="ExpressionComboBox"/>
-    </item>
-    <item row="6" column="0" colspan="3">
+    <item row="6" column="1" colspan="3">
      <widget class="QLabel" name="label_11">
       <property name="font">
        <font>
@@ -222,7 +220,7 @@
       </property>
      </widget>
     </item>
-    <item row="8" column="0" alignment="Qt::AlignHCenter">
+    <item row="8" column="1" alignment="Qt::AlignHCenter">
      <widget class="QRadioButton" name="rightSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -247,7 +245,38 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="1" colspan="2">
+    <item row="5" column="1">
+     <widget class="QComboBox" name="ExpressionComboBox"/>
+    </item>
+    <item row="3" column="1" alignment="Qt::AlignHCenter">
+     <widget class="ImageDisplay" name="photo1Display">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>318</width>
+        <height>250</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>318</width>
+        <height>250</height>
+       </size>
+      </property>
+      <property name="acceptDrops">
+       <bool>true</bool>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="2" colspan="2" alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="loadPhoto2Button">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -275,11 +304,97 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="0">
-     <widget class="ImageDisplay" name="photo1Display"/>
+    <item row="3" column="2" alignment="Qt::AlignHCenter">
+     <widget class="ImageDisplay" name="photo2Display">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>318</width>
+        <height>250</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>318</width>
+        <height>250</height>
+       </size>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Sunken</enum>
+      </property>
+     </widget>
     </item>
-    <item row="3" column="1">
-     <widget class="ImageDisplay" name="photo2Display"/>
+    <item row="0" column="1" colspan="2">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Please Select the Task:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1" alignment="Qt::AlignRight">
+     <widget class="QPushButton" name="previousButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>12</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Previous</string>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="2" colspan="2" alignment="Qt::AlignHCenter">
+     <widget class="QRadioButton" name="leftSideButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Left </string>
+      </property>
+     </widget>
+    </item>
+    <item row="3" column="3">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
    </layout>
   </widget>
