@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>679</width>
-    <height>623</height>
+    <width>686</width>
+    <height>646</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -18,14 +18,14 @@
   </property>
   <property name="minimumSize">
    <size>
-    <width>679</width>
-    <height>623</height>
+    <width>686</width>
+    <height>646</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>686</width>
-    <height>623</height>
+    <height>646</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -68,7 +68,7 @@
       </property>
      </widget>
     </item>
-    <item row="9" column="2" colspan="2" alignment="Qt::AlignLeft">
+    <item row="10" column="2" colspan="2" alignment="Qt::AlignLeft">
      <widget class="QPushButton" name="nextButton">
       <property name="font">
        <font>
@@ -132,6 +132,19 @@ background-color : rgb(170, 170, 170);
        <number>0</number>
       </property>
      </widget>
+    </item>
+    <item row="3" column="3">
+     <spacer name="horizontalSpacer_2">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
     </item>
     <item row="1" column="1" colspan="3" alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="PrevsPostButton">
@@ -201,7 +214,7 @@ background-color : rgb(170, 170, 170);
       </property>
      </spacer>
     </item>
-    <item row="6" column="1" colspan="3">
+    <item row="7" column="1" colspan="3">
      <widget class="QLabel" name="label_11">
       <property name="font">
        <font>
@@ -220,7 +233,7 @@ background-color : rgb(170, 170, 170);
       </property>
      </widget>
     </item>
-    <item row="8" column="1" alignment="Qt::AlignHCenter">
+    <item row="9" column="1" alignment="Qt::AlignHCenter">
      <widget class="QRadioButton" name="rightSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -245,8 +258,8 @@ background-color : rgb(170, 170, 170);
       </property>
      </widget>
     </item>
-    <item row="5" column="1">
-     <widget class="QComboBox" name="ExpressionComboBox"/>
+    <item row="6" column="1">
+     <widget class="QComboBox" name="ManipulationComboBox"/>
     </item>
     <item row="3" column="1" alignment="Qt::AlignHCenter">
      <widget class="ImageDisplay" name="photo1Display">
@@ -345,7 +358,7 @@ background-color : rgb(170, 170, 170);
       </property>
      </widget>
     </item>
-    <item row="9" column="1" alignment="Qt::AlignRight">
+    <item row="10" column="1" alignment="Qt::AlignRight">
      <widget class="QPushButton" name="previousButton">
       <property name="font">
        <font>
@@ -361,7 +374,7 @@ background-color : rgb(170, 170, 170);
       </property>
      </widget>
     </item>
-    <item row="8" column="2" colspan="2" alignment="Qt::AlignHCenter">
+    <item row="9" column="2" colspan="2" alignment="Qt::AlignHCenter">
      <widget class="QRadioButton" name="leftSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -383,18 +396,50 @@ background-color : rgb(170, 170, 170);
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
-     <spacer name="horizontalSpacer_2">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
+    <item row="5" column="1">
+     <widget class="QLabel" name="manipulationsLabel">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
       </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
+      <property name="styleSheet">
+       <string notr="true"/>
       </property>
-     </spacer>
+      <property name="text">
+       <string>Manipulations</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2">
+     <widget class="QLabel" name="expressionsLabel">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>10</pointsize>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(204, 204, 204)</string>
+      </property>
+      <property name="text">
+       <string>Expressions</string>
+      </property>
+     </widget>
+    </item>
+    <item row="6" column="2">
+     <widget class="QComboBox" name="ExpressionComboBox">
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+     </widget>
     </item>
    </layout>
   </widget>
@@ -403,7 +448,7 @@ background-color : rgb(170, 170, 170);
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>679</width>
+     <width>686</width>
      <height>26</height>
     </rect>
    </property>
