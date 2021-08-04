@@ -35,12 +35,12 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self.RestingvsExpressionButton.clicked.connect(self.RestingvsExpressionSelect)
         self.previousButton.clicked.connect(self.previous)
         self.nextButton.clicked.connect(self.next)
-        # pixmap = QtGui.QPixmap('icons\upload.jpg')
-        # self.photo1Display.setPhoto(pixmap)
-        # self.photo1Display.update_view()
-        # pixmap = QtGui.QPixmap('icons\upload.jpg')
-        # self.photo2Display.setPhoto(pixmap)
-        # self.photo2Display.update_view()
+        pixmap = QtGui.QPixmap('./icons/upload.jpg')
+        self.photo1Display.setPhoto(pixmap)
+        self.photo1Display.fitInView()
+        pixmap = QtGui.QPixmap('./icons/upload.jpg')
+        self.photo2Display.setPhoto(pixmap)
+        self.photo2Display.fitInView()
 
 
     def load_file1(self):
@@ -103,6 +103,15 @@ class SelectionWindow(QtWidgets.QMainWindow):
 
     def next(self):
         if self._valid_File1 == True and self._valid_File2 == True:
+            self.file1.emit(self._file1)
+            self.file2.emit(self._file2)
+            self.reference_Side.emit(self._reference_side)
+            self.task.emit(self._task)
+            self.finished.emit()
+            self.close()
+        elif self.photo1Display._hasImage == True and self.photo1Display._hasImage == True:
+            self._file1 = self.photo1Display._ImageAddress
+            self._file2 = self.photo2Display._ImageAddress
             self.file1.emit(self._file1)
             self.file2.emit(self._file2)
             self.reference_Side.emit(self._reference_side)

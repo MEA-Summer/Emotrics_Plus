@@ -1,7 +1,7 @@
 import numpy as np
 from PyQt5 import QtWidgets, QtGui, uic
 from Metrics import get_measurements_from_data, FaceMeasurementsSide, FaceMeasurementsDeviation
-from ImageDisplay import ImageDisplay
+from MetricsDisplay import MetricsDisplay
 
 class MetricsDoubleWindow(QtWidgets.QMainWindow):
     
@@ -204,6 +204,12 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
         self.metricsLabel1.setPhoto(pixmap)
         self.metricsLabel1.update_view()
+
+        #Set up Table
+        header = self.photo1Table.horizontalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        header = self.photo1Table.verticalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.photo1Table.selectionModel().selectionChanged.connect(self.get_new_selection1)
 
         #####################
@@ -342,6 +348,12 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
         self.metricsLabel2.setPhoto(pixmap)
         self.metricsLabel2.update_view()
+
+        #Set up Table
+        header = self.photo2Table.horizontalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        header = self.photo2Table.verticalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.photo2Table.selectionModel().selectionChanged.connect(self.get_new_selection2)
         
         #####################
@@ -484,6 +496,12 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
         self.metricsLabel3.setPhoto(pixmap)
         self.metricsLabel3.update_view()
+
+        #Set up Table
+        header = self.sideTable.horizontalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        header = self.sideTable.verticalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.sideTable.selectionModel().selectionChanged.connect(self.get_new_selection3)
 
 
@@ -690,85 +708,110 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
 
 
         #Left Side Percent Comparison
+        #BrowHeight
         self._MeasurementLeftPercentComparison.BrowHeight = abs(self._MeasurementsLeft2.BrowHeight - self._MeasurementsLeft1.BrowHeight)*100/self._MeasurementsLeft1.BrowHeight
+        #MarginalReflexDistance1
         if self._MeasurementsLeft1.MarginalReflexDistance1 > 0:
             self._MeasurementLeftPercentComparison.MarginalReflexDistance1 = abs(self._MeasurementsLeft2.MarginalReflexDistance1 - self._MeasurementsLeft1.MarginalReflexDistance1)*100/self._MeasurementsLeft1.MarginalReflexDistance1
         else:
             self._MeasurementLeftPercentComparison.MarginalReflexDistance1 = 0
+        #MarginalReflexDistance2
         if self._MeasurementsLeft1.MarginalReflexDistance2 > 0:
             self._MeasurementLeftPercentComparison.MarginalReflexDistance2 = abs(self._MeasurementsLeft2.MarginalReflexDistance2 - self._MeasurementsLeft1.MarginalReflexDistance2)*100/self._MeasurementsLeft1.MarginalReflexDistance2
         else:
             self._MeasurementLeftPercentComparison.MarginalReflexDistance2 = 0
+        #PalpebralFissureHeight
         if self._MeasurementsLeft1.PalpebralFissureHeight > 0:
             self._MeasurementLeftPercentComparison.PalpebralFissureHeight = abs(self._MeasurementsLeft2.PalpebralFissureHeight - self._MeasurementsLeft1.PalpebralFissureHeight)*100/self._MeasurementsLeft1.PalpebralFissureHeight
         else:
             self._MeasurementLeftPercentComparison.PalpebralFissureHeight = 0
+        #EyeArea
         if self._MeasurementsLeft1.EyeArea > 0:
             self._MeasurementLeftPercentComparison.EyeArea = abs(self._MeasurementsLeft2.EyeArea - self._MeasurementsLeft1.EyeArea)*100/self._MeasurementsLeft1.EyeArea
         else:
             self._MeasurementLeftPercentComparison.EyeArea = 0
+        #NLF_angle
         if self._MeasurementsLeft1.NLF_angle > 0:
             self._MeasurementLeftPercentComparison.NLF_angle = abs(self._MeasurementsLeft2.NLF_angle - self._MeasurementsLeft1.NLF_angle)*100/self._MeasurementsLeft1.NLF_angle
         else:
             self._MeasurementLeftPercentComparison.NLF_angle = 0
+        #UpperLipSlope
         if self._MeasurementsLeft1.UpperLipSlope > 0:
             self._MeasurementLeftPercentComparison.UpperLipSlope = abs(self._MeasurementsLeft2.UpperLipSlope - self._MeasurementsLeft1.UpperLipSlope)*100/self._MeasurementsLeft1.UpperLipSlope
         else:
             self._MeasurementLeftPercentComparison.UpperLipSlope = 0
+        #CommisureHeight
         if self._MeasurementsLeft1.CommisureHeight > 0:    
             self._MeasurementLeftPercentComparison.CommisureHeight = abs(self._MeasurementsLeft2.CommisureHeight - self._MeasurementsLeft1.CommisureHeight)*100/self._MeasurementsLeft1.CommisureHeight
         else:
             self._MeasurementLeftPercentComparison.CommisureHeight = 0
-        if self._MeasurementsLeft1.CommisureHeight > 0:
+        #InterlabialDistance
+        if self._MeasurementsLeft1.InterlabialDistance > 0:
             self._MeasurementLeftPercentComparison.InterlabialDistance = abs(self._MeasurementsLeft2.InterlabialDistance - self._MeasurementsLeft1.InterlabialDistance)*100/self._MeasurementsLeft1.InterlabialDistance
         else:
             self._MeasurementLeftPercentComparison.InterlabialDistance = 0
-        if self._MeasurementsLeft1.CommisureHeight > 0:
+        #InterlabialArea_of_the_Hemiface
+        if self._MeasurementsLeft1.InterlabialArea_of_the_Hemiface > 0:
             self._MeasurementLeftPercentComparison.InterlabialArea_of_the_Hemiface = abs(self._MeasurementsLeft2.InterlabialArea_of_the_Hemiface - self._MeasurementsLeft1.InterlabialArea_of_the_Hemiface)*100/self._MeasurementsLeft1.InterlabialArea_of_the_Hemiface
         else:
             self._MeasurementLeftPercentComparison.InterlabialArea_of_the_Hemiface = 0
+        #CommissurePosition
         self._MeasurementLeftPercentComparison.CommissurePosition = abs(self._MeasurementsLeft2.CommissurePosition - self._MeasurementsLeft1.CommissurePosition)*100/self._MeasurementsLeft1.CommissurePosition
+        #LowerLipHeight
         self._MeasurementLeftPercentComparison.LowerLipHeight = abs(self._MeasurementsLeft2.LowerLipHeight - self._MeasurementsLeft1.LowerLipHeight)*100/self._MeasurementsLeft1.LowerLipHeight
 
+
         #Right Side Percent Comparison
+        #BrowHeight
         self._MeasurementRightPercentComparison.BrowHeight = abs(self._MeasurementsRight2.BrowHeight - self._MeasurementsRight1.BrowHeight)*100/self._MeasurementsRight1.BrowHeight
+        #MarginalReflexDistance1
         if self._MeasurementsRight1.MarginalReflexDistance1 > 0:
             self._MeasurementRightPercentComparison.MarginalReflexDistance1 = abs(self._MeasurementsRight2.MarginalReflexDistance1 - self._MeasurementsRight1.MarginalReflexDistance1)*100/self._MeasurementsRight1.MarginalReflexDistance1
         else:
             self._MeasurementRightPercentComparison.MarginalReflexDistance1 = 0
+        #MarginalReflexDistance2
         if self._MeasurementsRight1.MarginalReflexDistance2 > 0:
             self._MeasurementRightPercentComparison.MarginalReflexDistance2 = abs(self._MeasurementsRight2.MarginalReflexDistance2 - self._MeasurementsRight1.MarginalReflexDistance2)*100/self._MeasurementsRight1.MarginalReflexDistance2
         else:
             self._MeasurementRightPercentComparison.MarginalReflexDistance2 = 0
+        #PalpebralFissureHeight
         if self._MeasurementsRight1.PalpebralFissureHeight > 0:
             self._MeasurementRightPercentComparison.PalpebralFissureHeight = abs(self._MeasurementsRight2.PalpebralFissureHeight - self._MeasurementsRight1.PalpebralFissureHeight)*100/self._MeasurementsRight1.PalpebralFissureHeight
         else:
             self._MeasurementRightPercentComparison.PalpebralFissureHeight = 0
+        #EyeArea
         if self._MeasurementsRight1.EyeArea > 0:
             self._MeasurementRightPercentComparison.EyeArea = abs(self._MeasurementsRight2.EyeArea - self._MeasurementsRight1.EyeArea)*100/self._MeasurementsRight1.EyeArea
         else:
             self._MeasurementRightPercentComparison.EyeArea = 0
+        #NLF_angle
         if self._MeasurementsRight1.NLF_angle > 0:
             self._MeasurementRightPercentComparison.NLF_angle = abs(self._MeasurementsRight2.NLF_angle - self._MeasurementsRight1.NLF_angle)*100/self._MeasurementsRight1.NLF_angle
         else:
             self._MeasurementRightPercentComparison.NLF_angle = 0
+        #UpperLipSlope
         if self._MeasurementsRight1.UpperLipSlope > 0:
             self._MeasurementRightPercentComparison.UpperLipSlope = abs(self._MeasurementsRight2.UpperLipSlope - self._MeasurementsRight1.UpperLipSlope)*100/self._MeasurementsRight1.UpperLipSlope
         else:
             self._MeasurementRightPercentComparison.UpperLipSlope = 0
+        #CommisureHeight
         if self._MeasurementsRight1.CommisureHeight > 0:    
             self._MeasurementRightPercentComparison.CommisureHeight = abs(self._MeasurementsRight2.CommisureHeight - self._MeasurementsRight1.CommisureHeight)*100/self._MeasurementsRight1.CommisureHeight
         else:
             self._MeasurementRightPercentComparison.CommisureHeight = 0
-        if self._MeasurementsRight1.CommisureHeight > 0:
+        #InterlabialDistance
+        if self._MeasurementsRight1.InterlabialDistance > 0:
             self._MeasurementRightPercentComparison.InterlabialDistance = abs(self._MeasurementsRight2.InterlabialDistance - self._MeasurementsRight1.InterlabialDistance)*100/self._MeasurementsRight1.InterlabialDistance
         else:
             self._MeasurementRightPercentComparison.InterlabialDistance = 0
-        if self._MeasurementsRight1.CommisureHeight > 0:
+        #InterlabialArea_of_the_Hemiface
+        if self._MeasurementsRight1.InterlabialArea_of_the_Hemiface > 0:
             self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface = abs(self._MeasurementsRight2.InterlabialArea_of_the_Hemiface - self._MeasurementsRight1.InterlabialArea_of_the_Hemiface)*100/self._MeasurementsRight1.InterlabialArea_of_the_Hemiface
         else:
             self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface = 0
+        #CommissurePosition
         self._MeasurementRightPercentComparison.CommissurePosition = abs(self._MeasurementsRight2.CommissurePosition - self._MeasurementsRight1.CommissurePosition)*100/self._MeasurementsRight1.CommissurePosition
+        #LowerLipHeight
         self._MeasurementRightPercentComparison.LowerLipHeight = abs(self._MeasurementsRight2.LowerLipHeight - self._MeasurementsRight1.LowerLipHeight)*100/self._MeasurementsRight1.LowerLipHeight
 
 

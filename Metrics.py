@@ -918,119 +918,271 @@ def get_measurements_from_data(shape, left_pupil, right_pupil, points, Calibrati
     ResultsDeviation.LowerLipHeight = ResultsDeviation.LowerLipHeight*Calibration
 
     if reference_side == 'Left': #left is the good side
-        ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
-        ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
-        ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
-        ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
-        ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
-        ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
+        #BrowHeight
+        if ResultsLeft.BrowHeight > 0:
+            ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
+        else:
+            ResultsPercentile.BrowHeight = 0
+        #MarginalReflexDistance1
+        if ResultsLeft.MarginalReflexDistance1 > 0:
+            ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
+        else:
+            ResultsPercentile.MarginalReflexDistance1 = 0
+        #MarginalReflexDistance2
+        if ResultsLeft.MarginalReflexDistance2 > 0:
+            ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
+        else:
+            ResultsPercentile.MarginalReflexDistance2 = 0
+        #CommissurePosition
+        if ResultsLeft.CommissurePosition > 0:
+            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
+        else:
+            ResultsPercentile.CommissurePosition = 0
+        #CommisureHeight
+        if ResultsLeft.CommisureHeight > 0:
+            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
+        else:
+            ResultsPercentile.CommisureHeight = 0
+        #SmileAngle
+        if ResultsLeft.SmileAngle > 0:
+            ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
+        else:
+            ResultsPercentile.SmileAngle = 0
+        #InterlabialDistance
         if ResultsLeft.InterlabialDistance >0:
             ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsLeft.InterlabialDistance   
         else:
             ResultsPercentile.InterlabialDistance = 0
-        
+        #PalpebralFissureHeight
         if ResultsLeft.PalpebralFissureHeight > 0:
             ResultsPercentile.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)*100/ResultsLeft.PalpebralFissureHeight
         else:
             ResultsPercentile.PalpebralFissureHeight = 0
-        if ResultsDeviation.NLF_angle == 0:
-            ResultsPercentile.NLF_angle = 0
+        #NLF_angle
+        if ResultsLeft.NLF_angle > 0:
+            ResultsPercentile.NLF_angle = abs(ResultsLeft.NLF_angle - ResultsRight.NLF_angle)*100/ResultsLeft.NLF_angle
         else:
-            #Makes sure to not divide by 0
-            if NLF_angles[1] != 0:
-                ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[1])
-            else:
-                ResultsPercentile.NLF_angle = 0
-        ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
-        ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
-        ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
-        ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
+            ResultsPercentile.NLF_angle = 0
+        #InterlabialArea_of_the_Hemiface
+        if ResultsLeft.InterlabialArea_of_the_Hemiface > 0:
+            ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
+        else:
+            ResultsPercentile.InterlabialArea_of_the_Hemiface = 0
+        #EyeArea
+        if ResultsLeft.EyeArea > 0:
+            ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
+        else:
+            ResultsPercentile.EyeArea = 0
+        #UpperLipSlope
+        if ResultsLeft.UpperLipSlope > 0:
+            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
+        else:
+            ResultsPercentile.BrowHeight = 0
+        #LowerLipHeight
+        if ResultsLeft.LowerLipHeight > 0:
+            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
+        else:
+            ResultsPercentile.LowerLipHeight = 0
     elif reference_side == 'Right':
+        #BrowHeight
+        if ResultsLeft.BrowHeight > 0:
             ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsRight.BrowHeight
+        else:
+            ResultsPercentile.BrowHeight = 0
+        #MarginalReflexDistance1
+        if ResultsLeft.MarginalReflexDistance1 > 0:
             ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsRight.MarginalReflexDistance1
+        else:
+            ResultsPercentile.MarginalReflexDistance1 = 0
+        #MarginalReflexDistance2
+        if ResultsLeft.MarginalReflexDistance2 > 0:
             ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsRight.MarginalReflexDistance2
+        else:
+            ResultsPercentile.MarginalReflexDistance2 = 0
+        #CommissurePosition
+        if ResultsLeft.CommissurePosition > 0:
             ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsRight.CommissurePosition
+        else:
+            ResultsPercentile.CommissurePosition = 0
+        #CommisureHeight
+        if ResultsLeft.CommisureHeight > 0:
             ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsRight.CommisureHeight)
-            ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle        
-            if ResultsRight.InterlabialDistance > 0:
-                ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance
-            else:
-                ResultsPercentile.InterlabialDistance =0     
-            
-            if ResultsRight.PalpebralFissureHeight > 0:
-                ResultsPercentile.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)*100/ResultsRight.PalpebralFissureHeight
-            else:
-                ResultsPercentile.PalpebralFissureHeight = 0
-            if ResultsDeviation.NLF_angle == 0:
-                ResultsPercentile.NLF_angle = 0
-            else:
-                #Makes sure to not divide by 0
-                if NLF_angles[0] != 0:
-                    ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[0])
-                else:
-                    ResultsPercentile.NLF_angle = 0
+        else:
+            ResultsPercentile.CommisureHeight = 0
+        #SmileAngle
+        if ResultsLeft.SmileAngle > 0:
+            ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle
+        else:
+            ResultsPercentile.SmileAngle = 0
+        #InterlabialDistance
+        if ResultsLeft.InterlabialDistance >0:
+            ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance   
+        else:
+            ResultsPercentile.InterlabialDistance = 0
+        #PalpebralFissureHeight
+        if ResultsLeft.PalpebralFissureHeight > 0:
+            ResultsPercentile.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)*100/ResultsRight.PalpebralFissureHeight
+        else:
+            ResultsPercentile.PalpebralFissureHeight = 0
+        #NLF_angle
+        if ResultsLeft.NLF_angle > 0:
+            ResultsPercentile.NLF_angle = abs(ResultsLeft.NLF_angle - ResultsRight.NLF_angle)*100/ResultsRight.NLF_angle
+        else:
+            ResultsPercentile.NLF_angle = 0
+        #InterlabialArea_of_the_Hemiface
+        if ResultsLeft.InterlabialArea_of_the_Hemiface > 0:
             ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsRight.InterlabialArea_of_the_Hemiface)
+        else:
+            ResultsPercentile.InterlabialArea_of_the_Hemiface = 0
+        #EyeArea
+        if ResultsLeft.EyeArea > 0:
             ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsRight.EyeArea)
+        else:
+            ResultsPercentile.EyeArea = 0
+        #UpperLipSlope
+        if ResultsLeft.UpperLipSlope > 0:
             ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsRight.UpperLipSlope)
+        else:
+            ResultsPercentile.BrowHeight = 0
+        #LowerLipHeight
+        if ResultsLeft.LowerLipHeight > 0:
             ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsRight.LowerLipHeight
+        else:
+            ResultsPercentile.LowerLipHeight = 0
     else:  
         #If no heathly side is selected, then the old method is used
         if shape[57,0] >= cross_lowerlip[0] : #left is the good side (probably)
-            ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
-            ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
-            ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
-            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
-            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
-            ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
+            #BrowHeight
+            if ResultsLeft.BrowHeight > 0:
+                ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsLeft.BrowHeight
+            else:
+                ResultsPercentile.BrowHeight = 0
+            #MarginalReflexDistance1
+            if ResultsLeft.MarginalReflexDistance1 > 0:
+                ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsLeft.MarginalReflexDistance1
+            else:
+                ResultsPercentile.MarginalReflexDistance1 = 0
+            #MarginalReflexDistance2
+            if ResultsLeft.MarginalReflexDistance2 > 0:
+                ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsLeft.MarginalReflexDistance2
+            else:
+                ResultsPercentile.MarginalReflexDistance2 = 0
+            #CommissurePosition
+            if ResultsLeft.CommissurePosition > 0:
+                ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsLeft.CommissurePosition
+            else:
+                ResultsPercentile.CommissurePosition = 0
+            #CommisureHeight
+            if ResultsLeft.CommisureHeight > 0:
+                ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsLeft.CommisureHeight)
+            else:
+                ResultsPercentile.CommisureHeight = 0
+            #SmileAngle
+            if ResultsLeft.SmileAngle > 0:
+                ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsLeft.SmileAngle
+            else:
+                ResultsPercentile.SmileAngle = 0
+            #InterlabialDistance
             if ResultsLeft.InterlabialDistance >0:
                 ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsLeft.InterlabialDistance   
             else:
                 ResultsPercentile.InterlabialDistance = 0
-            
+            #PalpebralFissureHeight
             if ResultsLeft.PalpebralFissureHeight > 0:
                 ResultsPercentile.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)*100/ResultsLeft.PalpebralFissureHeight
             else:
                 ResultsPercentile.PalpebralFissureHeight = 0
-            if ResultsDeviation.NLF_angle == 0:
+            #NLF_angle
+            if ResultsLeft.NLF_angle > 0:
+                ResultsPercentile.NLF_angle = abs(ResultsLeft.NLF_angle - ResultsRight.NLF_angle)*100/ResultsLeft.NLF_angle
+            else:
                 ResultsPercentile.NLF_angle = 0
+            #InterlabialArea_of_the_Hemiface
+            if ResultsLeft.InterlabialArea_of_the_Hemiface > 0:
+                ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
             else:
-                #Makes sure to not divide by 0
-                if NLF_angles[1] != 0:
-                    ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[1])
-                else:
-                    ResultsPercentile.NLF_angle = 0
-            ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsLeft.InterlabialArea_of_the_Hemiface)
-            ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
-            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
-            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
+                ResultsPercentile.InterlabialArea_of_the_Hemiface = 0
+            #EyeArea
+            if ResultsLeft.EyeArea > 0:
+                ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsLeft.EyeArea)
+            else:
+                ResultsPercentile.EyeArea = 0
+            #UpperLipSlope
+            if ResultsLeft.UpperLipSlope > 0:
+                ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsLeft.UpperLipSlope)
+            else:
+                ResultsPercentile.BrowHeight = 0
+            #LowerLipHeight
+            if ResultsLeft.LowerLipHeight > 0:
+                ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsLeft.LowerLipHeight
+            else:
+                ResultsPercentile.LowerLipHeight = 0
         else: #right is the good side 
-            ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsRight.BrowHeight
-            ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsRight.MarginalReflexDistance1
-            ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsRight.MarginalReflexDistance2
-            ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsRight.CommissurePosition
-            ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsRight.CommisureHeight)
-            ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle        
-            if ResultsRight.InterlabialDistance > 0:
-                ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance
+            #BrowHeight
+            if ResultsLeft.BrowHeight > 0:
+                ResultsPercentile.BrowHeight = abs(ResultsLeft.BrowHeight - ResultsRight.BrowHeight)*100/ResultsRight.BrowHeight
             else:
-                ResultsPercentile.InterlabialDistance = 0     
-            
-            if ResultsRight.PalpebralFissureHeight > 0:
+                ResultsPercentile.BrowHeight = 0
+            #MarginalReflexDistance1
+            if ResultsLeft.MarginalReflexDistance1 > 0:
+                ResultsPercentile.MarginalReflexDistance1 = abs(ResultsLeft.MarginalReflexDistance1 - ResultsRight.MarginalReflexDistance1)*100/ResultsRight.MarginalReflexDistance1
+            else:
+                ResultsPercentile.MarginalReflexDistance1 = 0
+            #MarginalReflexDistance2
+            if ResultsLeft.MarginalReflexDistance2 > 0:
+                ResultsPercentile.MarginalReflexDistance2 = abs(ResultsLeft.MarginalReflexDistance2 - ResultsRight.MarginalReflexDistance2)*100/ResultsRight.MarginalReflexDistance2
+            else:
+                ResultsPercentile.MarginalReflexDistance2 = 0
+            #CommissurePosition
+            if ResultsLeft.CommissurePosition > 0:
+                ResultsPercentile.CommissurePosition = abs(ResultsLeft.CommissurePosition - ResultsRight.CommissurePosition)*100/ResultsRight.CommissurePosition
+            else:
+                ResultsPercentile.CommissurePosition = 0
+            #CommisureHeight
+            if ResultsLeft.CommisureHeight > 0:
+                ResultsPercentile.CommisureHeight = abs(ResultsLeft.CommisureHeight - ResultsRight.CommisureHeight)*100/abs(ResultsRight.CommisureHeight)
+            else:
+                ResultsPercentile.CommisureHeight = 0
+            #SmileAngle
+            if ResultsLeft.SmileAngle > 0:
+                ResultsPercentile.SmileAngle = abs(ResultsLeft.SmileAngle - ResultsRight.SmileAngle)*100/ResultsRight.SmileAngle
+            else:
+                ResultsPercentile.SmileAngle = 0
+            #InterlabialDistance
+            if ResultsLeft.InterlabialDistance >0:
+                ResultsPercentile.InterlabialDistance = abs(ResultsLeft.InterlabialDistance - ResultsRight.InterlabialDistance)*100/ResultsRight.InterlabialDistance   
+            else:
+                ResultsPercentile.InterlabialDistance = 0
+            #PalpebralFissureHeight
+            if ResultsLeft.PalpebralFissureHeight > 0:
                 ResultsPercentile.PalpebralFissureHeight = abs(ResultsLeft.PalpebralFissureHeight - ResultsRight.PalpebralFissureHeight)*100/ResultsRight.PalpebralFissureHeight
             else:
                 ResultsPercentile.PalpebralFissureHeight = 0
-            if ResultsDeviation.NLF_angle == 0:
-                ResultsPercentile.NLF_angle = 0
+            #NLF_angle
+            if ResultsLeft.NLF_angle > 0:
+                ResultsPercentile.NLF_angle = abs(ResultsLeft.NLF_angle - ResultsRight.NLF_angle)*100/ResultsRight.NLF_angle
             else:
-                #Makes sure to not divide by 0
-                if NLF_angles[0] != 0:
-                    ResultsPercentile.NLF_angle = abs(NLF_angles[1] - NLF_angles[0])*100/(NLF_angles[0])
-                else:
-                    ResultsPercentile.NLF_angle = 0
-            ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsRight.InterlabialArea_of_the_Hemiface)
-            ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsRight.EyeArea)
-            ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsRight.UpperLipSlope)
-            ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsRight.LowerLipHeight
+                ResultsPercentile.NLF_angle = 0
+            #InterlabialArea_of_the_Hemiface
+            if ResultsLeft.InterlabialArea_of_the_Hemiface > 0:
+                ResultsPercentile.InterlabialArea_of_the_Hemiface = (ResultsDeviation.InterlabialArea_of_the_Hemiface*100)/(ResultsRight.InterlabialArea_of_the_Hemiface)
+            else:
+                ResultsPercentile.InterlabialArea_of_the_Hemiface = 0
+            #EyeArea
+            if ResultsLeft.EyeArea > 0:
+                ResultsPercentile.EyeArea = (ResultsDeviation.EyeArea*100)/(ResultsRight.EyeArea)
+            else:
+                ResultsPercentile.EyeArea = 0
+            #UpperLipSlope
+            if ResultsLeft.UpperLipSlope > 0:
+                ResultsPercentile.UpperLipSlope = abs((ResultsDeviation.UpperLipSlope*100)/ResultsRight.UpperLipSlope)
+            else:
+                ResultsPercentile.BrowHeight = 0
+            #LowerLipHeight
+            if ResultsLeft.LowerLipHeight > 0:
+                ResultsPercentile.LowerLipHeight = (ResultsDeviation.LowerLipHeight*100)/ResultsRight.LowerLipHeight
+            else:
+                ResultsPercentile.LowerLipHeight = 0
 
     
     return ResultsLeft, ResultsRight, ResultsDeviation, ResultsPercentile

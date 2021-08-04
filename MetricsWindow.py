@@ -9,7 +9,7 @@ Created on Fri Jul  9 13:00:27 2021
 import numpy as np
 from PyQt5 import QtWidgets, QtGui, uic
 from Metrics import get_measurements_from_data
-from ImageDisplay import ImageDisplay
+from MetricsDisplay import MetricsDisplay
 
 class MetricsWindow(QtWidgets.QMainWindow):
     
@@ -29,6 +29,18 @@ class MetricsWindow(QtWidgets.QMainWindow):
         
     def initUI(self):
         self.ui = uic.loadUi('uis/Metrics_Single.ui', self)
+        
+        # Connecting the selection method to the show the example photos
+        pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
+        self.metricsLabel.setPhoto(pixmap)
+        self.metricsLabel.update_view()
+
+        #Set up Table
+        header = self.resultTable.horizontalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        header = self.resultTable.verticalHeader()       
+        header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
+        self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
         #Measurements
         MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual = get_measurements_from_data(self._shape, self._lefteye, self._righteye, self._points, self._CalibrationType, self._CalibrationValue, self._reference_side)
@@ -162,11 +174,6 @@ class MetricsWindow(QtWidgets.QMainWindow):
             self.resultTable.horizontalHeaderItem(0).setText('Reference ("Normal")\nRight Side')
             self.resultTable.horizontalHeaderItem(1).setText('Queried (Affected)\nLeft Side')
         
-        #Connecting the selection method to the show the example photos
-        pixmap = QtGui.QPixmap('./Metrics/Default.jpg')
-        self.metricsLabel.setPhoto(pixmap)
-        # self.metricsLabel.update_view()
-        self.resultTable.selectionModel().selectionChanged.connect(self.get_new_selection)
         
          
     def get_new_selection(self, selected, deselected):

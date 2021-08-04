@@ -1,13 +1,7 @@
-# -*- coding: utf-8 -*-
-"""
-Created on Fri Jul 23 00:56:37 2021
-
-@author: lukem
-"""
 from PyQt5 import QtWidgets, QtGui, QtCore
-import os 
 
-class ImageDisplay(QtWidgets.QGraphicsView):       
+
+class MetricsDisplay(QtWidgets.QGraphicsView):       
     
     def __init__(self, *args, **kwargs):
         #usual parameters to make sure the image can be zoom-in and out and is 
@@ -27,29 +21,25 @@ class ImageDisplay(QtWidgets.QGraphicsView):
         self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
         self.setMouseTracking(True)
         self._image = None
-        self._hasImage = False
-        self._ImageAddress = None
-
-        self._validextensions = ['.png', '.jpg', '.jpeg', '.tif', '.tiff', '.PNG', '.JPG', '.JPEG', '.TIF', '.TIFF']
         
-
     def setPhoto(self, pixmap = None):
         #this function puts an image in the scece (if pixmap is not None), it
-        #sets the zoom to zero  
+        #sets the zoom to zero 
+        self._zoom = 0        
         if pixmap and not pixmap.isNull():
-            #self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
+            self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
             self._photo.setPixmap(pixmap)
             self.fitInView()
         else:
             self.setDragMode(QtWidgets.QGraphicsView.NoDrag)
             self._photo.setPixmap(QtGui.QPixmap())
 
-
     def fitInView(self):
         #this function takes care of accomodating the view so that it can fit
-        #in the scene
+        #in the scene, it resets the zoom to 0 (i think is a overkill, i took
+        #it from somewhere else)
         rect = QtCore.QRectF(self._photo.pixmap().rect())
-        self.setSceneRect(rect)
+        #self.setSceneRect(rect)
         if not rect.isNull():
             unity = self.transform().mapRect(QtCore.QRectF(0, 0, 1, 1))
             self.scale(1 / unity.width(), 1 / unity.height())        
@@ -59,57 +49,26 @@ class ImageDisplay(QtWidgets.QGraphicsView):
                      viewrect.height() / scenerect.height())               
             self.scale(factor, factor)
             self.centerOn(rect.center())
-
-
+            self._zoom = 0    
+                    
+    def update_view(self):
+        #this function takes care of updating the view by re-setting the zoom.
+        #is usefull to place the image in the scene for the first time
+        
+        
+        #if shape then add shape to image
+    
+        #image = cv2.cvtColor(temp_image,cv2.COLOR_BGR2RGB)
+        if self._image is not None:
+            height, width, channel = self._image.shape
+            bytesPerLine = 3 * width
+            img_Qt = QtGui.QImage(self._image.data, width, height, bytesPerLine, QtGui.QImage.Format_RGB888)
+            img_show = QtGui.QPixmap.fromImage(img_Qt)
+            #show the photo
+            self.setPhoto(img_show)
+            
     def resizeEvent(self, event):
         #this function assure that when the main window is resized the image 
         #is also resized preserving the h/w ratio
         self.fitInView()
-        
-
-    def dragEnterEvent(self, event):        
-        if event.mimeData().hasUrls():
-            event.accept()
-        else:
-            event.ignore()
-
-
-    def dragMoveEvent(self, event):
-        if event.mimeData().hasUrls():
-            
-            for url in event.mimeData().urls():
-                
-                local_address = str(url.toLocalFile())
-                
-                file_name,extension = os.path.splitext(local_address)
-                if extension in self._validextensions:
-                    event.setDropAction(QtCore.Qt.CopyAction)
-                    event.accept()
-                else:
-                    event.ignore()
-        else:
-            event.ignore()
-            
-
-    def dropEvent(self, event):
-        if event.mimeData().hasUrls():           
-            for url in event.mimeData().urls():               
-                local_address = str(url.toLocalFile())                
-                file_name,extension = os.path.splitext(local_address)
-                if extension in self._validextensions:
-                    try:
-                        event.setDropAction(QtCore.Qt.CopyAction)                    
-                        event.accept()
-                        
-                        pixmap = QtGui.QPixmap(local_address)
-                        self.setPhoto(pixmap)
-                        self._hasImage = True  #indicate that there is an image
-                        self._ImageAddress = os.path.normpath(local_address) #store the image address in a class variable
-                    except:
-                        event.ignore()
-                else:
-                    event.ignore()
-        else:
-            event.ignore()          
-
                 
