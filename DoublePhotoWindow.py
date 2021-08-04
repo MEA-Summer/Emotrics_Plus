@@ -83,6 +83,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self._CalibrationValue = 11.77
         self._file_name = None
         self._task = 'Pre-Op vs Post-Op'
+        self._taskName = 'Ocular'
         
         ########################
         """Set Up the UI form"""
@@ -104,11 +105,9 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
 
     def initUI(self):
         self.ui = uic.loadUi('uis/double.ui', self)
-        """Pre-Selection"""
-        #Add task assignments into combo to be selected later
         
-
-
+        #Set Date
+        self.dateEdit.setDate(QtCore.QDate.currentDate())
         
         """Button Connection"""
         #New Photograph Button
@@ -345,6 +344,19 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             self._task = task
             self.photo1Label.setText('Resting State')
             self.photo2Label.setText('Expression State')
+        else:
+            print('Invalid Task')
+
+
+    def setTaskName(self, taskName):
+        if self._task == 'Pre-Op vs Post-Op':
+            self._taskName = taskName
+            self.photo1Label.setText(f'Pre {self._taskName} Operation State')
+            self.photo2Label.setText(f'Post {self._taskName} Operation State')
+        elif self._task == 'Resting vs Expression':
+            self._taskName = taskName
+            self.photo1Label.setText('Resting State')
+            self.photo2Label.setText(f'{self._taskName} Expression State')
         else:
             print('Invalid Task')
 

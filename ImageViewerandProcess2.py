@@ -234,8 +234,46 @@ class ImageViewer(QtWidgets.QGraphicsView):
                         #make the cursor a cross to facilitate localization of eye center     
                         self.setCursor(QtGui.QCursor(QtCore.Qt.SplitHCursor))
                 if self._IsShapeVisible == True and self._IsMidLineMoving == False:
+                    dot_removed = False
                     if self._PointToModify is None:
-                        if self._AddLandmarks == True:
+                        for item in self._scene.items():
+                            """Following Code is for "moving" landmarks by remebering the ID of the dot removed
+                                then making the next dot placed have the same ID.
+                                """
+                            if isinstance(item, QtWidgets.QGraphicsEllipseItem):
+                                center_of_ellipseX = item.pos().x() + item.rect().center().x()
+                                center_of_ellipseY = item.pos().y() + item.rect().center().y()
+                                if np.sqrt(((x_mousePos - center_of_ellipseX)**2 + (y_mousePos - center_of_ellipseY)**2)) < self._landmark_size*2:
+                                    if item.rect().height() <= self._landmark_size*2:
+                                        if dot_removed == False:
+                                            self._scene.removeItem(item)
+                                            dot_removed = True
+                            
+                        """Following Code is "attepmting" to track any removed IDs"""
+                        try:
+                            current_IDs = []
+                            list_of_IDs = np.arange(1,len(self._shape)+1)
+                            list_of_IDs.tolist()
+                            any_missing = False
+                            missing_IDs = []
+                            for item in self._scene.items():
+                                if isinstance(item, QtWidgets.QGraphicsSimpleTextItem):
+                                    if item.text().isnumeric():
+                                        current_IDs.append(item.text())
+                            current_IDs = list(set(current_IDs))
+                            for ID in list_of_IDs:
+                                Label = str(ID)
+                                if Label not in current_IDs:
+                                    missing_IDs.append(Label)
+                                    any_missing = True
+                            if any_missing:
+                                self._PointToModify = missing_IDs[0] #if multiple missing IDs, next placed will be 
+                        except:
+                            print('Error in finding self._PointToModify /n')
+                            print('self._shape = ', self._shape)
+
+
+                        if self._AddLandmarks == True and dot_removed == False:
                             point_temp = np.array([x_mousePos, y_mousePos, len(self._shape)+1])
                             point_temp = torch.from_numpy(point_temp).view(1,3)
                             self._shape = torch.cat((self._shape, point_temp), -2)
@@ -243,7 +281,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                             # self._numPoints +=1
                             
                         
-                        elif self._AddLandmarks == False:
+                        elif self._AddLandmarks == False and dot_removed == False:
                             scenePos = self.mapToScene(event.pos())
                             x_mousePos = scenePos.toPoint().x()
                             y_mousePos = scenePos.toPoint().y()
@@ -287,7 +325,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                 self.draw_circle(self._righteye)
                                 self.draw_circle(self._lefteye) 
                                             
-                    if self._PointToModify is not None:
+                    if self._PointToModify is not None and dot_removed == False:
                         for i, point in enumerate(self._shape):
                             point_ID = int(point.numpy()[2])
                             if point_ID == int(self._PointToModify):
@@ -299,7 +337,6 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     
             elif event.button() == QtCore.Qt.LeftButton:
                 new_window_opened = False 
-                dot_removed = False                              
                 if self._PointToModify is None:
                     for item in self._scene.items():
                         """Following Code is for "moving" landmarks by remebering the ID of the dot removed
@@ -309,11 +346,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                             center_of_ellipseX = item.pos().x() + item.rect().center().x()
                             center_of_ellipseY = item.pos().y() + item.rect().center().y()
                             if np.sqrt(((x_mousePos - center_of_ellipseX)**2 + (y_mousePos - center_of_ellipseY)**2)) < self._landmark_size*2:
-                                if item.rect().height() <= self._landmark_size*2:
-                                    if dot_removed == False:
-                                        self._scene.removeItem(item)
-                                        dot_removed = True
-                                elif item.rect().height() > self._landmark_size*2:
+                                if item.rect().height() > self._landmark_size*2:
                                     if np.sqrt(((x_mousePos - self._lefteye[0])**2 + (y_mousePos - self._lefteye[1])**2)) < self._landmark_size*2:
                                         position = 'left'
                                         if self._lefteye_landmarks is None:
@@ -348,29 +381,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
                                             #       'self._righteye_landmarks = ', self._righteye_landmarks)
                                     self.update_shape()        
                         
-                    """Following Code is "attepmting" to track any removed IDs"""
-                    if self._PointToModify is None:
-                        try:
-                            current_IDs = []
-                            list_of_IDs = np.arange(1,len(self._shape)+1)
-                            list_of_IDs.tolist()
-                            any_missing = False
-                            missing_IDs = []
-                            for item in self._scene.items():
-                                if isinstance(item, QtWidgets.QGraphicsSimpleTextItem):
-                                    if item.text().isnumeric():
-                                        current_IDs.append(item.text())
-                            current_IDs = list(set(current_IDs))
-                            for ID in list_of_IDs:
-                                Label = str(ID)
-                                if Label not in current_IDs:
-                                    missing_IDs.append(Label)
-                                    any_missing = True
-                            if any_missing:
-                                self._PointToModify = missing_IDs[0] #if multiple missing IDs, next placed will be 
-                        except:
-                            print('Error in finding self._PointToModify /n')
-                            print('self._shape = ', self._shape)
+                    
                 if new_window_opened != True:
                     self.setDragMode(QtWidgets.QGraphicsView.ScrollHandDrag)
                             
@@ -621,10 +632,11 @@ class ImageViewer(QtWidgets.QGraphicsView):
                 
             
         #set the ellipse line width according to the image size
-        if self._scene.height() < 1000:
-            pen.setWidth(1)
-        else:
-            pen.setWidth(3)
+        if self._landmark_size > 0.5:
+            if self._scene.height() < 1000:
+                pen.setWidth(1)
+            else:
+                pen.setWidth(3)
         
         #Sets color    
         Ellipse.setPen(pen)      
@@ -642,8 +654,14 @@ class ImageViewer(QtWidgets.QGraphicsView):
         #Check whether to adjust text size or not
         if self._landmark_size > 3:
             Font = Label.font()
-            Font.setPixelSize(3*self._landmark_size)
+            Font.setPixelSize(max(3*self._landmark_size, 1))
             Label.setFont(Font)
+        elif self._landmark_size < 1:
+            Font = Label.font()
+            Font.setPointSize(max(self._landmark_size*10, 1))
+            Label.setFont(Font)
+        # print('Label.font().pixelSize() = ', Label.font().pixelSize())
+        # print('Label.font().pointSize() = ', Label.font().pointSize())
         Label.setBrush(self._label_color)
         Label.setText(str(ID))
         # self._scene.addItem(Label)
@@ -659,10 +677,11 @@ class ImageViewer(QtWidgets.QGraphicsView):
         Circle = QtWidgets.QGraphicsEllipseItem(0,0,CircleInformation[2]*2,CircleInformation[2]*2)
         pen = QtGui.QPen(self._iris_color)
         #set the ellipse line width according to the image size
-        if self._scene.height() < 1000:
-            pen.setWidth(1)
-        else:
-            pen.setWidth(3)
+        if self._landmark_size > 0.5:
+            if self._scene.height() < 1000:
+                pen.setWidth(1)
+            else:
+                pen.setWidth(3)
             
         Circle.setPen(pen)      
 

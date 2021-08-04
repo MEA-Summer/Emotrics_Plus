@@ -8,6 +8,7 @@ class SelectionWindow(QtWidgets.QMainWindow):
     file2 = QtCore.pyqtSignal(object)
     reference_Side = QtCore.pyqtSignal(object)
     task = QtCore.pyqtSignal(object)
+    taskName = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super() .__init__()
@@ -17,6 +18,7 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self._valid_File2 = False
         self._reference_side = 'Right'
         self._task = 'Pre-Op vs Post-Op'
+        self._taskName = 'Ocular'
 
 
 
@@ -33,8 +35,36 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self.rightSideButton.toggled.connect(self.rightSideSelected)
         self.PrevsPostButton.clicked.connect(self.PrevsPostSelect)
         self.RestingvsExpressionButton.clicked.connect(self.RestingvsExpressionSelect)
+
+        
+
         self.previousButton.clicked.connect(self.previous)
         self.nextButton.clicked.connect(self.next)
+
+        #Setting up Combo boxes
+        self.ManipulationComboBox.activated[str].connect(self.getNewTaskName)
+        # self.ManipulationComboBox.addItem('')
+        self.ManipulationComboBox.addItem('Ocular')
+        self.ManipulationComboBox.addItem('Midface')
+        self.ManipulationComboBox.addItem('Lips/Smile')
+        self.ManipulationComboBox.addItem('Other')
+
+        self.ExpressionComboBox.activated[str].connect(self.getNewTaskName)
+        # self.ExpressionComboBox.addItem('')
+        self.ExpressionComboBox.addItem('Brow Raise')
+        self.ExpressionComboBox.addItem('Gentle Eyes')
+        self.ExpressionComboBox.addItem('Tight Eyes')
+        self.ExpressionComboBox.addItem('Gentle Smile')
+        self.ExpressionComboBox.addItem('Big Smile')
+        self.ExpressionComboBox.addItem('"ee"')
+        self.ExpressionComboBox.addItem('"oo"')
+        self.ExpressionComboBox.addItem('Other')
+        #Since the default is Pre-op vs Post-op, This is disabled intialally
+        self.ExpressionComboBox.setCurrentText('Gentle Smile')
+        self.ExpressionComboBox.setEnabled(False)
+        
+        
+        #Adding Icons
         pixmap = QtGui.QPixmap('./icons/upload.jpg')
         self.photo1Display.setPhoto(pixmap)
         self.photo1Display.fitInView()
@@ -92,6 +122,13 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self.loadPhoto2Button.setText('Click to Upload Post-Op Photograph')
         self.PrevsPostButton.setChecked(True)
         self.RestingvsExpressionButton.setChecked(False)
+        self.manipulationsLabel.setStyleSheet("")
+        self.expressionsLabel.setStyleSheet("color: rgb(204, 204, 204)")
+        # self.ExpressionComboBox.setCurrentText('')
+        self.ExpressionComboBox.setEnabled(False)
+        self.ManipulationComboBox.setEnabled(True)
+        self.getNewTaskName(self.ExpressionComboBox.currentText())
+
 
     def RestingvsExpressionSelect(self):
         self._task = 'Resting vs Expression'
@@ -99,6 +136,15 @@ class SelectionWindow(QtWidgets.QMainWindow):
         self.loadPhoto2Button.setText('Click to Upload Expression Photograph')
         self.PrevsPostButton.setChecked(False)
         self.RestingvsExpressionButton.setChecked(True)
+        self.manipulationsLabel.setStyleSheet("color: rgb(204, 204, 204)")
+        self.expressionsLabel.setStyleSheet("")
+        # self.ManipulationComboBox.setCurrentText('')
+        self.ManipulationComboBox.setEnabled(False)
+        self.ExpressionComboBox.setEnabled(True)
+        self.getNewTaskName(self.ExpressionComboBox.currentText())
+
+    def getNewTaskName(self, task_Name):
+        self._taskName = task_Name
 
 
     def next(self):
@@ -107,6 +153,7 @@ class SelectionWindow(QtWidgets.QMainWindow):
             self.file2.emit(self._file2)
             self.reference_Side.emit(self._reference_side)
             self.task.emit(self._task)
+            self.taskName.emit(self._taskName)
             self.finished.emit()
             self.close()
         elif self.photo1Display._hasImage == True and self.photo1Display._hasImage == True:
@@ -116,6 +163,7 @@ class SelectionWindow(QtWidgets.QMainWindow):
             self.file2.emit(self._file2)
             self.reference_Side.emit(self._reference_side)
             self.task.emit(self._task)
+            self.taskName.emit(self._taskName)
             self.finished.emit()
             self.close()
         else:

@@ -32,6 +32,7 @@ class HomeWindow(QtWidgets.QMainWindow):
         self._selection_window.file2.connect(self._new_window.setPhoto2)
         self._selection_window.reference_Side.connect(self._new_window.setReferenceSide)
         self._selection_window.task.connect(self._new_window.setTask)
+        self._selection_window.taskName.connect(self._new_window.setTaskName)
         #Show window when selection is finally finished
         self._selection_window.finished.connect(self._new_window.show)
         #Hides Home window until the previous button is hit

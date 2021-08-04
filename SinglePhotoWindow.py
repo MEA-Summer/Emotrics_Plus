@@ -109,6 +109,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         
     def initUI(self):
         self.ui = uic.loadUi('uis/single.ui', self)
+
+        #Set Date
+        self.dateEdit.setDate(QtCore.QDate.currentDate())
         
         """Button Connection"""
         #New Photograph Button
@@ -242,9 +245,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 area = H*W
                 self.displayImage._landmark_size = ((area)/(10**6))**.8
                 # self.landmarkSizeBox.setValue(int(self.displayImage._landmark_size)) #makes sure size change is displayed
-                # print('self.displayImage._scene.height() = ', self.displayImage._scene.height())
-                # print('self.displayImage._image.shape = ', self.displayImage._image.shape)
-                # print('self.displayImage._landmark_size =', self.displayImage._landmark_size)
+                print('self.displayImage._scene.height() = ', self.displayImage._scene.height())
+                print('self.displayImage._image.shape = ', self.displayImage._image.shape)
+                print('self.displayImage._landmark_size =', self.displayImage._landmark_size)
                 
                 #Makes sure everything is up to date
                 self.displayImage.update_shape()

@@ -1,4 +1,5 @@
-from PyQt5 import QtWidgets, QtCore, uic
+from PyQt5 import QtWidgets, QtCore, uic, QtGui
+import numpy as np
 
 
 class LandmarkSettingsWindow(QtWidgets.QMainWindow):
@@ -42,7 +43,9 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
         self.modelComboBox.activated[str].connect(self.changeModelname)
         
         #Set landmark size to current size
-        self.landmarkSizeSpinBox.setValue(int(self._landmark_size))
+        self.landmarkSizeLineEdit.setText(str(np.round(self._landmark_size, decimals=2)))
+        validator = QtGui.QDoubleValidator(self)
+        self.landmarkSizeLineEdit.setValidator(validator)
         
         #Connect Buttons
         self.landmark1ColorButton.clicked.connect(self.get_Landmark1Color)
@@ -58,15 +61,19 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
         
         
     def done(self):
-        self._save_changes = True
+        try:
+            self._save_changes = True
         
-        self._landmark_size = self.landmarkSizeSpinBox.value()
+            self._landmark_size = float(self.landmarkSizeLineEdit.text())
         
-        self.models.emit(self._Model_name, self._new_Model_selected)
-        self.colors.emit(self._color_landmark1, self._color_landmark2, self._color_eyes, self._color_midline)
-        self.size.emit(self._landmark_size)
-        self.close()
-        
+            self.models.emit(self._Model_name, self._new_Model_selected)
+            self.colors.emit(self._color_landmark1, self._color_landmark2, self._color_eyes, self._color_midline)
+            self.size.emit(self._landmark_size)
+            self.close()
+        except:
+            QtWidgets.QMessageBox.information(self, 'Error', 
+            'Invalid Landmark Size.', 
+            QtWidgets.QMessageBox.Ok)
         
     def changeModelname(self, modelname):
         if modelname != '':
