@@ -440,7 +440,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftPercentComparison.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementLeftPercentComparison.CommisureHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(7, 3, val)
         
-        #Dental Show
+        #Interlabial Distance
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementRightComparison.InterlabialDistance, decimals=2)) != '0' else '-')
         self.sideTable.setItem(8, 0, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.InterlabialDistance, decimals=2)) != '0' else '-')
@@ -450,7 +450,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftPercentComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementLeftPercentComparison.InterlabialDistance, decimals=2)) != '0' else '-')
         self.sideTable.setItem(8, 3, val)
         
-        #Dental Show Area
+        #Interlabial Area of the Hemiface
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementRightComparison.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
         self.sideTable.setItem(9, 0, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
@@ -470,7 +470,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftPercentComparison.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementLeftPercentComparison.CommissurePosition, decimals=2)) != '0' else '-')
         self.sideTable.setItem(10, 3, val)
         
-        #Lower Lip Height Deviation
+        #Lower Lip Height
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementRightComparison.LowerLipHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(11, 0, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.LowerLipHeight, decimals=2)) != '0' else '-')

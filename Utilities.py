@@ -269,4 +269,56 @@ def find_circle_from_points(x,y):
     #circle.append((int(xc_1),int(yc_1),int(R_1)))
     
     return circle    
+
+
+def save_xls_file(file_name, MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual):
+    #saves the facial metrics into a xls file. It works only for a single photo
     
+    file_no_ext=file_name[0:-4]
+    delimiter = os.path.sep
+    temp=file_name.split(delimiter)
+    photo_name=temp[-1]
+    
+    number_of_measurements = 12
+    Columns = ['Right','Left','Deviation (absolute)','Deviation (percent)']
+    Columns = Columns * number_of_measurements
+    
+    temp = ['Brow Height', 'Marginal Reflex Distance 1', 'Marginal Reflex Distance 2', 
+            'Palpebral Fissure Height', 'Eye Area', 'NLF Angle',
+            'Upper Lip Slope', 'Commisure Height', 'Interlabial Distance',
+            'Interlabial Area of the Hemiface','Commissure Position','Lower Lip Height']
+    number_of_repetitions=4
+    Header = [item for item in temp for i in range(number_of_repetitions)]
+    
+    
+    elements = ['BH', 'MRD1', 'MRD2', 'PFH', 'EA', 'NA', 'ULS', 'CH', 'ID', 'IAH', 'CP', 'LLH']
+    BH = np.array([[MeasurementsRight.BrowHeight,MeasurementsLeft.BrowHeight,MeasurementsDeviation.BrowHeight,MeasurementsPercentual.BrowHeight]],dtype=object)
+    MRD1 = np.array([[MeasurementsRight.MarginalReflexDistance1, MeasurementsLeft.MarginalReflexDistance1,MeasurementsDeviation.MarginalReflexDistance1,MeasurementsPercentual.MarginalReflexDistance1]], dtype=object)
+    MRD2 = np.array([[MeasurementsRight.MarginalReflexDistance2, MeasurementsLeft.MarginalReflexDistance2,MeasurementsDeviation.MarginalReflexDistance2,MeasurementsPercentual.MarginalReflexDistance2]],dtype=object)
+    PFH = np.array([[MeasurementsRight.PalpebralFissureHeight, MeasurementsLeft.PalpebralFissureHeight,MeasurementsDeviation.PalpebralFissureHeight,MeasurementsPercentual.PalpebralFissureHeight]],dtype=object)
+    EA = np.array([[MeasurementsRight.EyeArea, MeasurementsLeft.EyeArea,MeasurementsDeviation.EyeArea,MeasurementsPercentual.EyeArea]],dtype=object)
+    NA = np.array([[MeasurementsRight.NLF_angle, MeasurementsLeft.NLF_angle,MeasurementsDeviation.NLF_angle,MeasurementsPercentual.NLF_angle]],dtype=object)
+    ULS = np.array([[MeasurementsRight.UpperLipSlope, MeasurementsLeft.UpperLipSlope,MeasurementsDeviation.UpperLipSlope,MeasurementsPercentual.UpperLipSlope]],dtype=object)
+    CH = np.array([[MeasurementsRight.CommisureHeight, MeasurementsLeft.CommisureHeight,MeasurementsDeviation.CommisureHeight,MeasurementsPercentual.CommisureHeight]],dtype=object)
+    ID = np.array([[MeasurementsRight.InterlabialDistance, MeasurementsLeft.InterlabialDistance,MeasurementsDeviation.InterlabialDistance,MeasurementsPercentual.InterlabialDistance]],dtype=object)
+    IAH = np.array([[MeasurementsRight.InterlabialArea_of_the_Hemiface,MeasurementsLeft.InterlabialArea_of_the_Hemiface,MeasurementsDeviation.InterlabialArea_of_the_Hemiface,MeasurementsPercentual.InterlabialArea_of_the_Hemiface]],dtype=object)
+    CP = np.array([[MeasurementsRight.CommissurePosition,MeasurementsLeft.CommissurePosition,MeasurementsDeviation.CommissurePosition,MeasurementsPercentual.CommissurePosition]],dtype=object)
+    LLH = np.array([[MeasurementsRight.LowerLipHeight,MeasurementsLeft.LowerLipHeight,MeasurementsDeviation.LowerLipHeight,MeasurementsPercentual.LowerLipHeight]],dtype=object)
+    
+    
+    
+    fill=BH
+    for i in elements:
+        if i is not 'BH':
+            fill = np.append(fill, eval(i), axis = 1)
+    
+    
+    
+    Index = [photo_name]
+    
+    
+    df = pd.DataFrame(fill, index = Index, columns = Columns)
+    df.columns = pd.MultiIndex.from_tuples(list(zip(Header,df.columns)))
+    
+    
+    df.to_excel(file_no_ext+'.xlsx',index = True)

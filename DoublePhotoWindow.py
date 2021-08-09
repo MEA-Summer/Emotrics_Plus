@@ -1,4 +1,3 @@
-from SelectionWindow import SelectionWindow
 from PyQt5 import QtWidgets, QtCore, uic
 from PyQt5.QtGui import QImage, QPainter
 import sys
@@ -15,6 +14,7 @@ from arch.FAN import FAN
 from arch.resnest.HeatMaps import model_resnest
 from models.irislandmarks import IrisLandmarks
 from ImageViewerandProcess2 import ImageViewer
+from DoubleSelectionWindow import DoubleSelectionWindow
 from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
 from MetricsDoubleWindow import MetricsDoubleWindow
@@ -595,6 +595,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         elif title == 'Expression State':
             self._task = 'Resting vs Expression'
             self.photo1ComboBox.setCurrentText('Resting State')
+
 
     ########################################################################################################################
     ########################################################################################################################
