@@ -562,6 +562,31 @@
               </property>
              </widget>
             </item>
+            <item row="2" column="1">
+             <widget class="QPushButton" name="auto_eFaceButton">
+              <property name="sizePolicy">
+               <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+                <horstretch>0</horstretch>
+                <verstretch>0</verstretch>
+               </sizepolicy>
+              </property>
+              <property name="minimumSize">
+               <size>
+                <width>80</width>
+                <height>80</height>
+               </size>
+              </property>
+              <property name="maximumSize">
+               <size>
+                <width>80</width>
+                <height>80</height>
+               </size>
+              </property>
+              <property name="text">
+               <string>Auto eFace</string>
+              </property>
+             </widget>
+            </item>
            </layout>
           </item>
           <item>
@@ -1010,7 +1035,7 @@
                </size>
               </property>
               <property name="checkable">
-               <bool>true</bool>
+               <bool>false</bool>
               </property>
              </widget>
             </item>
