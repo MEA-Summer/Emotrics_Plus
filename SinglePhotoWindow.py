@@ -75,7 +75,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         
         #NLF Model
         model_NLF = model_resnest(out_channels=8, pretrained=False)
-        model_NLF.load_state_dict(torch.load('./arch/heatmap_NSLF.pth', map_location=torch.device('cpu')))
+        model_NLF.load_state_dict(torch.load('./arch/heatmap_NSLF_3.pth', map_location=torch.device('cpu')))
         model_NLF.eval();
         self.model_NLF = model_NLF
         
@@ -420,24 +420,24 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
     def create_auto_eFace_window(self):
         """This function is used when the user clicks the Auto eFace button.
         This function opens up a window and displays the Auto eFace graph of the photo"""
-        try:
-            if max(self.displayImage._shape[:, 2]) >= 76:
-                #This is to make sure that the midline exist
-                if self.displayImage._points == None:
-                    self.displayImage.toggle_midLine()
-                    self.displayImage.toggle_midLine()
-                #say to the window that presents the results that there is only 1 tab
-                self._new_window = Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name, self._expression)
-                #show the window with the results 
-                self._new_window.show()
-            else:
-                QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
-                    QtWidgets.QMessageBox.Ok)
-        except:
+        # try:
+        if max(self.displayImage._shape[:, 2]) >= 76:
+            #This is to make sure that the midline exist
+            if self.displayImage._points == None:
+                self.displayImage.toggle_midLine()
+                self.displayImage.toggle_midLine()
+            #say to the window that presents the results that there is only 1 tab
+            self._new_window = Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name, self._expression)
+            #show the window with the results 
+            self._new_window.show()
+        else:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Error in creating Auto-eFace Window.', 
-                    QtWidgets.QMessageBox.Ok)
+                'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
+                QtWidgets.QMessageBox.Ok)
+        # except:
+        #     QtWidgets.QMessageBox.information(self, 'Error', 
+        #             'Error in creating Auto-eFace Window.', 
+        #             QtWidgets.QMessageBox.Ok)
     
     def leftSideSelected(self):
         self.displayImage._reference_side = 'Left'

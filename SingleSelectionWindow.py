@@ -37,10 +37,9 @@ class SingleSelectionWindow(QtWidgets.QMainWindow):
         self.ExpressionComboBox.addItem('Brow Raise')
         self.ExpressionComboBox.addItem('Gentle Eyes')
         self.ExpressionComboBox.addItem('Tight Eyes')
-        self.ExpressionComboBox.addItem('Gentle Smile')
         self.ExpressionComboBox.addItem('Big Smile')
-        self.ExpressionComboBox.addItem('"ee"')
-        self.ExpressionComboBox.addItem('"oo"')
+        self.ExpressionComboBox.addItem('"eeeek"')
+        self.ExpressionComboBox.addItem('"ooooo"')
         self.ExpressionComboBox.addItem('Other')
         
         
