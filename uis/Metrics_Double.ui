@@ -122,6 +122,9 @@
            <property name="text">
             <string>Brow Height (mm):</string>
            </property>
+           <property name="toolTip">
+            <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-family:'Times New Roman';&quot;&gt;Testing&lt;/span&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+           </property>
            <property name="font">
             <font>
              <family>Times New Roman</family>

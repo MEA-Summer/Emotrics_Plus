@@ -89,7 +89,7 @@
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Click to Upload Post-Op Photograph</string>
+       <string>Click to Upload Photograph</string>
       </property>
      </widget>
     </item>
