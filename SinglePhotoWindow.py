@@ -279,6 +279,8 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
 
 
     def load_file(self):
+        #Verify is current dots are saved
+        self.verifySave()
         
         #load a file using the widget
         name,_ = QtWidgets.QFileDialog.getOpenFileName(
@@ -615,10 +617,107 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
     ########################################################################################################################
     ########################################################################################################################
 
-    
+
+    def verifySave(self):
+        """This function verifies that the current landmarks are save."""
+        try:
+            filename = self._file_name[:-4]
+            if filename[-1] == '.':
+                filename = filename[:-1]
+            file_txt = (filename + '.txt')
+            if os.path.isfile(file_txt):
+                shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
+                currently_Saved = True #the landmarks are assumed to be saved unless a difference is found
+                for i in range(len(self.displayImage._shape)):
+                    if (self.displayImage._shape[i,0] != shape[i,0] or
+                    self.displayImage._shape[i,1] != shape[i,1] or
+                    self.displayImage._shape[i,2] != shape[i,2]):
+                        #checks if shape is the same
+                        # print('Difference Found in boundingbox')
+                        # print('self.displayImage._shape = ', self.displayImage._shape)
+                        # print('shape = ', shape)
+                        currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._righteye)):
+                        if self.displayImage._righteye[i] != righteye[i]:
+                            #checks if righteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._righteye = ', self.displayImage._righteye)
+                            # print('righteye = ', righteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._lefteye)):
+                        if self.displayImage._lefteye[i] != lefteye[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._lefteye = ', self.displayImage._lefteye)
+                            # print('lefteye = ', lefteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._boundingbox)):
+                        if self.displayImage._boundingbox[i] != boundingbox[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._boundingbox = ', self.displayImage._boundingbox)
+                            # print('boundingbox = ', boundingbox)
+                            currently_Saved = False
+                
+                if currently_Saved == False:
+                    #If difference is found ask if the user wants to be saved
+                    saveDotsQuestion = QtWidgets.QMessageBox
+                    saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                        'New Landmarks adjustments are currently not saved.\nWould you like to save the new Landmarks?', 
+                        saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                    if saveDotsBox == saveDotsQuestion.Yes:
+                        try:
+                            self.save_results()
+                            QtWidgets.QMessageBox.information(self, 'Successfully Saved', 
+                                'Current Landmarks were successfully saved.', 
+                                QtWidgets.QMessageBox.Ok)
+                        except:
+                            QtWidgets.QMessageBox.information(self, 'Error', 
+                                'Error in saving current Landmarks.', 
+                                QtWidgets.QMessageBox.Ok)
+            else:
+                saveDotsQuestion = QtWidgets.QMessageBox
+                saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                    'The Landmarks are currently not saved.\nWould you like to save the current Landmarks?', 
+                    saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                if saveDotsBox == saveDotsQuestion.Yes:
+                    try:
+                        self.save_results()
+                        QtWidgets.QMessageBox.information(self, 'Successfully Saved', 
+                            'Current Landmarks were successfully saved.', 
+                            QtWidgets.QMessageBox.Ok)
+                    except:
+                        QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Error in saving current Landmarks.', 
+                            QtWidgets.QMessageBox.Ok)
+        except:
+            print('Error in verifying save')
+            # QtWidgets.QMessageBox.information(self, 'Error', 
+            #     'Error in verifying saved Landmarks.', 
+            #     QtWidgets.QMessageBox.Ok)
+
+
     def previous(self):
+        """This function is used to close the window.
+        It verifies the the landmarks are saved then closes the window and goes back to the home window"""
+        self.verifySave()
+                        
         self.finished.emit()
         self.close()
+
+    
+    def closeEvent(self, event):
+        """This function is used to close the program.
+        It verifies the the landmarks are saved then closes the program"""
+        self.verifySave()
+        event.accept()
+
 
 
 def main():

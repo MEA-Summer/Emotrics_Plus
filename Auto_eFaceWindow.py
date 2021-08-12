@@ -43,7 +43,9 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
     def initUI(self):
         
         
-        if self._expression == 'Resting':
+        if self._expression == 'Resting' or self._expression == 'Other':
+            if self._expression == 'Other':
+                self.setWindowTitle('Other Auto eFace')
             self.ui = uic.loadUi('uis\Auto_eFace_Resting.ui', self)
 
             (MeasurementsLeft, MeasurementsRight, 
@@ -196,7 +198,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
             Oral_Commisure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            NLF_at_rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
             x = ['Oral Commisure', 'Nasolabial Fold Angle']
 
             y = [Oral_Commisure_at_Rest, NLF_at_rest]
@@ -233,7 +235,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
             Oral_Commisure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            NLF_at_rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
             x = ['Oral Commisure', 'Nasolabial Fold Angle']
 
             y = [Oral_Commisure_at_Rest, NLF_at_rest]

@@ -102,7 +102,7 @@ def save_txt_file(file_name,shape,circle_left,circle_right, boundingbox):
 
 def get_info_from_txt(file):
     #function to read the landmark, iris and bounding box location from txt files
-    print('Using Saved Dots')
+    # print('Using Saved Dots')
     shape = None
     left_pupil = np.zeros((1,3),dtype=int)
     right_pupil = np.zeros((1,3),dtype=int)
