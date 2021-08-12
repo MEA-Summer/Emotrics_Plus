@@ -438,7 +438,7 @@ p, li { white-space: pre-wrap; }
          <string notr="true">color: rgb(68, 85, 95);</string>
         </property>
         <property name="currentIndex">
-         <number>0</number>
+         <number>1</number>
         </property>
         <widget class="QWidget" name="tab_3">
          <attribute name="title">
@@ -466,6 +466,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="10" column="0" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="screenShotButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1310,6 +1313,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="12" column="2" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="customMeasurementsButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>60</width>
