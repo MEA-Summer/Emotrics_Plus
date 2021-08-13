@@ -43,7 +43,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
     def initUI(self):
         
         
-        if self._expression == 'Resting' or self._expression == 'Other':
+        if self._expression == 'Resting':
             if self._expression == 'Other':
                 self.setWindowTitle('Other Auto eFace')
             self.ui = uic.loadUi('uis\Auto_eFace_Resting.ui', self)
@@ -52,10 +52,10 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commisure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Brow Height', 'Palpebral Fissure', 'Oral Commisure', 'Nasolabial Fold Angle']
+            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
 
-            y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commisure_at_Rest, NLF_at_rest]
+            y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
 
             ##############
             """Plotting"""
@@ -63,7 +63,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -80,7 +80,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
 
             self.BHLineEdit.setText(str(Resting_Brow))
             self.PFLineEdit.setText(str(Resting_Palpebral_Fissure))
-            self.OCLineEdit.setText(str(Oral_Commisure_at_Rest))
+            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
             self.NLFLineEdit.setText(str(NLF_at_rest)) 
 
             self.BHLineEdit.textChanged.connect(self.updateRestingGraph)
@@ -107,7 +107,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -121,14 +121,14 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.BHLineEdit.textChanged.connect(self.updateBRGraph)
 
 
-        elif self._expression == 'Gentle Eyes':
+        elif self._expression == 'Gentle Eye Closure':
             self.ui = uic.loadUi('uis\Auto_eFace_Gentle_Eye_Closure.ui', self)
 
             (MeasurementsLeft, MeasurementsRight, 
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commisure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
             x = ['Palpebral Fissure']
 
             y = [Resting_Palpebral_Fissure]
@@ -139,7 +139,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -153,7 +153,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.PFLineEdit.textChanged.connect(self.updateGECGraph)
         
 
-        elif self._expression == 'Tight Eyes':
+        elif self._expression == 'Tight Eye Closure':
             self.ui = uic.loadUi('uis\Auto_eFace_Tight_Eye_Closure.ui', self)
 
             (MeasurementsLeft, MeasurementsRight, 
@@ -172,7 +172,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -197,11 +197,11 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Oral_Commisure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            Oral_Commissure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
             NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Oral Commisure', 'Nasolabial Fold Angle']
+            x = ['Oral Commissure', 'Nasolabial Fold Angle']
 
-            y = [Oral_Commisure_at_Rest, NLF_at_rest]
+            y = [Oral_Commissure_at_Rest, NLF_at_rest]
 
             ##############
             """Plotting"""
@@ -209,7 +209,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -220,11 +220,11 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             validator = DoubleValidator( 0, 200, 1, self)
             self.NLFLineEdit.setValidator(validator)
 
-            self.OCLineEdit.setText(str(Oral_Commisure_at_Rest))
+            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
             self.NLFLineEdit.setText(str(NLF_at_rest)) 
 
-            self.OCLineEdit.textChanged.connect(self.updateRestingGraph)
-            self.NLFLineEdit.textChanged.connect(self.updateRestingGraph)
+            self.OCLineEdit.textChanged.connect(self.updateBSGraph)
+            self.NLFLineEdit.textChanged.connect(self.updateBSGraph)
 
         
         elif self._expression == '"eeeek"':
@@ -234,11 +234,11 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Oral_Commisure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
+            Oral_Commissure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
             NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Oral Commisure', 'Nasolabial Fold Angle']
+            x = ['Oral Commissure', 'Nasolabial Fold Angle']
 
-            y = [Oral_Commisure_at_Rest, NLF_at_rest]
+            y = [Oral_Commissure_at_Rest, NLF_at_rest]
 
             ##############
             """Plotting"""
@@ -246,7 +246,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -257,7 +257,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             validator = DoubleValidator( 0, 200, 1, self)
             self.NLFLineEdit.setValidator(validator)
 
-            self.OCLineEdit.setText(str(Oral_Commisure_at_Rest))
+            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
             self.NLFLineEdit.setText(str(NLF_at_rest)) 
 
             self.OCLineEdit.textChanged.connect(self.updateEeeekGraph)
@@ -282,7 +282,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             self.plotWidget.canvas.ax.bar(x, y, color='blue')
             self.plotWidget.canvas.ax.set_xlabel('Parameters')
             self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title('Static Parameters')
+            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
             self.plotWidget.canvas.ax.set_ylim(0,200)
 
             ##############
@@ -306,22 +306,22 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         except:
             Resting_Palpebral_Fissure = 0
         try:
-            Oral_Commisure_at_Rest = float(self.OCLineEdit.text())
+            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
         except:
-            Oral_Commisure_at_Rest = 0
+            Oral_Commissure_at_Rest = 0
         try:
             NLF_at_rest = float(self.NLFLineEdit.text())
         except:
             NLF_at_rest = 0
 
-        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commisure', 'Nasolabial Fold Angle']
-        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commisure_at_Rest, NLF_at_rest]
+        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
+        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
 
         self.plotWidget.canvas.ax.clear()
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
@@ -339,7 +339,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
@@ -357,7 +357,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
@@ -379,51 +379,51 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
 
     def updateBSGraph(self, text):
         try:
-            Oral_Commisure_at_Rest = float(self.OCLineEdit.text())
+            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
         except:
-            Oral_Commisure_at_Rest = 0
+            Oral_Commissure_at_Rest = 0
         try:
             NLF_at_rest = float(self.NLFLineEdit.text())
         except:
             NLF_at_rest = 0
 
-        x = ['Oral Commisure', 'Nasolabial Fold Angle']
-        y = [Oral_Commisure_at_Rest, NLF_at_rest]
+        x = ['Oral Commissure', 'Nasolabial Fold Angle']
+        y = [Oral_Commissure_at_Rest, NLF_at_rest]
 
         self.plotWidget.canvas.ax.clear()
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
 
     def updateEeeekGraph(self, text):
         try:
-            Oral_Commisure_at_Rest = float(self.OCLineEdit.text())
+            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
         except:
-            Oral_Commisure_at_Rest = 0
+            Oral_Commissure_at_Rest = 0
         try:
             NLF_at_rest = float(self.NLFLineEdit.text())
         except:
             NLF_at_rest = 0
 
-        x = ['Oral Commisure', 'Nasolabial Fold Angle']
-        y = [Oral_Commisure_at_Rest, NLF_at_rest]
+        x = ['Oral Commissure', 'Nasolabial Fold Angle']
+        y = [Oral_Commissure_at_Rest, NLF_at_rest]
 
         self.plotWidget.canvas.ax.clear()
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
@@ -438,22 +438,22 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         except:
             Resting_Palpebral_Fissure = 0
         try:
-            Oral_Commisure_at_Rest = float(self.OCLineEdit.text())
+            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
         except:
-            Oral_Commisure_at_Rest = 0
+            Oral_Commissure_at_Rest = 0
         try:
             NLF_at_rest = float(self.NLFLineEdit.text())
         except:
             NLF_at_rest = 0
 
-        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commisure', 'Nasolabial Fold Angle']
-        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commisure_at_Rest, NLF_at_rest]
+        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
+        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
 
         self.plotWidget.canvas.ax.clear()
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title('Static Parameters')
+        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
         self.plotWidget.canvas.ax.set_ylim(0,200)
         self.plotWidget.canvas.draw()
 
