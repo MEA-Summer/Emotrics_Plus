@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>484</width>
+    <width>473</width>
     <height>550</height>
    </rect>
   </property>
@@ -40,28 +40,31 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="6" column="1" alignment="Qt::AlignHCenter">
-     <widget class="QRadioButton" name="rightSideButton">
+    <item row="10" column="2">
+     <widget class="QPushButton" name="nextButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>0</height>
+       </size>
+      </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>14</pointsize>
+        <pointsize>11</pointsize>
        </font>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Right </string>
-      </property>
-      <property name="checked">
-       <bool>true</bool>
+       <string>Next</string>
       </property>
      </widget>
     </item>
@@ -93,50 +96,28 @@
       </property>
      </widget>
     </item>
-    <item row="4" column="0" colspan="4" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="label_11">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Please Select the Reference Side:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="2">
-     <widget class="QPushButton" name="nextButton">
+    <item row="8" column="1" alignment="Qt::AlignHCenter">
+     <widget class="QRadioButton" name="rightSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="minimumSize">
-       <size>
-        <width>200</width>
-        <height>0</height>
-       </size>
-      </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>11</pointsize>
+        <pointsize>14</pointsize>
        </font>
       </property>
       <property name="styleSheet">
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Next</string>
+       <string>Right </string>
+      </property>
+      <property name="checked">
+       <bool>true</bool>
       </property>
      </widget>
     </item>
@@ -165,7 +146,7 @@
       </property>
      </widget>
     </item>
-    <item row="6" column="2" alignment="Qt::AlignHCenter">
+    <item row="8" column="2" alignment="Qt::AlignHCenter">
      <widget class="QRadioButton" name="leftSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -187,40 +168,7 @@
       </property>
      </widget>
     </item>
-    <item row="3" column="1" colspan="2">
-     <widget class="QComboBox" name="ExpressionComboBox">
-      <property name="editable">
-       <bool>false</bool>
-      </property>
-     </widget>
-    </item>
-    <item row="2" column="1" colspan="2" alignment="Qt::AlignHCenter">
-     <widget class="QLabel" name="expressionsLabel">
-      <property name="maximumSize">
-       <size>
-        <width>16777215</width>
-        <height>25</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>10</pointsize>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true"/>
-      </property>
-      <property name="text">
-       <string>Expressions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="8" column="1">
+    <item row="10" column="1">
      <widget class="QPushButton" name="previousButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -248,6 +196,80 @@
       </property>
      </widget>
     </item>
+    <item row="3" column="1" colspan="2">
+     <widget class="QComboBox" name="ExpressionComboBox">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="4" column="1" colspan="2">
+     <widget class="QLabel" name="expressionsLabel_2">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="layoutDirection">
+       <enum>Qt::LeftToRight</enum>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Select the Reference Side:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLabel" name="expressionsLabel">
+      <property name="maximumSize">
+       <size>
+        <width>16777215</width>
+        <height>25</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+        <strikeout>false</strikeout>
+       </font>
+      </property>
+      <property name="autoFillBackground">
+       <bool>false</bool>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Select the Expression Displayed:</string>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -255,7 +277,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>484</width>
+     <width>473</width>
      <height>26</height>
     </rect>
    </property>
