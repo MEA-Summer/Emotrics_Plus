@@ -380,12 +380,14 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         """This function is to show that the program is current working on something
         (most likely Landmark Thread). It shows this by set the cursor to the busy cursor"""
         # print('Busy\nBusy Cursor Set')
+        self.displayImage._busy = True
         self.setCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
     
     def setNormalCursor(self):
         """This function is to show that the program is current working on something
         (most likely Landmark Thread). It shows this by set the cursor to the busy cursor"""
         # print('Finished\nNormal Cursor Set')
+        self.displayImage._busy = False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
     
 
@@ -674,9 +676,6 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     if saveDotsBox == saveDotsQuestion.Yes:
                         try:
                             self.save_results()
-                            QtWidgets.QMessageBox.information(self, 'Successfully Saved', 
-                                'Current Landmarks were successfully saved.', 
-                                QtWidgets.QMessageBox.Ok)
                         except:
                             QtWidgets.QMessageBox.information(self, 'Error', 
                                 'Error in saving current Landmarks.', 
@@ -689,9 +688,6 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 if saveDotsBox == saveDotsQuestion.Yes:
                     try:
                         self.save_results()
-                        QtWidgets.QMessageBox.information(self, 'Successfully Saved', 
-                            'Current Landmarks were successfully saved.', 
-                            QtWidgets.QMessageBox.Ok)
                     except:
                         QtWidgets.QMessageBox.information(self, 'Error', 
                             'Error in saving current Landmarks.', 
@@ -706,7 +702,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
     def previous(self):
         """This function is used to close the window.
         It verifies the the landmarks are saved then closes the window and goes back to the home window"""
-        self.verifySave()
+        # self.verifySave()
                         
         self.finished.emit()
         self.close()

@@ -459,7 +459,6 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
 
     
 
-    
 
 
 

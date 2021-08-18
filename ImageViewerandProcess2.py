@@ -37,6 +37,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
         self.setFrameShape(QtWidgets.QFrame.NoFrame)
         self.setDragMode(QtWidgets.QGraphicsView.RubberBandDrag)
         self.setMouseTracking(True)
+        self._busy = False
         
         #this is used to show the dots and update the dots in image
         """Variable for patient"""
@@ -216,7 +217,9 @@ class ImageViewer(QtWidgets.QGraphicsView):
         #user wants to manually modify the position of the iris. In that case,
         #it opens up a new window showing only the eye (left or right) where 
         #the user can select four points around the iris
-        if not self._photo.pixmap().isNull():
+        if self._busy == True:
+            event.ignore()
+        elif not self._photo.pixmap().isNull():
 
             scenePos = self.mapToScene(event.pos())
             x_mousePos = scenePos.toPoint().x()
@@ -406,7 +409,9 @@ class ImageViewer(QtWidgets.QGraphicsView):
     def mouseDoubleClickEvent(self, event):
    
         #if the user double click on one of the iris the both iris will be able to move together
-        if event.button() == QtCore.Qt.RightButton:
+        if self._busy == True:
+            event.ignore()
+        elif event.button() == QtCore.Qt.RightButton:
             event.accept()
             if self._shape is not None:
                 scenePos = self.mapToScene(event.pos())
@@ -1071,4 +1076,8 @@ class ImageViewer(QtWidgets.QGraphicsView):
     def reset_save_variables(self):
         self._savedShape = False
         
-           
+    def get_midline(self):
+        try:
+            self._points = estimate_lines(self._image, self._lefteye, self._righteye)    
+        except:
+            print('Error in get_midline')  
