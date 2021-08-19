@@ -185,7 +185,7 @@
       </property>
       <property name="icon">
        <iconset>
-        <normaloff>../icons/eface.jpg</normaloff>../icons/eface.jpg</iconset>
+        <normaloff>../icons/measurements.jpg</normaloff>../icons/measurements.jpg</iconset>
       </property>
       <property name="iconSize">
        <size>
