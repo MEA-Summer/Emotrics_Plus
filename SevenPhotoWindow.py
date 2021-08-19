@@ -22,6 +22,13 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self._file_BS = None
         self._file_eeeek = None
         self._file_ooooo = None
+        self._finished_R = False
+        self._finished_BR = False
+        self._finished_GEC = False
+        self._finished_TEC = False
+        self._finished_BS = False
+        self._finished_eeeek = False
+        self._finished_ooooo = False
         
         self._Patient = Patient()
         self._Patient._reference_side = 'Right'
@@ -42,45 +49,60 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.restingDisplay.selected.connect(self.hideWindow)
         self.restingWindow.finished.connect(self.restingWindow.hide)
         self.restingWindow.finished.connect(self.showWindow)
+        self.restingWindow.busy.connect(self.setBusy)
+        self.restingWindow.got_landmarks.connect(self.got_R)
         #Brow Raise Window
         self.browRaiseWindow = SinglePhotoWindow()
         self.browRaiseDisplay.selected.connect(self.browRaiseWindow.show)
         self.browRaiseDisplay.selected.connect(self.hideWindow)
         self.browRaiseWindow.finished.connect(self.browRaiseWindow.hide)
         self.browRaiseWindow.finished.connect(self.showWindow)
+        self.browRaiseWindow.busy.connect(self.setBusy)
+        self.browRaiseWindow.got_landmarks.connect(self.got_BR)
         #Gentle Eye Closure Window
         self.GentleEyeClosureWindow = SinglePhotoWindow()
         self.gentleEyeClosureDisplay.selected.connect(self.GentleEyeClosureWindow.show)
         self.gentleEyeClosureDisplay.selected.connect(self.hideWindow)
         self.GentleEyeClosureWindow.finished.connect(self.GentleEyeClosureWindow.hide)
         self.GentleEyeClosureWindow.finished.connect(self.showWindow)
+        self.GentleEyeClosureWindow.busy.connect(self.setBusy)
+        self.GentleEyeClosureWindow.got_landmarks.connect(self.got_GEC)
         #TightEyeClosureWindow Window
         self.TightEyeClosureWindow = SinglePhotoWindow()
         self.tightEyeClosureDisplay.selected.connect(self.TightEyeClosureWindow.show)
         self.tightEyeClosureDisplay.selected.connect(self.hideWindow)
         self.TightEyeClosureWindow.finished.connect(self.TightEyeClosureWindow.hide)
         self.TightEyeClosureWindow.finished.connect(self.showWindow)
+        self.TightEyeClosureWindow.busy.connect(self.setBusy)
+        self.TightEyeClosureWindow.got_landmarks.connect(self.got_TEC)
         #Big Smile Window
         self.BigSmileWindow = SinglePhotoWindow()
         self.bigSmileDisplay.selected.connect(self.BigSmileWindow.show)
         self.bigSmileDisplay.selected.connect(self.hideWindow)
         self.BigSmileWindow.finished.connect(self.BigSmileWindow.hide)
         self.BigSmileWindow.finished.connect(self.showWindow)
+        self.BigSmileWindow.busy.connect(self.setBusy)
+        self.BigSmileWindow.got_landmarks.connect(self.got_BS)
         #"eeeek" Window
         self.eeeekWindow = SinglePhotoWindow()
         self.eeeekDisplay.selected.connect(self.eeeekWindow.show)
         self.eeeekDisplay.selected.connect(self.hideWindow)
         self.eeeekWindow.finished.connect(self.eeeekWindow.hide)
         self.eeeekWindow.finished.connect(self.showWindow)
+        self.eeeekWindow.busy.connect(self.setBusy)
+        self.eeeekWindow.got_landmarks.connect(self.got_ek)
         #"ooooo" Window
         self.oooooWindow = SinglePhotoWindow()
         self.oooooDisplay.selected.connect(self.oooooWindow.show)
         self.oooooDisplay.selected.connect(self.hideWindow)
         self.oooooWindow.finished.connect(self.oooooWindow.hide)
         self.oooooWindow.finished.connect(self.showWindow)
+        self.oooooWindow.busy.connect(self.setBusy)
+        self.oooooWindow.got_landmarks.connect(self.got_oo)
 
         """Button Connection"""
         self.previousButton.clicked.connect(self.previous)
+        self.matchIrisButton.clicked.connect(self.matchIris)
 
 
     ########################################################################################################################
@@ -88,7 +110,7 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
     """Set-up Functions"""
     ########################################################################################################################
     ########################################################################################################################
-
+    
 
     def setPhoto_R(self, name):
         self._file_R = name
@@ -96,7 +118,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.restingDisplay.setPhoto(pixmap)
         self.restingWindow.setPhoto(name)
         self.restingWindow.setTaskName('Resting')
-        self.restingWindow.displayImage.get_midline() #This makes sure _points exist
+
+    def got_R(self):
+        self._finished_R = True
+        self.checkBusy()
 
     def setPhoto_BR(self, name):
         self._file_BR = name
@@ -104,7 +129,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.browRaiseDisplay.setPhoto(pixmap)
         self.browRaiseWindow.setPhoto(name)
         self.browRaiseWindow.setTaskName('Brow Raise')
-        self.browRaiseWindow.displayImage.get_midline() #This makes sure _points exist
+        
+    def got_BR(self):
+        self._finished_BR = True
+        self.checkBusy()
     
     def setPhoto_GEC(self, name):
         self._file_GEC = name
@@ -112,7 +140,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.gentleEyeClosureDisplay.setPhoto(pixmap)
         self.GentleEyeClosureWindow.setPhoto(name)
         self.GentleEyeClosureWindow.setTaskName('Gentle Eye Closure')
-        self.GentleEyeClosureWindow.displayImage.get_midline() #This makes sure _points exist
+        
+    def got_GEC(self):
+        self._finished_GEC = True
+        self.checkBusy()
     
     def setPhoto_TEC(self, name):
         self._file_TEC = name
@@ -120,7 +151,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.tightEyeClosureDisplay.setPhoto(pixmap)
         self.TightEyeClosureWindow.setPhoto(name)
         self.TightEyeClosureWindow.setTaskName('Tight Eye Closure')
-        self.TightEyeClosureWindow.displayImage.get_midline() #This makes sure _points exist
+        
+    def got_TEC(self):
+        self._finished_TEC = True
+        self.checkBusy()
 
     def setPhoto_BS(self, name):
         self._file_BS = name
@@ -128,7 +162,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.bigSmileDisplay.setPhoto(pixmap)
         self.BigSmileWindow.setPhoto(name)
         self.BigSmileWindow.setTaskName('Big Smile')
-        self.BigSmileWindow.displayImage.get_midline() #This makes sure _points exist
+    
+    def got_BS(self):
+        self._finished_BS = True
+        self.checkBusy()
 
     def setPhoto_eeeek(self, name):
         self._file_eeeek = name
@@ -136,7 +173,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.eeeekDisplay.setPhoto(pixmap)
         self.eeeekWindow.setPhoto(name)
         self.eeeekWindow.setTaskName('"eeeek"')
-        self.eeeekWindow.displayImage.get_midline() #This makes sure _points exist
+        
+    def got_ek(self):
+        self._finished_eeeek = True
+        self.checkBusy()
 
     def setPhoto_ooooo(self, name):
         self._file_ooooo = name
@@ -144,7 +184,10 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.oooooDisplay.setPhoto(pixmap)
         self.oooooWindow.setPhoto(name)
         self.oooooWindow.setTaskName('"ooooo"')
-        self.oooooWindow.displayImage.get_midline() #This makes sure _points exist
+        
+    def got_oo(self):
+        self._finished_ooooo = True
+        self.checkBusy()
 
     def setReferenceSide(self, side):
         if side == 'Left':
@@ -168,6 +211,31 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         else:
             print('Invalid Reference Side')
     
+
+    def setBusy(self):
+        """This function is to show that the program is current working on something
+        (most likely Landmark Thread). It shows this by set the cursor to the busy cursor"""
+        # print('Busy\nBusy Cursor Set')
+        self.setCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+
+    
+    def checkBusy(self):
+        """Checks if all the landmarks have been found so that the plot can be updated"""
+        print('Checking if all done')
+        if (self._finished_R == True and self._finished_BR == True and self._finished_GEC == True
+        and self._finished_TEC == True and self._finished_BS == True and self._finished_eeeek == True
+        and self._finished_ooooo == True):
+            print('All threads finished')
+            self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
+            self.update_Plots()
+        else:
+            print(f'self._finished_R = {self._finished_R}')
+            print(f'self._finished_BR = {self._finished_BR}')
+            print(f'self._finished_GEC = {self._finished_GEC}')
+            print(f'self._finished_TEC = {self._finished_TEC}')
+            print(f'self._finished_BS = {self._finished_BS}')
+            print(f'self._finished_eeeek = {self._finished_eeeek}')
+            print(f'self._finished_ooooo = {self._finished_ooooo}')
 
     ########################################################################################################################
     ########################################################################################################################
@@ -297,10 +365,59 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
             self.synkinesisPlot.canvas.ax.set_title('Synkinesis Score')
             self.synkinesisPlot.canvas.ax.set_ylim(0,100)
             self.synkinesisPlot.canvas.draw()
+
+
+            self._finished_R = True
+            self._finished_BR = True
+            self._finished_GEC = True
+            self._finished_TEC = True
+            self._finished_BS = True
+            self._finished_eeeek = True
+            self._finished_ooooo = True
         except:
             print('Error in updating plot')
+            if (self._finished_R == True and self._finished_BR == True and self._finished_GEC == True
+            and self._finished_TEC == True and self._finished_BS == True and self._finished_eeeek == True
+            and self._finished_ooooo == True):
+                print('Since all threads are finished, retrying self.updatePlots()')
 
 
+
+    
+    ########################################################################################################################
+    ########################################################################################################################
+    """Button Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+    
+
+    def matchIris(self):
+        """This function matches all the eyes to the eye in the resting photo"""
+        print('Matching Iris')
+        self.browRaiseWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.browRaiseWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+
+        self.GentleEyeClosureWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.GentleEyeClosureWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+
+        self.TightEyeClosureWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.TightEyeClosureWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+
+        self.BigSmileWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.BigSmileWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+
+        self.eeeekWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.eeeekWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+
+        self.oooooWindow.displayImage._lefteye = self.restingWindow.displayImage._lefteye
+        self.oooooWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
+        self.browRaiseWindow.displayImage.update_shape()
+        self.update_Plots()
     
     ########################################################################################################################
     ########################################################################################################################

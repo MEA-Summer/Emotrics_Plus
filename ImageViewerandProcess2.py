@@ -19,7 +19,7 @@ window, it also takes care of lifting and re-location of landmarks.
 """
 
 class ImageViewer(QtWidgets.QGraphicsView):       
-    
+    dots_shown = QtCore.pyqtSignal()
     def __init__(self, *args, **kwargs):
         #usual parameters to make sure the image can be zoom-in and out and is 
         #possible to move around the zoomed-in view
@@ -746,6 +746,7 @@ class ImageViewer(QtWidgets.QGraphicsView):
         #       '\n self._lefteye_landmarks = ', self._lefteye_landmarks,
         #       '\n self._righteye_landmarks = ', self._righteye_landmarks)
         self.update_shape()
+        self.dots_shown.emit()
     
     
     def toggle_dots(self):

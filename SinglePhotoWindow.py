@@ -4,15 +4,9 @@ import sys
 import numpy as np
 from PIL import Image, ImageOps
 import torch
-from face_alignment.detection.blazeface.net_blazeface import BlazeFace
-from lib.models import get_face_alignment_net
-from lib.config import config, merge_configs
 import os 
 from pathlib import Path
 from PyQt5 import QtGui
-from arch.FAN import FAN
-from arch.resnest.HeatMaps import model_resnest
-from models.irislandmarks import IrisLandmarks
 from ImageViewerandProcess2 import ImageViewer
 from Facial_Landmarks import GetLandmarks
 from Metrics import get_measurements_from_data
@@ -26,6 +20,8 @@ from SaveMetricsWindow import SaveMetricsWindow
 
 class SinglePhotoWindow(QtWidgets.QMainWindow):
     finished = QtCore.pyqtSignal()
+    busy = QtCore.pyqtSignal()
+    got_landmarks = QtCore.pyqtSignal()
     def __init__(self, *args, **kwargs):
         super(SinglePhotoWindow, self).__init__(*args, **kwargs)
         
@@ -42,51 +38,17 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         # create Thread  to take care of the landmarks and iris estimation   
         self.thread_landmarks = QtCore.QThread()  # no parent!
         
-        """Loading Models"""
-        FaceDetector = BlazeFace()
-        FaceDetector.load_state_dict(torch.load('./models/blazeface.pth'))
-        FaceDetector.load_anchors_from_npy(np.load('./models/anchors.npy'))
-    
-        
-        # device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        #Face Detector
-        FaceDetector.eval();
-        self.FaceDetector = FaceDetector
-        
-        #Face Alignment
-        FaceAlignment = torch.jit.load('./models/2DFAN4-cd938726ad.zip')
-        FaceAlignment.eval();
-        self.FaceAlignment = FaceAlignment
-        
-        #FAN Model
-        model_path = './models/HR18-300W.pth'
-        config_path = './models/HR18-300W.yaml'
-        merge_configs(config, config_path)
-        model = get_face_alignment_net(config)
-        model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-        model.eval();
-        self.model = model
-        
-        #FAN_MEEE Model
-        model_FAN = FAN(4)
-        model_FAN.load_state_dict(torch.load('./arch/train160.pth.tar', map_location=torch.device('cpu')))
-        model_FAN.eval();
-        self.model_FAN = model_FAN
-        
-        #NLF Model
-        model_NLF = model_resnest(out_channels=8, pretrained=False)
-        model_NLF.load_state_dict(torch.load('./arch/heatmap_NSLF_3.pth', map_location=torch.device('cpu')))
-        model_NLF.eval();
-        self.model_NLF = model_NLF
-        
-        #Eye Model
-        device = 'cpu'
-        self.net = IrisLandmarks().to(device)
-        self.net.load_weights('./models/irislandmarks.pth')
         
         #Model Names
         self.Modelname = 'FAN_MEEE' #Default Model is FAN_MEEE
         self.Modelname_NLF = True
+        #Models
+        self.FaceAlignment = None
+        self.FaceDetector = None
+        self.model = None
+        self.model_FAN = None
+        self.model_NLF = None
+        self.net = None
         
         """Variable for Results Window"""
         self._new_window = None
@@ -368,20 +330,21 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                                       self.model, self.model_FAN, self.model_NLF, self.net)
         self.landmarks.moveToThread(self.thread_landmarks)
         self.thread_landmarks.start()
-        self.thread_landmarks.started.connect(self.setBusyCursor) #shows that the thread has started
+        self.thread_landmarks.started.connect(self.setBusy) #shows that the thread has started
         self.thread_landmarks.started.connect(self.landmarks.run) #runs thread
         self.landmarks.landmarks.connect(self.displayImage.show_Facial_Landmarks) #connects signal to function
         self.landmarks.finished.connect(self.thread_landmarks.quit) #ends thread when done
-        self.landmarks.finished.connect(self.setNormalCursor) #shows that everything is done loading
         self.landmarks.finished.connect(self.displayImage.update_shape) #updates everything when done
         self.landmarks.finished.connect(self.displayImage.reset_save_variables)
+        self.displayImage.dots_shown.connect(self.setNormalCursor) #shows that everything is done loading
     
-    def setBusyCursor(self):
+    def setBusy(self):
         """This function is to show that the program is current working on something
         (most likely Landmark Thread). It shows this by set the cursor to the busy cursor"""
         # print('Busy\nBusy Cursor Set')
         self.displayImage._busy = True
         self.setCursor(QtGui.QCursor(QtCore.Qt.WaitCursor))
+        self.busy.emit()
     
     def setNormalCursor(self):
         """This function is to show that the program is current working on something
@@ -389,7 +352,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         # print('Finished\nNormal Cursor Set')
         self.displayImage._busy = False
         self.setCursor(QtGui.QCursor(QtCore.Qt.ArrowCursor))
-    
+        self.got_landmarks.emit()
 
     ########################################################################################################################
     ########################################################################################################################

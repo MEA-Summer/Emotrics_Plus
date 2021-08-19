@@ -458,15 +458,3 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
         self.plotWidget.canvas.draw()
 
     
-
-
-
-
-
-
-            
-
-            
-
-            
-

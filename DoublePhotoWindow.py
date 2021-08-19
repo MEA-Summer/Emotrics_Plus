@@ -31,52 +31,18 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self.thread_landmarks = QtCore.QThread()  # no parent!
         self.thread_landmarks2 = QtCore.QThread()
         
-        """Loading Models"""
-        FaceDetector = BlazeFace()
-        FaceDetector.load_state_dict(torch.load('./models/blazeface.pth'))
-        FaceDetector.load_anchors_from_npy(np.load('./models/anchors.npy'))
-    
-        
-        # device = 'cuda' if torch.cuda.is_available() else 'cpu'
-        #Face Detector
-        FaceDetector.eval();
-        self.FaceDetector = FaceDetector
-        
-        #Face Alignment
-        FaceAlignment = torch.jit.load('./models/2DFAN4-cd938726ad.zip')
-        FaceAlignment.eval();
-        self.FaceAlignment = FaceAlignment
-        
-        #FAN Model
-        model_path = './models/HR18-300W.pth'
-        config_path = './models/HR18-300W.yaml'
-        merge_configs(config, config_path)
-        model = get_face_alignment_net(config)
-        model.load_state_dict(torch.load(model_path, map_location=torch.device('cpu')))
-        model.eval();
-        self.model = model
-        
-        #FAN_MEEE Model
-        model_FAN = FAN(4)
-        model_FAN.load_state_dict(torch.load('./arch/train160.pth.tar', map_location=torch.device('cpu')))
-        model_FAN.eval();
-        self.model_FAN = model_FAN
-        
-        #NLF Model
-        model_NLF = model_resnest(out_channels=8, pretrained=False)
-        model_NLF.load_state_dict(torch.load('./arch/heatmap_NSLF.pth', map_location=torch.device('cpu')))
-        model_NLF.eval();
-        self.model_NLF = model_NLF
-        
-        #Eye Model
-        device = 'cpu'
-        self.net = IrisLandmarks().to(device)
-        self.net.load_weights('./models/irislandmarks.pth')
-        
+
         #Model Names
         self.Modelname = 'FAN_MEEE' #Default Model is FAN_MEEE
         self.Modelname_NLF = True
-        
+        #Models
+        self.FaceAlignment = None
+        self.FaceDetector =None
+        self.model = None
+        self.model_FAN = None
+        self.model_NLF = None
+        self.net = None
+
         """Variable for Results Window"""
         self._new_window = None
         self._CalibrationType = 'Iris'
