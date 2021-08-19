@@ -583,7 +583,17 @@
                </size>
               </property>
               <property name="text">
-               <string>Auto eFace</string>
+               <string/>
+              </property>
+              <property name="icon">
+               <iconset>
+                <normaloff>../icons/eface.jpg</normaloff>../icons/eface.jpg</iconset>
+              </property>
+              <property name="iconSize">
+               <size>
+                <width>70</width>
+                <height>70</height>
+               </size>
               </property>
              </widget>
             </item>
@@ -616,6 +626,9 @@
             </property>
             <item row="11" column="3" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="metricsSettingsButton">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -867,6 +880,9 @@
             </item>
             <item row="11" column="4" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="pushButton_8">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1133,6 +1149,9 @@
             </item>
             <item row="2" column="2" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="importIrisButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>

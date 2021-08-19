@@ -33,7 +33,7 @@
   </property>
   <property name="windowIcon">
    <iconset>
-    <normaloff>../../Documents/Emotrics+/icons/Home_logo_square.jpg</normaloff>../../Documents/Emotrics+/icons/Home_logo_square.jpg</iconset>
+    <normaloff>../icons/Home_logo_square.jpg</normaloff>../icons/Home_logo_square.jpg</iconset>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: rgb(255, 255, 255);</string>

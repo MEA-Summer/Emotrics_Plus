@@ -875,7 +875,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/adjust_midline.jpg</normaloff>../icons/adjust_midline.jpg</iconset>
+                <normaloff>../icons/adjust_midline_left.jpg</normaloff>../icons/adjust_midline_left.jpg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1038,6 +1038,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="2" column="2" alignment="Qt::AlignHCenter|Qt::AlignTop">
              <widget class="QPushButton" name="importIrisButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1164,7 +1167,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/reset_midlines.jpg</normaloff>../icons/reset_midlines.jpg</iconset>
+                <normaloff>../icons/reset_midline_left.jpg</normaloff>../icons/reset_midline_left.jpg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1225,6 +1228,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="12" column="3" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="metricsSettingsButton">
+              <property name="enabled">
+               <bool>true</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1269,6 +1275,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="12" column="4" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="saveSettingsButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
                 <horstretch>0</horstretch>
@@ -1438,7 +1447,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/adjust_midline.jpg</normaloff>../icons/adjust_midline.jpg</iconset>
+                <normaloff>../icons/adjust_midline_right.jpg</normaloff>../icons/adjust_midline_right.jpg</iconset>
               </property>
               <property name="iconSize">
                <size>
@@ -1485,7 +1494,7 @@ p, li { white-space: pre-wrap; }
               </property>
               <property name="icon">
                <iconset>
-                <normaloff>../icons/reset_midlines.jpg</normaloff>../icons/reset_midlines.jpg</iconset>
+                <normaloff>../icons/reset_midline_right.jpg</normaloff>../icons/reset_midline_right.jpg</iconset>
               </property>
               <property name="iconSize">
                <size>

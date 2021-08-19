@@ -17,7 +17,11 @@
    </size>
   </property>
   <property name="windowTitle">
-   <string>MainWindow</string>
+   <string>Emotrics+</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>../icons/Home_logo_square.jpg</normaloff>../icons/Home_logo_square.jpg</iconset>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_3">
@@ -155,8 +159,11 @@
     </item>
     <item row="8" column="9" colspan="2">
      <widget class="QPushButton" name="pushButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -164,11 +171,27 @@
       <property name="minimumSize">
        <size>
         <width>100</width>
-        <height>150</height>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
        </size>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/eface.jpg</normaloff>../icons/eface.jpg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
       </property>
      </widget>
     </item>
@@ -206,7 +229,7 @@
     <item row="11" column="9" colspan="2">
      <widget class="QPushButton" name="previousButton">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -214,11 +237,27 @@
       <property name="minimumSize">
        <size>
         <width>100</width>
-        <height>150</height>
+        <height>75</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>75</height>
        </size>
       </property>
       <property name="text">
-       <string>Previous</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/previous.jpg</normaloff>../icons/previous.jpg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
       </property>
      </widget>
     </item>
@@ -286,9 +325,9 @@
      </widget>
     </item>
     <item row="7" column="9" colspan="2">
-     <widget class="QPushButton" name="pushButton_2">
+     <widget class="QPushButton" name="matchIrisButton">
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -296,18 +335,40 @@
       <property name="minimumSize">
        <size>
         <width>100</width>
-        <height>150</height>
+        <height>100</height>
        </size>
       </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="toolTipDuration">
+       <number>-1</number>
+      </property>
       <property name="text">
-       <string>PushButton</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/match_rest_to_all.jpg</normaloff>../icons/match_rest_to_all.jpg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
       </property>
      </widget>
     </item>
     <item row="9" column="9" colspan="2">
      <widget class="QPushButton" name="pushButton_4">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="sizePolicy">
-       <sizepolicy hsizetype="Minimum" vsizetype="Minimum">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
@@ -315,11 +376,27 @@
       <property name="minimumSize">
        <size>
         <width>100</width>
-        <height>150</height>
+        <height>100</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
        </size>
       </property>
       <property name="text">
-       <string>PushButton</string>
+       <string/>
+      </property>
+      <property name="icon">
+       <iconset>
+        <normaloff>../icons/save.jpg</normaloff>../icons/save.jpg</iconset>
+      </property>
+      <property name="iconSize">
+       <size>
+        <width>100</width>
+        <height>100</height>
+       </size>
       </property>
      </widget>
     </item>
