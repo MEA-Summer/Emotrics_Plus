@@ -80,7 +80,7 @@ def Compute_Resting_eFace(LeftResting, RightResting, reference_side):
     score_OralCommissure_rest = np.round(score_OralCommissure_rest,1)
     NLF_at_rest = np.round(NLF_at_rest,1)
 
-    return score_brow_rest, score_PalpebralFissure_rest, score_OralCommissure_rest, NLF_at_rest
+    return Brow_at_rest, PalpebralFissure_at_rest, OralCommissure_at_rest, NLF_at_rest
     
 
 def Compute_eFace_BH(LeftResting, RightResting, reference_side):
@@ -103,7 +103,7 @@ def Compute_eFace_BH(LeftResting, RightResting, reference_side):
     score_brow_rest = 100 - abs(100-Brow_at_rest)
     score_brow_rest = np.round(score_brow_rest,1)
     
-    return score_brow_rest
+    return Brow_at_rest
 
 
 def Compute_eFace_PF(LeftResting, RightResting, reference_side):
@@ -129,7 +129,7 @@ def Compute_eFace_PF(LeftResting, RightResting, reference_side):
 
     score_PalpebralFissure_rest = np.round(score_PalpebralFissure_rest,1)
 
-    return score_PalpebralFissure_rest
+    return PalpebralFissure_at_rest
     
 
 def Compute_eFace_OC(LeftResting, RightResting, reference_side):
@@ -162,7 +162,7 @@ def Compute_eFace_OC(LeftResting, RightResting, reference_side):
 
     score_OralCommissure_rest = np.round(score_OralCommissure_rest,1)
 
-    return score_OralCommissure_rest
+    return OralCommissure_at_rest
 
 
 def Compute_eFace_NLF(LeftResting, RightResting, reference_side):

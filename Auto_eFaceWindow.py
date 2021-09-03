@@ -52,6 +52,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
+            print(f'self._reference_side = {self._reference_side}')
             Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
             x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
 
@@ -272,7 +273,7 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
             Resting_Palpebral_Fissure = Compute_eFace_PF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Palpebral Fissure']
+            x = ['Ocular Synkinesis']
 
             y = [Resting_Palpebral_Fissure]
 

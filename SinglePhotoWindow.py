@@ -36,7 +36,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         
         """Thread Creation"""
         # create Thread  to take care of the landmarks and iris estimation   
-        self.thread_landmarks = QtCore.QThread()  # no parent!
+        self.thread_landmarks = QtCore.QThread(parent=self)  
         
         
         #Model Names
