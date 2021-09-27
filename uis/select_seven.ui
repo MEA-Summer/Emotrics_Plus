@@ -73,7 +73,7 @@
      </widget>
     </item>
     <item row="1" column="1" colspan="2">
-     <widget class="QLineEdit" name="lineEdit">
+     <widget class="QLineEdit" name="patientIDLineEdit">
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -440,6 +440,9 @@
     </item>
     <item row="10" column="1" colspan="6">
      <widget class="QPushButton" name="PrevsPostButton">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -447,7 +450,7 @@
        </font>
       </property>
       <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
+       <string notr="true">color rgb(204, 204, 204)</string>
       </property>
       <property name="text">
        <string>Folder Upload</string>

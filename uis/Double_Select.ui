@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>686</width>
-    <height>646</height>
+    <height>800</height>
    </rect>
   </property>
   <property name="sizePolicy">
@@ -19,13 +19,13 @@
   <property name="minimumSize">
    <size>
     <width>686</width>
-    <height>646</height>
+    <height>800</height>
    </size>
   </property>
   <property name="maximumSize">
    <size>
     <width>686</width>
-    <height>646</height>
+    <height>800</height>
    </size>
   </property>
   <property name="windowTitle">
@@ -40,150 +40,27 @@
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
-    <item row="2" column="1" colspan="3" alignment="Qt::AlignHCenter">
-     <widget class="QPushButton" name="RestingvsExpressionButton">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>420</width>
-        <height>35</height>
-       </size>
-      </property>
-      <property name="maximumSize">
-       <size>
-        <width>420</width>
-        <height>35</height>
-       </size>
-      </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">QPushButton::checked 
-{
-background-color : rgb(170, 170, 170);
-color: rgb(68, 85, 95);
-}
-
-</string>
-      </property>
-      <property name="text">
-       <string>Compare Resting vs Expression Photograph</string>
-      </property>
-      <property name="checkable">
-       <bool>true</bool>
-      </property>
-      <property name="autoExclusive">
-       <bool>false</bool>
-      </property>
-      <property name="autoRepeatDelay">
-       <number>0</number>
-      </property>
-      <property name="autoRepeatInterval">
-       <number>0</number>
-      </property>
-     </widget>
-    </item>
-    <item row="4" column="1" alignment="Qt::AlignHCenter">
-     <widget class="QPushButton" name="loadPhoto1Button">
-      <property name="sizePolicy">
-       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
-        <horstretch>0</horstretch>
-        <verstretch>0</verstretch>
-       </sizepolicy>
-      </property>
-      <property name="minimumSize">
-       <size>
-        <width>325</width>
-        <height>0</height>
-       </size>
-      </property>
+    <item row="8" column="2">
+     <widget class="QLabel" name="expressionsLabel">
       <property name="font">
        <font>
         <family>Times New Roman</family>
         <pointsize>12</pointsize>
+        <strikeout>false</strikeout>
        </font>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Click to Upload Pre-Op Photograph</string>
-      </property>
-     </widget>
-    </item>
-    <item row="6" column="1">
-     <widget class="QLabel" name="manipulationsLabel">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>12</pointsize>
-        <weight>50</weight>
-        <bold>false</bold>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Manipulations</string>
-      </property>
-     </widget>
-    </item>
-    <item row="3" column="0">
-     <spacer name="horizontalSpacer">
-      <property name="orientation">
-       <enum>Qt::Horizontal</enum>
-      </property>
-      <property name="sizeHint" stdset="0">
-       <size>
-        <width>40</width>
-        <height>20</height>
-       </size>
-      </property>
-     </spacer>
-    </item>
-    <item row="8" column="1" colspan="3">
-     <widget class="QLabel" name="label_11">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>16</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Select the Reference Side:</string>
-      </property>
-      <property name="alignment">
-       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
-      </property>
-     </widget>
-    </item>
-    <item row="7" column="2">
-     <widget class="QComboBox" name="ExpressionComboBox">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
-      </property>
-      <property name="editable">
+      <property name="autoFillBackground">
        <bool>false</bool>
       </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(204, 204, 204)</string>
+      </property>
+      <property name="text">
+       <string>Expressions</string>
+      </property>
      </widget>
     </item>
-    <item row="1" column="1" colspan="3" alignment="Qt::AlignHCenter">
+    <item row="3" column="1" colspan="3" alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="PrevsPostButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -239,7 +116,7 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
-    <item row="3" column="3">
+    <item row="5" column="3">
      <spacer name="horizontalSpacer_2">
       <property name="orientation">
        <enum>Qt::Horizontal</enum>
@@ -252,44 +129,8 @@ color: rgb(68, 85, 95);
       </property>
      </spacer>
     </item>
-    <item row="6" column="2">
-     <widget class="QLabel" name="expressionsLabel">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>12</pointsize>
-        <strikeout>false</strikeout>
-       </font>
-      </property>
-      <property name="autoFillBackground">
-       <bool>false</bool>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(204, 204, 204)</string>
-      </property>
-      <property name="text">
-       <string>Expressions</string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="2">
-     <widget class="QPushButton" name="nextButton">
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>11</pointsize>
-       </font>
-      </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Next</string>
-      </property>
-     </widget>
-    </item>
-    <item row="0" column="1" colspan="2">
-     <widget class="QLabel" name="label">
+    <item row="10" column="1" colspan="3">
+     <widget class="QLabel" name="label_11">
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -300,11 +141,62 @@ color: rgb(68, 85, 95);
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Select the Task:</string>
+       <string>Select the Reference Side:</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
       </property>
      </widget>
     </item>
-    <item row="3" column="2" alignment="Qt::AlignHCenter">
+    <item row="5" column="0">
+     <spacer name="horizontalSpacer">
+      <property name="orientation">
+       <enum>Qt::Horizontal</enum>
+      </property>
+      <property name="sizeHint" stdset="0">
+       <size>
+        <width>40</width>
+        <height>20</height>
+       </size>
+      </property>
+     </spacer>
+    </item>
+    <item row="9" column="2">
+     <widget class="QComboBox" name="ExpressionComboBox">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="editable">
+       <bool>false</bool>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="2" colspan="2" alignment="Qt::AlignHCenter">
+     <widget class="QRadioButton" name="leftSideButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Left </string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="2" alignment="Qt::AlignHCenter">
      <widget class="ImageDisplay" name="photo2Display">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -329,30 +221,20 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
-    <item row="10" column="2" colspan="2" alignment="Qt::AlignHCenter">
-     <widget class="QRadioButton" name="leftSideButton">
+    <item row="6" column="1" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="loadPhoto1Button">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
         <horstretch>0</horstretch>
         <verstretch>0</verstretch>
        </sizepolicy>
       </property>
-      <property name="font">
-       <font>
-        <family>Times New Roman</family>
-        <pointsize>14</pointsize>
-       </font>
+      <property name="minimumSize">
+       <size>
+        <width>325</width>
+        <height>0</height>
+       </size>
       </property>
-      <property name="styleSheet">
-       <string notr="true">color: rgb(68, 85, 95);</string>
-      </property>
-      <property name="text">
-       <string>Left </string>
-      </property>
-     </widget>
-    </item>
-    <item row="11" column="1">
-     <widget class="QPushButton" name="previousButton">
       <property name="font">
        <font>
         <family>Times New Roman</family>
@@ -363,11 +245,91 @@ color: rgb(68, 85, 95);
        <string notr="true">color: rgb(68, 85, 95);</string>
       </property>
       <property name="text">
-       <string>Previous</string>
+       <string>Click to Upload Pre-Op Photograph</string>
       </property>
      </widget>
     </item>
-    <item row="10" column="1" alignment="Qt::AlignHCenter">
+    <item row="4" column="1" colspan="3" alignment="Qt::AlignHCenter">
+     <widget class="QPushButton" name="RestingvsExpressionButton">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>420</width>
+        <height>35</height>
+       </size>
+      </property>
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton::checked 
+{
+background-color : rgb(170, 170, 170);
+color: rgb(68, 85, 95);
+}
+
+</string>
+      </property>
+      <property name="text">
+       <string>Compare Resting vs Expression Photograph</string>
+      </property>
+      <property name="checkable">
+       <bool>true</bool>
+      </property>
+      <property name="autoExclusive">
+       <bool>false</bool>
+      </property>
+      <property name="autoRepeatDelay">
+       <number>0</number>
+      </property>
+      <property name="autoRepeatInterval">
+       <number>0</number>
+      </property>
+     </widget>
+    </item>
+    <item row="8" column="1">
+     <widget class="QLabel" name="manipulationsLabel">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>12</pointsize>
+        <weight>50</weight>
+        <bold>false</bold>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Manipulations</string>
+      </property>
+     </widget>
+    </item>
+    <item row="9" column="1">
+     <widget class="QComboBox" name="ManipulationComboBox">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>14</pointsize>
+       </font>
+      </property>
+     </widget>
+    </item>
+    <item row="12" column="1" alignment="Qt::AlignHCenter">
      <widget class="QRadioButton" name="rightSideButton">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -392,17 +354,36 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
-    <item row="7" column="1">
-     <widget class="QComboBox" name="ManipulationComboBox">
+    <item row="13" column="1">
+     <widget class="QPushButton" name="previousButton">
       <property name="font">
        <font>
         <family>Times New Roman</family>
-        <pointsize>14</pointsize>
+        <pointsize>12</pointsize>
        </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Previous</string>
       </property>
      </widget>
     </item>
-    <item row="3" column="1" alignment="Qt::AlignHCenter">
+    <item row="0" column="1">
+     <widget class="QLabel" name="label_2">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Patient ID:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="5" column="1" alignment="Qt::AlignHCenter">
      <widget class="ImageDisplay" name="photo1Display">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -430,7 +411,7 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
-    <item row="4" column="2" colspan="2" alignment="Qt::AlignHCenter">
+    <item row="6" column="2" colspan="2" alignment="Qt::AlignHCenter">
      <widget class="QPushButton" name="loadPhoto2Button">
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -458,7 +439,7 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
-    <item row="5" column="1" colspan="3">
+    <item row="7" column="1" colspan="3">
      <widget class="QLabel" name="label_12">
       <property name="font">
        <font>
@@ -477,6 +458,60 @@ color: rgb(68, 85, 95);
       </property>
      </widget>
     </item>
+    <item row="13" column="2">
+     <widget class="QPushButton" name="nextButton">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">color: rgb(68, 85, 95);</string>
+      </property>
+      <property name="text">
+       <string>Next</string>
+      </property>
+     </widget>
+    </item>
+    <item row="2" column="1" colspan="2">
+     <widget class="QLabel" name="label">
+      <property name="font">
+       <font>
+        <family>Times New Roman</family>
+        <pointsize>16</pointsize>
+       </font>
+      </property>
+      <property name="styleSheet">
+       <string notr="true"/>
+      </property>
+      <property name="text">
+       <string>Select the Task:</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="1">
+     <widget class="QLineEdit" name="patientIDLineEdit">
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>200</width>
+        <height>30</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>200</width>
+        <height>30</height>
+       </size>
+      </property>
+     </widget>
+    </item>
    </layout>
   </widget>
   <widget class="QMenuBar" name="menubar">
@@ -485,7 +520,7 @@ color: rgb(68, 85, 95);
      <x>0</x>
      <y>0</y>
      <width>686</width>
-     <height>21</height>
+     <height>26</height>
     </rect>
    </property>
   </widget>
