@@ -5,6 +5,7 @@ class SingleSelectionWindow(QtWidgets.QMainWindow):
     finished = QtCore.pyqtSignal()
     canceled = QtCore.pyqtSignal()
     file = QtCore.pyqtSignal(object)
+    patientID = QtCore.pyqtSignal(object)
     reference_Side = QtCore.pyqtSignal(object)
     taskName = QtCore.pyqtSignal(object)
 
@@ -12,6 +13,7 @@ class SingleSelectionWindow(QtWidgets.QMainWindow):
         super() .__init__()
         self._file1 = None
         self._valid_File = False
+        self._patientID = ''
         self._reference_side = 'Right'
         self._taskName = 'Resting'
 
@@ -75,26 +77,60 @@ class SingleSelectionWindow(QtWidgets.QMainWindow):
 
     def getNewTaskName(self, task_Name):
         self._taskName = task_Name
+    
+    def getPatientID(self):
+        self._patientID = self.patientIDLineEdit.text()
+
 
 
     def next(self):
-        if self._valid_File == True :
-            self.file.emit(self._file)
-            self.reference_Side.emit(self._reference_side)
-            self.taskName.emit(self._taskName)
-            self.finished.emit()
-            self.close()
-        elif self.photoDisplay._hasImage == True :
-            self._file = self.photoDisplay._ImageAddress
-            self.file.emit(self._file)
-            self.reference_Side.emit(self._reference_side)
-            self.taskName.emit(self._taskName)
-            self.finished.emit()
-            self.close()
+        self.getPatientID()
+        if self._patientID == '':
+            patientIDQuestion = QtWidgets.QMessageBox
+            patientIDBox = patientIDQuestion.question(self, 'No Patient ID', 
+                'There is currently no Patient ID entered. Would you still like to continue?', 
+                patientIDQuestion.Yes | patientIDQuestion.No) 
+            if patientIDBox == patientIDQuestion.Yes:
+                if self._valid_File == True :
+                    self.file.emit(self._file)
+                    self.reference_Side.emit(self._reference_side)
+                    self.taskName.emit(self._taskName)
+                    self.patientID.emit(self._patientID)
+                    self.finished.emit()
+                    self.close()
+                elif self.photoDisplay._hasImage == True :
+                    self._file = self.photoDisplay._ImageAddress
+                    self.file.emit(self._file)
+                    self.reference_Side.emit(self._reference_side)
+                    self.taskName.emit(self._taskName)
+                    self.patientID.emit(self._patientID)
+                    self.finished.emit()
+                    self.close()
+                else:
+                    QtWidgets.QMessageBox.information(self, 'Error', 
+                        'Valid files not selected.\nPlease select a valid photo. ', 
+                        QtWidgets.QMessageBox.Ok)
         else:
-            QtWidgets.QMessageBox.information(self, 'Error', 
-                'Valid files not selected.\nPlease select a valid photo. ', 
-                QtWidgets.QMessageBox.Ok)
+            if self._valid_File == True :
+                self.file.emit(self._file)
+                self.reference_Side.emit(self._reference_side)
+                self.taskName.emit(self._taskName)
+                self.patientID.emit(self._patientID)
+                self.finished.emit()
+                self.close()
+            elif self.photoDisplay._hasImage == True :
+                self._file = self.photoDisplay._ImageAddress
+                self.file.emit(self._file)
+                self.reference_Side.emit(self._reference_side)
+                self.taskName.emit(self._taskName)
+                self.patientID.emit(self._patientID)
+                self.finished.emit()
+                self.close()
+            else:
+                QtWidgets.QMessageBox.information(self, 'Error', 
+                    'Valid files not selected.\nPlease select a valid photo. ', 
+                    QtWidgets.QMessageBox.Ok)
+            
     
     def previous(self):
         self.canceled.emit()

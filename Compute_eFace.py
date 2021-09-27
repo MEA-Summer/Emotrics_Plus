@@ -326,7 +326,7 @@ def Compute_eFace(Patient):
     
     #9) Lower Lip EEE
     
-    j_left, j_right = Lefteeeek.InterlabialDistance, Righteeeek.InterlabialDistance
+    j_left, j_right = Lefteeeek.LowerLipHeight, Righteeeek.LowerLipHeight
     if Patient._reference_side == 'Right':
         #making sure that it will work if j_right is zero 
         try:

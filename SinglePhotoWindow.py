@@ -55,6 +55,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self._CalibrationType = 'Iris'
         self._CalibrationValue = 11.77
         self._file_name = None
+        self._patientID = None
         self._expression = 'Resting'
         
         """Set Up the UI form"""
@@ -73,6 +74,8 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
 
         #Set Date
         self.dateEdit.setDate(QtCore.QDate.currentDate())
+        #Set Patient ID
+        self.patientIDLineEdit.textChanged.connect(self.setPatientID)
         
         """Button Connection"""
         #New Photograph Button
@@ -230,6 +233,13 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
 
     def setTaskName(self, taskName):
         self._expression = taskName
+
+    
+    def setPatientID(self, patientID):
+        self._patientID = patientID
+        self.patientIDLineEdit.setText(self._patientID)
+        self.setWindowTitle(f"Emotrics+ | {self._patientID}")
+
 
 
 

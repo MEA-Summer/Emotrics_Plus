@@ -388,19 +388,24 @@ class SaveMetricsWindow(QDialog):
                             'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved', 
                             QtWidgets.QMessageBox.Ok)
             else:
-                writer = pd.ExcelWriter(xlsxfilename, engine='xlsxwriter')
-                    
-                df.to_excel(writer, sheet_name='Sheet1', index = True)
+                try:
+                    writer = pd.ExcelWriter(xlsxfilename, engine='xlsxwriter')
+                        
+                    df.to_excel(writer, sheet_name='Sheet1', index = True)
 
-                # #adjust the size of each column to fit the text
-                # worksheet = writer.sheets['Sheet1']
-                # for i in range(0, 55):
-                #     worksheet.autoFitColumn(i,0,2)
+                    # #adjust the size of each column to fit the text
+                    # worksheet = writer.sheets['Sheet1']
+                    # for i in range(0, 55):
+                    #     worksheet.autoFitColumn(i,0,2)
 
-                writer.save()
-                self.close()
+                    writer.save()
+                    self.close()
+                except:
+                    QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Error in saving metrics.', 
+                            QtWidgets.QMessageBox.Ok)
                     
-        else: #the user wants to appedn to an existing file
+        else: #the user wants to append to an existing file
             
             
             filename, file_extension = os.path.splitext(self._name_of_file ) 

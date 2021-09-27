@@ -504,7 +504,11 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         header.setSectionResizeMode(QtWidgets.QHeaderView.Fixed)
         self.sideTable.selectionModel().selectionChanged.connect(self.get_new_selection3)
 
-
+    def headerClicked1(self):
+        row = self.photo1Table.currentItem().row()
+        selectedName = self.photo1Table.verticalHeaderItem(row)
+        metricName = selectedName.text()
+        print(f'metricName = {metricName}')
          
     def get_new_selection1(self, selected, deselected):
         """This function is for when the user selects a item on the table 

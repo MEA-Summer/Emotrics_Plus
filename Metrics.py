@@ -624,7 +624,7 @@ class FaceMeasurementsSide(object):
         self.CommissurePosition = 0 
         self.CommisureHeight = 0
         self.SmileAngle = 0 
-        self.UpperLipSlope = 0 #Needs to implemented
+        self.UpperLipSlope = 0 
         self.MarginalReflexDistance1 = 0
         self.MarginalReflexDistance2 = 0 
         self.BrowHeight = 0 
@@ -633,7 +633,7 @@ class FaceMeasurementsSide(object):
         self.NLF_angle = 0
         self.InterlabialArea_of_the_Hemiface = 0
         self.EyeArea = 0
-        self.LowerLipHeight = 0 #Needs to implemented
+        self.LowerLipHeight = 0 
         
 class FaceMeasurementsDeviation(object):
     
@@ -644,7 +644,7 @@ class FaceMeasurementsDeviation(object):
         
         self.CommissurePosition = 0 
         self.SmileAngle = 0 
-        self.UpperLipSlope = 0 #Needs to implemented
+        self.UpperLipSlope = 0 
         self.MarginalReflexDistance1 = 0
         self.MarginalReflexDistance2 = 0 
         self.BrowHeight = 0 
@@ -653,7 +653,7 @@ class FaceMeasurementsDeviation(object):
         self.NLF_angle = 0
         self.InterlabialArea_of_the_Hemiface = 0
         self.EyeArea = 0
-        self.LowerLipHeight = 0 #Needs to implemented
+        self.LowerLipHeight = 0 
 
 def get_measurements_from_data(shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, reference_side):
     

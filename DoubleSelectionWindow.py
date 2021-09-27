@@ -9,6 +9,7 @@ class DoubleSelectionWindow(QtWidgets.QMainWindow):
     reference_Side = QtCore.pyqtSignal(object)
     task = QtCore.pyqtSignal(object)
     taskName = QtCore.pyqtSignal(object)
+    patientID = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super() .__init__()
@@ -19,6 +20,7 @@ class DoubleSelectionWindow(QtWidgets.QMainWindow):
         self._reference_side = 'Right'
         self._task = 'Pre-Op vs Post-Op'
         self._taskName = 'Ocular'
+        self._patientID = ''
 
 
 
@@ -145,25 +147,44 @@ class DoubleSelectionWindow(QtWidgets.QMainWindow):
         self._taskName = task_Name
 
 
+    def getPatientID(self):
+        self._patientID = self.patientIDLineEdit.text()
+
+
     def next(self):
-        if self._valid_File1 == True and self._valid_File2 == True:
-            self.file1.emit(self._file1)
-            self.file2.emit(self._file2)
-            self.reference_Side.emit(self._reference_side)
-            self.task.emit(self._task)
-            self.taskName.emit(self._taskName)
-            self.finished.emit()
-            self.close()
-        elif self.photo1Display._hasImage == True and self.photo1Display._hasImage == True:
-            self._file1 = self.photo1Display._ImageAddress
-            self._file2 = self.photo2Display._ImageAddress
-            self.file1.emit(self._file1)
-            self.file2.emit(self._file2)
-            self.reference_Side.emit(self._reference_side)
-            self.task.emit(self._task)
-            self.taskName.emit(self._taskName)
-            self.finished.emit()
-            self.close()
+        self.getPatientID()
+        if (self._valid_File1 == True or self.photo1Display._hasImage == True) and (self._valid_File2 == True or self.photo2Display._hasImage == True):
+            if self._patientID == '':
+                patientIDQuestion = QtWidgets.QMessageBox
+                patientIDBox = patientIDQuestion.question(self, 'No Patient ID', 
+                    'There is currently no Patient ID entered. Would you still like to continue?', 
+                    patientIDQuestion.Yes | patientIDQuestion.No) 
+                if patientIDBox == patientIDQuestion.Yes:
+                    if self.photo1Display._hasImage == True:
+                        self._file1 = self.photo1Display._ImageAddress
+                    if self.photo2Display._hasImage == True:
+                        self._file2 = self.photo2Display._ImageAddress
+                    self.file1.emit(self._file1)
+                    self.file2.emit(self._file2)
+                    self.reference_Side.emit(self._reference_side)
+                    self.task.emit(self._task)
+                    self.taskName.emit(self._taskName)
+                    self.patientID.emit(self._patientID)
+                    self.finished.emit()
+                    self.close()
+            else:
+                if self.photo1Display._hasImage == True:
+                    self._file1 = self.photo1Display._ImageAddress
+                if self.photo2Display._hasImage == True:
+                    self._file2 = self.photo2Display._ImageAddress
+                self.file1.emit(self._file1)
+                self.file2.emit(self._file2)
+                self.reference_Side.emit(self._reference_side)
+                self.task.emit(self._task)
+                self.taskName.emit(self._taskName)
+                self.patientID.emit(self._patientID)
+                self.finished.emit()
+                self.close()
         else:
             QtWidgets.QMessageBox.information(self, 'Error', 
                             'Valid files not selected.\nPlease select two valid photos. ', 

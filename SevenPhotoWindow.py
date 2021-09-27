@@ -31,6 +31,7 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self._finished_ooooo = False
         
         self._Patient = Patient()
+        self._patientID = None
         self._Patient._reference_side = 'Right'
         self._Patient._CalibrationType = 'Iris'
         self._Patient._CalibrationValue = 11.77
@@ -111,6 +112,11 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
     ########################################################################################################################
     ########################################################################################################################
     
+    
+    def setPatientID(self, patientID):
+        self._patientID = patientID
+        self.setWindowTitle(f"Emotrics+ | {self._patientID}")
+
 
     def setPhoto_R(self, name):
         self._file_R = name

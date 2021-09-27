@@ -12,6 +12,7 @@ class SevenSelectionWindow(QtWidgets.QMainWindow):
     file_eeeek = QtCore.pyqtSignal(object)
     file_ooooo = QtCore.pyqtSignal(object)
     reference_Side = QtCore.pyqtSignal(object)
+    patientID = QtCore.pyqtSignal(object)
 
     def __init__(self):
         super() .__init__()
@@ -30,6 +31,7 @@ class SevenSelectionWindow(QtWidgets.QMainWindow):
         self._valid_file_eeeek = False
         self._valid_file_ooooo = False
         self._reference_side = 'Right'
+        self._patientID = ''
 
 
 
@@ -205,16 +207,44 @@ class SevenSelectionWindow(QtWidgets.QMainWindow):
     def rightSideSelected(self):
         self._reference_side = 'Right'
 
+    def getPatientID(self):
+        self._patientID = self.patientIDLineEdit.text()
         
     ########################################################################################################################
     """Close Functions"""
     ########################################################################################################################
     
     def next(self):
-        if (self._valid_file_R == True and self._valid_file_BR == True and 
-        self._valid_file_GEC == True and self._valid_file_TEC == True and 
-        self._valid_file_BS == True and self._valid_file_eeeek == True and 
-        self._valid_file_ooooo == True):
+        self.getPatientID()
+        if self._patientID == '':
+                patientIDQuestion = QtWidgets.QMessageBox
+                patientIDBox = patientIDQuestion.question(self, 'No Patient ID', 
+                    'There is currently no Patient ID entered. Would you still like to continue?', 
+                    patientIDQuestion.Yes | patientIDQuestion.No) 
+                if patientIDBox == patientIDQuestion.No:
+                    return
+        if ((self._valid_file_R == True or self.restingDisplay._hasImage == True) and 
+        (self._valid_file_BR == True or self.browRaiseDisplay._hasImage) and 
+        (self._valid_file_GEC == True or self.gentleEyeClosureDisplay._hasImage == True) and
+        (self._valid_file_TEC == True or self.tightEyeClosureDisplay._hasImage == True) and 
+        (self._valid_file_BS == True or self.bigSmileDisplay._hasImage == True) and
+        (self._valid_file_eeeek == True or self.eeeekDisplay._hasImage == True) and 
+        (self._valid_file_ooooo == True or self.oooooDisplay._hasImage == True)):
+            if self.restingDisplay._hasImage == True:
+                self._file_R = self.restingDisplay._ImageAddress
+            if self.browRaiseDisplay._hasImage == True:
+                self._file_BR = self.browRaiseDisplay._ImageAddress
+            if self.gentleEyeClosureDisplay._hasImage == True:
+                self._file_GEC = self.gentleEyeClosureDisplay._ImageAddress
+            if self.tightEyeClosureDisplay._hasImage == True:
+                self._file_TEC = self.tightEyeClosureDisplay._ImageAddress
+            if self.bigSmileDisplay._hasImage == True:
+                self._file_BS = self.bigSmileDisplay._ImageAddress
+            if self.eeeekDisplay._hasImage == True:
+                self._file_eeeek = self.eeeekDisplay._ImageAddress
+            if self.oooooDisplay._hasImage == True:
+                self._file_ooooo = self.oooooDisplay._ImageAddress
+            
             self.file_R.emit(self._file_R)
             self.file_BR.emit(self._file_BR)
             self.file_GEC.emit(self._file_GEC)
@@ -223,29 +253,7 @@ class SevenSelectionWindow(QtWidgets.QMainWindow):
             self.file_eeeek.emit(self._file_eeeek)
             self.file_ooooo.emit(self._file_ooooo)
             self.reference_Side.emit(self._reference_side)
-            # self.patient_ID.emit(self._patient_ID)
-            self.finished.emit()
-            self.close()
-        elif (self.restingDisplay._hasImage == True and self.browRaiseDisplay._hasImage == True and 
-        self.gentleEyeClosureDisplay._hasImage == True and self.tightEyeClosureDisplay._hasImage == True and 
-        self.bigSmileDisplay._hasImage == True and self.eeeekDisplay._hasImage == True and 
-        self.oooooDisplay._hasImage == True):
-            self._file_R = self.restingDisplay._ImageAddress
-            self._file_BR = self.browRaiseDisplay._ImageAddress
-            self._file_GEC = self.gentleEyeClosureDisplay._ImageAddress
-            self._file_TEC = self.tightEyeClosureDisplay._ImageAddress
-            self._file_BS = self.bigSmileDisplay._ImageAddress
-            self._file_eeeek = self.eeeekDisplay._ImageAddress
-            self._file_ooooo = self.oooooDisplay._ImageAddress
-            self.file_R.emit(self._file_R)
-            self.file_BR.emit(self._file_BR)
-            self.file_GEC.emit(self._file_GEC)
-            self.file_TEC.emit(self._file_TEC)
-            self.file_BS.emit(self._file_BS) 
-            self.file_eeeek.emit(self._file_eeeek)
-            self.file_ooooo.emit(self._file_ooooo)
-            self.reference_Side.emit(self._reference_side)
-            # self.patient_ID.emit(self._patient_ID)
+            self.patientID.emit(self._patientID)
             self.finished.emit()
             self.close()
         else:

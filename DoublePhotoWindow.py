@@ -50,6 +50,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self._file_name = None
         self._task = 'Pre-Op vs Post-Op'
         self._taskName = 'Ocular'
+        self._patientID = None
         
         ########################
         """Set Up the UI form"""
@@ -74,6 +75,8 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         
         #Set Date
         self.dateEdit.setDate(QtCore.QDate.currentDate())
+        #Set Patient ID
+        self.patientIDLineEdit.textChanged.connect(self.setPatientID)
         
         """Button Connection"""
         #New Photograph Button
@@ -325,6 +328,12 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             self.photo2Label.setText(f'{self._taskName} Expression State')
         else:
             print('Invalid Task')
+
+
+    def setPatientID(self, patientID):
+        self._patientID = patientID
+        self.patientIDLineEdit.setText(self._patientID)
+        self.setWindowTitle(f"Emotrics+ | {self._patientID}")
 
 
     ########################################################################################################################

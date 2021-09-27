@@ -81,6 +81,7 @@ class HomeWindow(QtWidgets.QMainWindow):
         self._selection_window.file.connect(self._new_window.setPhoto)
         self._selection_window.reference_Side.connect(self._new_window.setReferenceSide)
         self._selection_window.taskName.connect(self._new_window.setTaskName)
+        self._selection_window.patientID.connect(self._new_window.setPatientID)
         #Show window when selection is finally finished
         self._selection_window.finished.connect(self._new_window.show)
         #Hides Home window until the previous button is hit
@@ -106,6 +107,7 @@ class HomeWindow(QtWidgets.QMainWindow):
         self._selection_window.reference_Side.connect(self._new_window.setReferenceSide)
         self._selection_window.task.connect(self._new_window.setTask)
         self._selection_window.taskName.connect(self._new_window.setTaskName)
+        self._selection_window.patientID.connect(self._new_window.setPatientID)
         #Show window when selection is finally finished
         self._selection_window.finished.connect(self._new_window.show)
         #Hides Home window until the previous button is hit
@@ -179,6 +181,7 @@ class HomeWindow(QtWidgets.QMainWindow):
         self._selection_window.file_eeeek.connect(self._new_window.setPhoto_eeeek)
         self._selection_window.file_ooooo.connect(self._new_window.setPhoto_ooooo)
         self._selection_window.reference_Side.connect(self._new_window.setReferenceSide)
+        self._selection_window.patientID.connect(self._new_window.setPatientID)
         #Show window when selection is finally finished
         self._selection_window.finished.connect(self._new_window.show)
         self._selection_window.finished.connect(self._new_window.update_Plots)
