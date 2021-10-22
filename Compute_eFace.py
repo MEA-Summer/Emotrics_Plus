@@ -43,6 +43,9 @@ def Compute_Resting_eFace(LeftResting, RightResting, reference_side):
             OralCommissure_at_rest = d_right/d_left
     
     OralCommissure_at_rest = np.round(OralCommissure_at_rest*100,1)
+    OralCommissure_at_rest = OralCommissure_at_rest + 2*(100 - OralCommissure_at_rest)
+    OralCommissure_at_rest = np.round(OralCommissure_at_rest,1)
+    
 
     # 4) NLF Angle
     if RightResting.NLF_angle == 0 or LeftResting.NLF_angle == 0:
@@ -150,8 +153,10 @@ def Compute_eFace_OC(LeftResting, RightResting, reference_side):
             OralCommissure_at_rest = 1-((e_left - e_right)/e_left)
         else:
             OralCommissure_at_rest = d_right/d_left
-    
+
     OralCommissure_at_rest = np.round(OralCommissure_at_rest*100,1)
+    OralCommissure_at_rest = OralCommissure_at_rest + 2*(100 - OralCommissure_at_rest)
+    OralCommissure_at_rest = np.round(OralCommissure_at_rest,1)
 
     
     if OralCommissure_at_rest < 0: OralCommissure_at_rest = 0

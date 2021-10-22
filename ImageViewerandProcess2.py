@@ -457,9 +457,11 @@ class ImageViewer(QtWidgets.QGraphicsView):
                     
         else:
             event.ignore()
-            
-        self.draw_circle(self._righteye)
-        self.draw_circle(self._lefteye) 
+        try:  
+            self.draw_circle(self._righteye)
+            self.draw_circle(self._lefteye) 
+        except:
+            pass
         QtWidgets.QGraphicsView.mouseDoubleClickEvent(self, event)
                 
 

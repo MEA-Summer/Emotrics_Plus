@@ -198,11 +198,10 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
                 self._shape, self._lefteye, self._righteye, self._points, 
                 self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Oral_Commissure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
             NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Oral Commissure', 'Nasolabial Fold Angle']
+            x = ['Nasolabial Fold Angle']
 
-            y = [Oral_Commissure_at_Rest, NLF_at_rest]
+            y = [NLF_at_rest]
 
             ##############
             """Plotting"""
@@ -217,14 +216,10 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
             """Filling Line Edits"""
             ##############
             validator = DoubleValidator( 0, 200, 1, self)
-            self.OCLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
             self.NLFLineEdit.setValidator(validator)
 
-            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
             self.NLFLineEdit.setText(str(NLF_at_rest)) 
 
-            self.OCLineEdit.textChanged.connect(self.updateBSGraph)
             self.NLFLineEdit.textChanged.connect(self.updateBSGraph)
 
         
@@ -387,16 +382,12 @@ class Auto_eFaceWindow(QtWidgets.QMainWindow):
 
     def updateBSGraph(self, text):
         try:
-            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
-        except:
-            Oral_Commissure_at_Rest = 0
-        try:
             NLF_at_rest = float(self.NLFLineEdit.text())
         except:
             NLF_at_rest = 0
 
-        x = ['Oral Commissure', 'Nasolabial Fold Angle']
-        y = [Oral_Commissure_at_Rest, NLF_at_rest]
+        x = ['Nasolabial Fold Angle']
+        y = [ NLF_at_rest]
 
         self.plotWidget.canvas.ax.clear()
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
