@@ -4,6 +4,9 @@ from SinglePhotoWindow import SinglePhotoWindow
 from PyQt5 import QtWidgets, QtGui, uic, QtCore
 from pathlib import Path
 from PIL import Image, ImageOps
+from ThumbNailDisplay import ThumbNailDisplay
+from ImageDisplay import ImageDisplay
+from MplWidget import MplWidget
 
 
 class SevenPhotoWindow(QtWidgets.QMainWindow):

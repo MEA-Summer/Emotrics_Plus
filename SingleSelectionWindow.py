@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, uic, QtCore
 from pathlib import Path
+from ImageDisplay import ImageDisplay
 
 class SingleSelectionWindow(QtWidgets.QMainWindow):
     finished = QtCore.pyqtSignal()
@@ -57,6 +58,7 @@ class SingleSelectionWindow(QtWidgets.QMainWindow):
         name,_ = QtWidgets.QFileDialog.getOpenFileName(
                 self,'Load Image',
                 '',"Image files (*.png *.jpg *.jpeg *.jfif *.tif *.tiff *.PNG *.JPG *.JPEG *.TIF *.TIFF)")
+        print(f'name = {name}')
         Pname = Path(name)
         if Pname.is_file():
             self._file = name

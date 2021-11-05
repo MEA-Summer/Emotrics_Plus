@@ -313,21 +313,21 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 
                 #Makes sure everything is up to date
                 self.displayImage.update_shape()
-            except:
+            except Exception as e:
                 if self.displayImage._image is None:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                        'Error in Loading file.\nPlease try again.', 
+                        f'Error in Loading file.\nPlease try again.\n Error message: {e}', 
                         QtWidgets.QMessageBox.Ok)
                     self.load_file()
                 else:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                        'Error in Loading file.', 
+                        'Error in Loading file.\n Error message: {e}', 
                         QtWidgets.QMessageBox.Ok)
         else:
             #If no file is selected or there is an error, return to home screen **Incomplete**
             if self.displayImage._image is None:
                 QtWidgets.QMessageBox.information(self, 'Error', 
-                    'No file selected.\nPlease try again.', 
+                    'No file selected.\nPlease try again.\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
                 self.load_file()
     
@@ -388,33 +388,33 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.information(self, 'Error', 
                     'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
                     QtWidgets.QMessageBox.Ok)
-        except:
+        except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Error in creating metrics window.', 
+                    f'Error in creating metrics window.\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
     
 
     def create_auto_eFace_window(self):
         """This function is used when the user clicks the Auto eFace button.
         This function opens up a window and displays the Auto eFace graph of the photo"""
-        # try:
-        if max(self.displayImage._shape[:, 2]) >= 76:
-            #This is to make sure that the midline exist
-            if self.displayImage._points == None:
-                self.displayImage.toggle_midLine()
-                self.displayImage.toggle_midLine()
-            #say to the window that presents the results that there is only 1 tab
-            self._new_window = Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name, self._expression)
-            #show the window with the results 
-            self._new_window.show()
-        else:
+        try:
+            if max(self.displayImage._shape[:, 2]) >= 76:
+                #This is to make sure that the midline exist
+                if self.displayImage._points == None:
+                    self.displayImage.toggle_midLine()
+                    self.displayImage.toggle_midLine()
+                #say to the window that presents the results that there is only 1 tab
+                self._new_window = Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._file_name, self._expression)
+                #show the window with the results 
+                self._new_window.show()
+            else:
+                QtWidgets.QMessageBox.information(self, 'Error', 
+                    'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
+                    QtWidgets.QMessageBox.Ok)
+        except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
-                QtWidgets.QMessageBox.Ok)
-        # except:
-        #     QtWidgets.QMessageBox.information(self, 'Error', 
-        #             'Error in creating Auto-eFace Window.', 
-        #             QtWidgets.QMessageBox.Ok)
+                    f'Error in creating Auto-eFace Window.\n Error message: {e}', 
+                    QtWidgets.QMessageBox.Ok)
     
     def leftSideSelected(self):
         self.displayImage._reference_side = 'Left'
@@ -553,9 +553,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.information(self, 'Saved', 
                     f'Screenshot succesfully saved.\nPhoto name is {photo_name}', 
                     QtWidgets.QMessageBox.Ok)
-            except:
+            except Exception as e:
                 QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Error in saving screenshot.', 
+                    f'Error in saving screenshot.\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
     
 
@@ -579,9 +579,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 QtWidgets.QMessageBox.information(self, 'Error', 
                     'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
                     QtWidgets.QMessageBox.Ok)
-        except:
+        except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Error in creating metrics window.', 
+                    f'Error in creating metrics window.\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
 
     
@@ -649,9 +649,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     if saveDotsBox == saveDotsQuestion.Yes:
                         try:
                             self.save_results()
-                        except:
+                        except Exception as e:
                             QtWidgets.QMessageBox.information(self, 'Error', 
-                                'Error in saving current Landmarks.', 
+                                f'Error in saving current Landmarks.\n Error message: {e}', 
                                 QtWidgets.QMessageBox.Ok)
             else:
                 saveDotsQuestion = QtWidgets.QMessageBox
@@ -661,9 +661,9 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                 if saveDotsBox == saveDotsQuestion.Yes:
                     try:
                         self.save_results()
-                    except:
+                    except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            'Error in saving current Landmarks.', 
+                            f'Error in saving current Landmarks.\n Error message: {e}', 
                             QtWidgets.QMessageBox.Ok)
         except:
             print('Error in verifying save')

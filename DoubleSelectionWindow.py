@@ -1,5 +1,6 @@
 from PyQt5 import QtWidgets, QtGui, uic, QtCore
 from pathlib import Path
+from ImageDisplay import ImageDisplay
 
 class DoubleSelectionWindow(QtWidgets.QMainWindow):
     finished = QtCore.pyqtSignal()

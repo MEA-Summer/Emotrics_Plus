@@ -129,7 +129,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(5, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.NLF_angle, decimals=2)) if str(np.round(self._MeasurementsDeviation1.NLF_angle, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(5, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.NLF_angle, decimals=2)) if str(np.round(self._MeasurementsPercentual1.NLF_angle, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(5, 3, val)
         
         #Upper Lip Slope
@@ -139,7 +139,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(6, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementsDeviation1.UpperLipSlope, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(6, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementsPercentual1.UpperLipSlope, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(6, 3, val)
         
         #Commisure Height
@@ -149,7 +149,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(7, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementsDeviation1.CommisureHeight, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(7, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementsPercentual1.CommisureHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(7, 3, val)
         
         #Dental Show
@@ -159,7 +159,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(8, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementsDeviation1.InterlabialDistance, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(8, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementsPercentual1.InterlabialDistance, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(8, 3, val)
         
         #Dental Show Area
@@ -169,7 +169,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(9, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementsDeviation1.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(9, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementsPercentual1.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(9, 3, val)
         
         #Commissure Position
@@ -179,7 +179,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(10, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementsDeviation1.CommissurePosition, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(10, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementsPercentual1.CommissurePosition, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(10, 3, val)
         
         #Lower Lip Height Deviation
@@ -189,7 +189,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo1Table.setItem(11, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation1.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementsDeviation1.LowerLipHeight, decimals=2)) != '0' else '-')
         self.photo1Table.setItem(11, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual1.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementsPercentual1.LowerLipHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo1Table.setItem(11, 3, val)
         
         #Set up Column headers to show which side is which
@@ -273,7 +273,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(5, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.NLF_angle, decimals=2)) if str(np.round(self._MeasurementsDeviation2.NLF_angle, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(5, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.NLF_angle, decimals=2)) if str(np.round(self._MeasurementsPercentual2.NLF_angle, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(5, 3, val)
         
         #Upper Lip Slope
@@ -283,7 +283,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(6, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementsDeviation2.UpperLipSlope, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(6, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementsPercentual2.UpperLipSlope, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(6, 3, val)
         
         #Commisure Height
@@ -293,7 +293,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(7, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementsDeviation2.CommisureHeight, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(7, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementsPercentual2.CommisureHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(7, 3, val)
         
         #Dental Show
@@ -303,7 +303,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(8, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementsDeviation2.InterlabialDistance, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(8, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementsPercentual2.InterlabialDistance, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(8, 3, val)
         
         #Dental Show Area
@@ -313,7 +313,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(9, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementsDeviation2.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(9, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementsPercentual2.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(9, 3, val)
         
         #Commissure Position
@@ -323,7 +323,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(10, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementsDeviation2.CommissurePosition, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(10, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementsPercentual2.CommissurePosition, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(10, 3, val)
         
         #Lower Lip Height Deviation
@@ -333,7 +333,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         self.photo2Table.setItem(11, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsDeviation2.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementsDeviation2.LowerLipHeight, decimals=2)) != '0' else '-')
         self.photo2Table.setItem(11, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementsPercentual2.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementsPercentual2.LowerLipHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.photo2Table.setItem(11, 3, val)
         
         #Set up Column headers to show which side is which
@@ -413,7 +413,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #NLF Angle
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.NLF_angle, decimals=2)) if str(np.round(self._MeasurementRightComparison.NLF_angle, decimals=2)) != '0' else '-')
         self.sideTable.setItem(5, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.NLF_angle, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.NLF_angle, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(5, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.NLF_angle, decimals=2)) if str(np.round(self._MeasurementLeftComparison.NLF_angle, decimals=2)) != '0' else '-')
         self.sideTable.setItem(5, 2, val)
@@ -423,7 +423,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Upper Lip Slope
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementRightComparison.UpperLipSlope, decimals=2)) != '0' else '-')
         self.sideTable.setItem(6, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.UpperLipSlope, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(6, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.UpperLipSlope, decimals=2)) if str(np.round(self._MeasurementLeftComparison.UpperLipSlope, decimals=2)) != '0' else '-')
         self.sideTable.setItem(6, 2, val)
@@ -433,7 +433,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Commisure Height
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementRightComparison.CommisureHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(7, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.CommisureHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(7, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.CommisureHeight, decimals=2)) if str(np.round(self._MeasurementLeftComparison.CommisureHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(7, 2, val)
@@ -443,7 +443,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Interlabial Distance
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementRightComparison.InterlabialDistance, decimals=2)) != '0' else '-')
         self.sideTable.setItem(8, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.InterlabialDistance, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(8, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.InterlabialDistance, decimals=2)) if str(np.round(self._MeasurementLeftComparison.InterlabialDistance, decimals=2)) != '0' else '-')
         self.sideTable.setItem(8, 2, val)
@@ -453,7 +453,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Interlabial Area of the Hemiface
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementRightComparison.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
         self.sideTable.setItem(9, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(9, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.InterlabialArea_of_the_Hemiface, decimals=2)) if str(np.round(self._MeasurementLeftComparison.InterlabialArea_of_the_Hemiface, decimals=2)) != '0' else '-')
         self.sideTable.setItem(9, 2, val)
@@ -463,7 +463,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Commissure Position
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementRightComparison.CommissurePosition, decimals=2)) != '0' else '-')
         self.sideTable.setItem(10, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.CommissurePosition, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(10, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.CommissurePosition, decimals=2)) if str(np.round(self._MeasurementLeftComparison.CommissurePosition, decimals=2)) != '0' else '-')
         self.sideTable.setItem(10, 2, val)
@@ -473,7 +473,7 @@ class MetricsDoubleWindow(QtWidgets.QMainWindow):
         #Lower Lip Height
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightComparison.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementRightComparison.LowerLipHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(11, 0, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementRightPercentComparison.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementRightPercentComparison.LowerLipHeight, decimals=2)) != '0' else '-')
+        val = QtWidgets.QTableWidgetItem('-')
         self.sideTable.setItem(11, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(self._MeasurementLeftComparison.LowerLipHeight, decimals=2)) if str(np.round(self._MeasurementLeftComparison.LowerLipHeight, decimals=2)) != '0' else '-')
         self.sideTable.setItem(11, 2, val)

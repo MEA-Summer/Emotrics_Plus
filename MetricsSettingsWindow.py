@@ -70,9 +70,9 @@ class MetricsSettingsWindow(QtWidgets.QMainWindow):
                    QtWidgets.QMessageBox.information(self, 'Error', 
                             'The value entered is not a proper Iris Diameter', 
                             QtWidgets.QMessageBox.Ok)
-           except:
+           except Exception as e:
                QtWidgets.QMessageBox.information(self, 'Error', 
-                            'No value was entered.\nPlease enter a value before pressing done or press cancel to leave the settings unchanged.', 
+                            f'No value was entered.\nPlease enter a value before pressing done or press cancel to leave the settings unchanged.\n Error message: {e}', 
                             QtWidgets.QMessageBox.Ok)
                return
        else:
@@ -82,9 +82,9 @@ class MetricsSettingsWindow(QtWidgets.QMainWindow):
                    QtWidgets.QMessageBox.information(self, 'Error', 
                             'The value entered is not a proper Calibration Value', 
                             QtWidgets.QMessageBox.Ok)
-           except:
+           except Exception as e:
                QtWidgets.QMessageBox.information(self, 'Error', 
-                            'No value was entered.\nPlease enter a value before pressing done or press cancel to leave the settings unchanged.', 
+                            f'No value was entered.\nPlease enter a value before pressing done or press cancel to leave the settings unchanged.\n Error message: {e}', 
                             QtWidgets.QMessageBox.Ok)
                return
        self.Calibration_Type.emit(self.CalibrationType)

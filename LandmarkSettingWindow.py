@@ -70,9 +70,9 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
             self.colors.emit(self._color_landmark1, self._color_landmark2, self._color_eyes, self._color_midline)
             self.size.emit(self._landmark_size)
             self.close()
-        except:
+        except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-            'Invalid Landmark Size.', 
+            f'Error message: {e}', 
             QtWidgets.QMessageBox.Ok)
         
     def changeModelname(self, modelname):

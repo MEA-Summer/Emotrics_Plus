@@ -383,9 +383,9 @@ class SaveMetricsWindow(QDialog):
 
                         writer.save()
                         self.close()
-                    except:
+                    except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved', 
+                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.\nError message: {e}', 
                             QtWidgets.QMessageBox.Ok)
             else:
                 try:
@@ -400,9 +400,9 @@ class SaveMetricsWindow(QDialog):
 
                     writer.save()
                     self.close()
-                except:
+                except Exception as e:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                            'Error in saving metrics.', 
+                            f'Error in saving metrics.\nError Message: {e}', 
                             QtWidgets.QMessageBox.Ok)
                     
         else: #the user wants to append to an existing file
@@ -420,7 +420,7 @@ class SaveMetricsWindow(QDialog):
             
             
             #load data from file and arrange its columns to fit the template
-            old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0)
+            old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
         
             
             old_df.columns = pd.MultiIndex.from_tuples(df.columns)

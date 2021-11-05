@@ -104,7 +104,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(5, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.NLF_angle, decimals=2)))
         self.resultTable.setItem(5, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.NLF_angle, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(5, 3, val)
         
         #Upper Lip Slope
@@ -114,7 +114,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(6, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.UpperLipSlope, decimals=2)))
         self.resultTable.setItem(6, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.UpperLipSlope, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(6, 3, val)
         
         #Commisure Height
@@ -124,7 +124,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(7, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.CommisureHeight, decimals=2)))
         self.resultTable.setItem(7, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.CommisureHeight, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(7, 3, val)
         
         #Dental Show
@@ -134,7 +134,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(8, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.InterlabialDistance, decimals=2)))
         self.resultTable.setItem(8, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.InterlabialDistance, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(8, 3, val)
         
         #Dental Show Area
@@ -144,7 +144,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(9, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.InterlabialArea_of_the_Hemiface, decimals=2)))
         self.resultTable.setItem(9, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.InterlabialArea_of_the_Hemiface, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(9, 3, val)
         
         #Commissure Position
@@ -154,7 +154,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(10, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.CommissurePosition, decimals=2)))
         self.resultTable.setItem(10, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.CommissurePosition, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(10, 3, val)
         
         #Lower Lip Height Deviation
@@ -164,7 +164,7 @@ class MetricsWindow(QtWidgets.QMainWindow):
         self.resultTable.setItem(11, 1, val)
         val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsDeviation.LowerLipHeight, decimals=2)))
         self.resultTable.setItem(11, 2, val)
-        val = QtWidgets.QTableWidgetItem(str(np.round(MeasurementsPercentual.LowerLipHeight, decimals=2)))
+        val = QtWidgets.QTableWidgetItem('-')
         self.resultTable.setItem(11, 3, val)
         
         #Set up Column headers to show which side is which

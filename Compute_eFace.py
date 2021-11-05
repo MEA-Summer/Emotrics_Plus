@@ -23,7 +23,8 @@ def Compute_Resting_eFace(LeftResting, RightResting, reference_side):
         PalpebralFissure_at_rest = c_right/c_left
     else:
         PalpebralFissure_at_rest = c_left/c_right
-    
+
+    #PalpebralFissure_at_rest = PalpebralFissure_at_rest + 2*(1 - PalpebralFissure_at_rest)
     PalpebralFissure_at_rest = np.round(PalpebralFissure_at_rest*100,1)
     
     # 3) Oral commissure at rest 
@@ -120,6 +121,7 @@ def Compute_eFace_PF(LeftResting, RightResting, reference_side):
     else:
         PalpebralFissure_at_rest = c_left/c_right
     
+    #PalpebralFissure_at_rest = PalpebralFissure_at_rest + 2*(1 - PalpebralFissure_at_rest)
     PalpebralFissure_at_rest = np.round(PalpebralFissure_at_rest*100,1)
     
     #apply corrections to remove everything less than zero 
@@ -228,6 +230,7 @@ def Compute_eFace(Patient):
     else:
         PalpebralFissure_at_rest = c_left/c_right
     
+    #PalpebralFissure_at_rest = PalpebralFissure_at_rest + 2*(1 - PalpebralFissure_at_rest)
     PalpebralFissure_at_rest = np.round(PalpebralFissure_at_rest*100,1)
     
     # 3) Oral commissure at rest 

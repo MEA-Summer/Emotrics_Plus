@@ -23,14 +23,18 @@ class DoubleValidator(QDoubleValidator):
         else:
             return QValidator.Invalid, p_str, p_int
 
-class Auto_eFaceWindow(QtWidgets.QMainWindow):
+class Double_Auto_eFaceWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, shape, left_pupil, right_pupil, points, CalibrationType, CalibrationValue, reference_side, file_name, expression):
+    def __init__(self, shape1, left_pupil1, right_pupil1, points1, shape2, left_pupil2, right_pupil2, points2, CalibrationType, CalibrationValue, reference_side, file_name, expression):
         super() .__init__()
-        self._shape = shape
-        self._lefteye = left_pupil
-        self._righteye = right_pupil
-        self._points = points
+        self._shape1 = shape1
+        self._lefteye1 = left_pupil1
+        self._righteye1 = right_pupil1
+        self._points1 = points1
+        self._shape2 = shape2
+        self._lefteye2 = left_pupil2
+        self._righteye2 = right_pupil2
+        self._points2 = points2
         self._CalibrationType = CalibrationType
         self._CalibrationValue = CalibrationValue
         self._reference_side = reference_side
