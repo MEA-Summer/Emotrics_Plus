@@ -22,8 +22,8 @@ class MyLineEdit(QLineEdit):
         self.clear()   
 
         
-class SaveMetricsWindow(QDialog):
-    def __init__(self, parent=None, file_name = None, MeasurementsLeft = None, MeasurementsRight = None, MeasurementsDeviation = None, MeasurementsPercentual = None):
+class DoubleSaveMetricsWindow(QDialog):
+    def __init__(self, parent=None, file_name = None, MeasurementsLeft = None, MeasurementsRight = None, MeasurementsDeviation = None, MeasurementsPercentual = None, file_name2 = None, MeasurementsLeft2 = None, MeasurementsRight2 = None, MeasurementsDeviation2 = None, MeasurementsPercentual2 = None):
         super().__init__(parent)
         
         self._NewFile = True    #This variable defines if the user is 
@@ -59,7 +59,36 @@ class SaveMetricsWindow(QDialog):
         self._other = '' #additional comments
         self._file_to_save = '' #file to add data 
 
+
+        #Photo 2 Variables
+        self._name_of_file2 = file_name2  #this variable stores the name of the 
+                                        #file, it won't be modified during 
+                                        #execution                        
+                                
+        self._file_name2 = file_name2    #this variable stores the name of the 
+                                        #file to be displayed. It will be 
+                                        #modified during execution 
+        filename2, file_extension2 = os.path.splitext(self._file_name2) 
+        delimiter = os.path.sep
+        temp2=filename2.split(delimiter)
+        photo_location2 = temp2[0:-1]
+        photo_location2 = delimiter.join(photo_location2)
+        photo_name2=temp2[-1]
         
+        #measurements
+        self._MeasurementsLeft2 = MeasurementsLeft2
+        self._MeasurementsRight2 = MeasurementsRight2
+        self._MeasurementsDeviation2 = MeasurementsDeviation2
+        self._MeasurementsPercentual2 = MeasurementsPercentual2
+        
+        self._file_name2 = photo_name2  #path + file name
+        self._photo_location2 = photo_location2
+        self._ID2 = photo_name2 #unique identifier
+        self._prevspost2 = '' #pre-treatment vs post-treatment
+        self._surgery2 = '' #type of surgery
+        self._expression2 = '' #type of expression
+        self._other2 = '' #additional comments
+
         self.initUI()
         
     def initUI(self):
@@ -319,13 +348,13 @@ class SaveMetricsWindow(QDialog):
         MRD2 = np.array([[self._MeasurementsRight.MarginalReflexDistance2, self._MeasurementsLeft.MarginalReflexDistance2,self._MeasurementsDeviation.MarginalReflexDistance2,self._MeasurementsPercentual.MarginalReflexDistance2]],dtype=object)
         PFH = np.array([[self._MeasurementsRight.PalpebralFissureHeight, self._MeasurementsLeft.PalpebralFissureHeight,self._MeasurementsDeviation.PalpebralFissureHeight,self._MeasurementsPercentual.PalpebralFissureHeight]],dtype=object)
         EA = np.array([[self._MeasurementsRight.EyeArea, self._MeasurementsLeft.EyeArea,self._MeasurementsDeviation.EyeArea,self._MeasurementsPercentual.EyeArea]],dtype=object)
-        NA = np.array([[self._MeasurementsRight.NLF_angle, self._MeasurementsLeft.NLF_angle,self._MeasurementsDeviation.NLF_angle,self._MeasurementsPercentual.NLF_angle]],dtype=object)
-        ULS = np.array([[self._MeasurementsRight.UpperLipSlope, self._MeasurementsLeft.UpperLipSlope,self._MeasurementsDeviation.UpperLipSlope,self._MeasurementsPercentual.UpperLipSlope]],dtype=object)
-        CH = np.array([[self._MeasurementsRight.CommisureHeight, self._MeasurementsLeft.CommisureHeight,self._MeasurementsDeviation.CommisureHeight,self._MeasurementsPercentual.CommisureHeight]],dtype=object)
-        ID = np.array([[self._MeasurementsRight.InterlabialDistance, self._MeasurementsLeft.InterlabialDistance,self._MeasurementsDeviation.InterlabialDistance,self._MeasurementsPercentual.InterlabialDistance]],dtype=object)
-        IAH = np.array([[self._MeasurementsRight.InterlabialArea_of_the_Hemiface,self._MeasurementsLeft.InterlabialArea_of_the_Hemiface,self._MeasurementsDeviation.InterlabialArea_of_the_Hemiface,self._MeasurementsPercentual.InterlabialArea_of_the_Hemiface]],dtype=object)
-        CP = np.array([[self._MeasurementsRight.CommissurePosition,self._MeasurementsLeft.CommissurePosition,self._MeasurementsDeviation.CommissurePosition,self._MeasurementsPercentual.CommissurePosition]],dtype=object)
-        LLH = np.array([[self._MeasurementsRight.LowerLipHeight,self._MeasurementsLeft.LowerLipHeight,self._MeasurementsDeviation.LowerLipHeight,self._MeasurementsPercentual.LowerLipHeight]],dtype=object)
+        NA = np.array([[self._MeasurementsRight.NLF_angle, self._MeasurementsLeft.NLF_angle,self._MeasurementsDeviation.NLF_angle,0]],dtype=object)
+        ULS = np.array([[self._MeasurementsRight.UpperLipSlope, self._MeasurementsLeft.UpperLipSlope,self._MeasurementsDeviation.UpperLipSlope,0]],dtype=object)
+        CH = np.array([[self._MeasurementsRight.CommisureHeight, self._MeasurementsLeft.CommisureHeight,self._MeasurementsDeviation.CommisureHeight,0]],dtype=object)
+        ID = np.array([[self._MeasurementsRight.InterlabialDistance, self._MeasurementsLeft.InterlabialDistance,self._MeasurementsDeviation.InterlabialDistance,0]],dtype=object)
+        IAH = np.array([[self._MeasurementsRight.InterlabialArea_of_the_Hemiface,self._MeasurementsLeft.InterlabialArea_of_the_Hemiface,self._MeasurementsDeviation.InterlabialArea_of_the_Hemiface,0]],dtype=object)
+        CP = np.array([[self._MeasurementsRight.CommissurePosition,self._MeasurementsLeft.CommissurePosition,self._MeasurementsDeviation.CommissurePosition,0]],dtype=object)
+        LLH = np.array([[self._MeasurementsRight.LowerLipHeight,self._MeasurementsLeft.LowerLipHeight,self._MeasurementsDeviation.LowerLipHeight,0]],dtype=object)
     
         
         UI = np.array([[self._Identifier.text()]],dtype = object)
@@ -382,10 +411,10 @@ class SaveMetricsWindow(QDialog):
                         #     worksheet.autoFitColumn(i,0,2)
 
                         writer.save()
-                        self.close()
+                        # self.close()
                     except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.\nError message: {e}', 
+                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.',#\nError message: {e}', 
                             QtWidgets.QMessageBox.Ok)
             else:
                 try:
@@ -399,10 +428,10 @@ class SaveMetricsWindow(QDialog):
                     #     worksheet.autoFitColumn(i,0,2)
 
                     writer.save()
-                    self.close()
+                    # self.close()
                 except Exception as e:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving metrics.\nError Message: {e}', 
+                            f'Error in saving metrics.',#\nError Message: {e}', 
                             QtWidgets.QMessageBox.Ok)
                     
         else: #the user wants to append to an existing file
@@ -421,7 +450,7 @@ class SaveMetricsWindow(QDialog):
             
             #load data from file and arrange its columns to fit the template
             old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
-        
+            xlsxfilename = str(self._SelectFile.text())
             
             old_df.columns = pd.MultiIndex.from_tuples(df.columns)
         
@@ -441,6 +470,105 @@ class SaveMetricsWindow(QDialog):
             #     worksheet.autoFitColumn(i,0,2)
             
             writer.save()
-            self.close() 
+            # self.close() 
             
+
+        number_of_measurements = 12
+        Columns = ['Right','Left','Deviation (absolute)','Deviation (percent)']
+        Columns = Columns * number_of_measurements
         
+        Columns.insert(0,'')
+        Columns.insert(0,'')
+        Columns.insert(0,'')
+        Columns.insert(0,'')
+        
+        Columns.append('')
+        
+        
+        
+        temp = ['Brow Height', 'Marginal Reflex Distance 1', 'Marginal Reflex Distance 2', 
+            'Palpebral Fissure Height', 'Eye Area', 'NLF Angle',
+            'Upper Lip Slope', 'Commisure Height', 'Interlabial Distance',
+            'Interlabial Area of the Hemiface','Commissure Position','Lower Lip Height']
+        number_of_repetitions=4
+        Header = [item for item in temp for i in range(number_of_repetitions)]
+        
+        
+        Header.insert(0,'Expression')
+        Header.insert(0,'Procedure')
+        Header.insert(0,'Pre vs Post Procedure')
+        Header.insert(0,'Unique Identifier')
+        
+        Header.append('Additional Comments')
+        
+        
+        
+        
+        #measurements
+        elements = ['BH', 'MRD1', 'MRD2', 'PFH', 'EA', 'NA', 'ULS', 'CH', 'ID', 'IAH', 'CP', 'LLH']
+        BH = np.array([[self._MeasurementsRight2.BrowHeight,self._MeasurementsLeft2.BrowHeight,self._MeasurementsDeviation2.BrowHeight,self._MeasurementsPercentual2.BrowHeight]],dtype=object)
+        MRD1 = np.array([[self._MeasurementsRight2.MarginalReflexDistance1, self._MeasurementsLeft2.MarginalReflexDistance1,self._MeasurementsDeviation2.MarginalReflexDistance1,self._MeasurementsPercentual2.MarginalReflexDistance1]], dtype=object)
+        MRD2 = np.array([[self._MeasurementsRight2.MarginalReflexDistance2, self._MeasurementsLeft2.MarginalReflexDistance2,self._MeasurementsDeviation2.MarginalReflexDistance2,self._MeasurementsPercentual2.MarginalReflexDistance2]],dtype=object)
+        PFH = np.array([[self._MeasurementsRight2.PalpebralFissureHeight, self._MeasurementsLeft2.PalpebralFissureHeight,self._MeasurementsDeviation2.PalpebralFissureHeight,self._MeasurementsPercentual2.PalpebralFissureHeight]],dtype=object)
+        EA = np.array([[self._MeasurementsRight2.EyeArea, self._MeasurementsLeft2.EyeArea,self._MeasurementsDeviation2.EyeArea,self._MeasurementsPercentual2.EyeArea]],dtype=object)
+        NA = np.array([[self._MeasurementsRight2.NLF_angle, self._MeasurementsLeft2.NLF_angle,self._MeasurementsDeviation2.NLF_angle,0]],dtype=object)
+        ULS = np.array([[self._MeasurementsRight2.UpperLipSlope, self._MeasurementsLeft2.UpperLipSlope,self._MeasurementsDeviation2.UpperLipSlope,0]],dtype=object)
+        CH = np.array([[self._MeasurementsRight2.CommisureHeight, self._MeasurementsLeft2.CommisureHeight,self._MeasurementsDeviation2.CommisureHeight,0]],dtype=object)
+        ID = np.array([[self._MeasurementsRight2.InterlabialDistance, self._MeasurementsLeft2.InterlabialDistance,self._MeasurementsDeviation2.InterlabialDistance,0]],dtype=object)
+        IAH = np.array([[self._MeasurementsRight2.InterlabialArea_of_the_Hemiface,self._MeasurementsLeft2.InterlabialArea_of_the_Hemiface,self._MeasurementsDeviation2.InterlabialArea_of_the_Hemiface,0]],dtype=object)
+        CP = np.array([[self._MeasurementsRight2.CommissurePosition,self._MeasurementsLeft2.CommissurePosition,self._MeasurementsDeviation2.CommissurePosition,0]],dtype=object)
+        LLH = np.array([[self._MeasurementsRight2.LowerLipHeight,self._MeasurementsLeft2.LowerLipHeight,self._MeasurementsDeviation2.LowerLipHeight,0]],dtype=object)
+    
+        
+        UI = np.array([[self._Identifier.text()]],dtype = object)
+        PvsP = np.array([[str(self._PrevsPost.currentText())]],dtype = object)
+        PC = np.array([[self._SurgeryType.text()]],dtype = object)
+        EX = np.array([[self._ExpressionType.text()]],dtype = object)
+        AD = np.array([[self._AddtitionalComments.text()]],dtype = object)
+        
+
+        fill= UI
+        fill= np.append(fill, PvsP, axis = 1)
+        fill= np.append(fill, PC, axis = 1)
+        fill= np.append(fill, EX, axis = 1)
+        for i in elements:
+                fill = np.append(fill, eval(i), axis = 1)
+        
+        fill= np.append(fill, AD, axis = 1)  
+
+
+        
+        filename, file_extension = os.path.splitext(self._name_of_file2 ) 
+        delimiter = os.path.sep
+        temp=filename.split(delimiter)
+        photo_name=temp[-1] + file_extension
+        
+        #create data frame with new ata
+        Index = [photo_name]
+        df = pd.DataFrame(fill, index = Index, columns = Columns)
+        df.columns = pd.MultiIndex.from_tuples(list(zip(Header,df.columns)))
+        
+        
+        #load data from file and arrange its columns to fit the template
+        old_df = pd.read_excel(xlsxfilename, sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
+    
+        
+        old_df.columns = pd.MultiIndex.from_tuples(df.columns)
+    
+        #concatenate old and new data frame
+        Frames = [old_df, df]
+        
+        resuls = pd.concat(Frames, axis=0)
+        
+        #write results in selected file 
+        writer = pd.ExcelWriter(xlsxfilename, engine='xlsxwriter')
+                    
+        resuls.to_excel(writer, sheet_name='Sheet1', index = True)
+
+        # #adjust the size of each column to fit the text
+        # worksheet = writer.sheets['Sheet1']
+        # for i in range(0, 55):
+        #     worksheet.autoFitColumn(i,0,2)
+        
+        writer.save()
+        self.close() 

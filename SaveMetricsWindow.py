@@ -385,7 +385,7 @@ class SaveMetricsWindow(QDialog):
                         self.close()
                     except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.\nError message: {e}', 
+                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.',#\nError message: {e}', 
                             QtWidgets.QMessageBox.Ok)
             else:
                 try:
@@ -402,7 +402,7 @@ class SaveMetricsWindow(QDialog):
                     self.close()
                 except Exception as e:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving metrics.\nError Message: {e}', 
+                            f'Error in saving metrics.',#\nError Message: {e}', 
                             QtWidgets.QMessageBox.Ok)
                     
         else: #the user wants to append to an existing file

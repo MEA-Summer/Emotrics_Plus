@@ -316,18 +316,18 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
             except Exception as e:
                 if self.displayImage._image is None:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                        f'Error in Loading file.\nPlease try again.\n Error message: {e}', 
+                        f'Error in Loading file.\nPlease try again.',#\n Error message: {e}', 
                         QtWidgets.QMessageBox.Ok)
                     self.load_file()
                 else:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                        'Error in Loading file.\n Error message: {e}', 
+                        'Error in Loading file.',#\n Error message: {e}', 
                         QtWidgets.QMessageBox.Ok)
         else:
             #If no file is selected or there is an error, return to home screen **Incomplete**
             if self.displayImage._image is None:
                 QtWidgets.QMessageBox.information(self, 'Error', 
-                    'No file selected.\nPlease try again.\n Error message: {e}', 
+                    'No file selected.\nPlease try again.', 
                     QtWidgets.QMessageBox.Ok)
                 self.load_file()
     
@@ -390,7 +390,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.Ok)
         except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in creating metrics window.\n Error message: {e}', 
+                    f'Error in creating metrics window.',#\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
     
 
@@ -413,7 +413,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.Ok)
         except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in creating Auto-eFace Window.\n Error message: {e}', 
+                    f'Error in creating Auto-eFace Window.',#\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
     
     def leftSideSelected(self):
@@ -555,7 +555,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.Ok)
             except Exception as e:
                 QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in saving screenshot.\n Error message: {e}', 
+                    f'Error in saving screenshot.',#\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
     
 
@@ -581,7 +581,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.Ok)
         except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in creating metrics window.\n Error message: {e}', 
+                    f'Error in creating metrics window.',#\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
 
     
@@ -651,7 +651,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                             self.save_results()
                         except Exception as e:
                             QtWidgets.QMessageBox.information(self, 'Error', 
-                                f'Error in saving current Landmarks.\n Error message: {e}', 
+                                f'Error in saving current Landmarks.',#\n Error message: {e}', 
                                 QtWidgets.QMessageBox.Ok)
             else:
                 saveDotsQuestion = QtWidgets.QMessageBox
@@ -663,7 +663,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                         self.save_results()
                     except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving current Landmarks.\n Error message: {e}', 
+                            f'Error in saving current Landmarks.',#\n Error message: {e}', 
                             QtWidgets.QMessageBox.Ok)
         except:
             print('Error in verifying save')

@@ -72,7 +72,7 @@ class LandmarkSettingsWindow(QtWidgets.QMainWindow):
             self.close()
         except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-            f'Error message: {e}', 
+            f'Error',# message: {e}', 
             QtWidgets.QMessageBox.Ok)
         
     def changeModelname(self, modelname):

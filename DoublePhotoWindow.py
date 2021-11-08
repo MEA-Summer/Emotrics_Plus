@@ -17,7 +17,9 @@ from ImageViewerandProcess2 import ImageViewer
 from DoubleSelectionWindow import DoubleSelectionWindow
 from Facial_Landmarks import GetLandmarks
 from Utilities import save_txt_file, get_info_from_txt
+from Metrics import get_measurements_from_data
 from Double_Auto_eFaceWindow import Double_Auto_eFaceWindow
+from DoubleSaveMetricsWindow import DoubleSaveMetricsWindow
 from MetricsDoubleWindow import MetricsDoubleWindow
 from LandmarkSettingWindow import LandmarkSettingsWindow
 from MetricsSettingsWindow import MetricsSettingsWindow
@@ -49,6 +51,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         self._CalibrationType = 'Iris'
         self._CalibrationValue = 11.77
         self._file_name = None
+        self._file_name2 = None
         self._task = 'Pre-Op vs Post-Op'
         self._taskName = 'Ocular'
         self._patientID = None
@@ -111,7 +114,9 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         #Save
         
         #Button 1.3.2: Save Dots
-        # self.saveDotsButton.clicked.connect(self.save_results)
+        self.saveDotsButton.clicked.connect(self.save_results)
+        #Button 1.3.2: Save Metrics
+        self.saveMeasurementsButton.clicked.connect(self.save_metrics)
 
         
         #Tab 2:Settings
@@ -174,7 +179,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
 
     def setPhoto1(self, name):
         try:
-            self._imagePath1 = name
+            self._imagePath = name
             name = Path(name)
             #Displaying Image
             image = Image.open(name).convert('RGB')
@@ -184,7 +189,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             self.displayImage.update_view()
             self.displayImage.clear_scene()
             
-            os_name = os.path.normpath(self._imagePath1)
+            os_name = os.path.normpath(self._imagePath)
             self._file_name = os_name
             #self.displayImage._opencvimage = image#cv2.imread(os_name)
             filename = os_name[:-4]
@@ -192,7 +197,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 filename = filename[:-1]
             file_txt = (filename + '.txt')
             
-            # self._shapePath = Path(self._imagePath1.stem + 'txt')
+            # self._shapePath = Path(self._imagePath.stem + 'txt')
 
             if os.path.isfile(file_txt):
                     shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
@@ -245,7 +250,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             self.displayImage2.clear_scene()
             
             os_name = os.path.normpath(self._imagePath2)
-            self._file_name = os_name
+            self._file_name2 = os_name
             #self.displayImage2._opencvimage = image#cv2.imread(os_name)
             filename = os_name[:-4]
             if filename[-1] == '.':
@@ -423,7 +428,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
         name,_ = QtWidgets.QFileDialog.getOpenFileName(
                 self,'Load Queried State Image',
                 '',"Image files (*.png *.jpg *.jpeg *.jfif *.tif *.tiff *.PNG *.JPG *.JPEG *.TIF *.TIFF)")
-        self._imagePath = name
+        self._imagePath2 = name
         name = Path(name)
         if name.is_file():
             try:
@@ -436,7 +441,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                 self.displayImage2.clear_scene()
                 
                 os_name = os.path.normpath(self._imagePath)
-                self._file_name = os_name
+                self._file_name2 = os_name
                 #self.displayImage2._opencvimage = image#cv2.imread(os_name)
                 filename = os_name[:-4]
                 if filename[-1] == '.':
@@ -571,7 +576,7 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
                     QtWidgets.QMessageBox.Ok)
         except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in creating Auto-eFace Window.\n Error message: {e}', 
+                    f'Error in creating Auto-eFace Window.',#\n Error message: {e}', 
                     QtWidgets.QMessageBox.Ok)
 
 
@@ -743,6 +748,14 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             if os.path.isfile(file_txt):
                 os.remove(file_txt)
             save_txt_file(file_txt, self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._boundingbox)
+
+        if self._imagePath2 is not None:
+            name = os.path.normpath(self._imagePath2)
+            filename = name[:-4]
+            file_txt = (filename + '.txt')
+            if os.path.isfile(file_txt):
+                os.remove(file_txt)
+            save_txt_file(file_txt, self.displayImage2._shape, self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._boundingbox)
     
     
     def save_as_results(self):
@@ -767,7 +780,43 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
             print(marked_image.save(photo_name,'JPG'))
             marked_image.save(photo_name,'JPG')
             print(marked_image.save(photo_name,'JPG'))
-   
+    
+
+    def save_metrics(self):
+        """This function saves the metrics as an xls file."""
+        try:
+            if max(self.displayImage._shape[:, 2]) >= 76 and max(self.displayImage2._shape[:, 2]) >= 76:
+                #This is to make sure that the midline exist
+                if self.displayImage._points == None:
+                    self.displayImage.toggle_midLine()
+                    self.displayImage.toggle_midLine()
+
+                if self.displayImage2._points == None:
+                    self.displayImage2.toggle_midLine()
+                    self.displayImage2.toggle_midLine()
+
+                (MeasurementsLeft, MeasurementsRight, 
+                MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(self.displayImage._shape, 
+                    self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, 
+                    self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side)
+
+                (MeasurementsLeft2, MeasurementsRight2, 
+                MeasurementsDeviation2, MeasurementsPercentual2) = get_measurements_from_data(self.displayImage2._shape, 
+                    self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, 
+                    self._CalibrationType, self._CalibrationValue, self.displayImage2._reference_side)
+                
+                temp = DoubleSaveMetricsWindow(self, self._file_name, MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual, self._file_name2, MeasurementsLeft2, MeasurementsRight2, MeasurementsDeviation2, MeasurementsPercentual2)
+                temp.exec_()
+            else:
+                QtWidgets.QMessageBox.information(self, 'Error', 
+                    'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
+                    QtWidgets.QMessageBox.Ok)
+        except Exception as e:
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                    f'Error in creating metrics window.',#\n Error message: {e}', 
+                    QtWidgets.QMessageBox.Ok)
+
+    
 
     ########################################################################################################################
     ########################################################################################################################
@@ -776,9 +825,179 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
     ########################################################################################################################
 
 
+    def verifySave(self):
+        """This function verifies that the current landmarks are save."""
+        try:
+            filename = self._file_name[:-4]
+            if filename[-1] == '.':
+                filename = filename[:-1]
+            file_txt = (filename + '.txt')
+            if os.path.isfile(file_txt):
+                shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
+                currently_Saved = True #the landmarks are assumed to be saved unless a difference is found
+                for i in range(len(self.displayImage._shape)):
+                    if (self.displayImage._shape[i,0] != shape[i,0] or
+                    self.displayImage._shape[i,1] != shape[i,1] or
+                    self.displayImage._shape[i,2] != shape[i,2]):
+                        #checks if shape is the same
+                        # print('Difference Found in boundingbox')
+                        # print('self.displayImage._shape = ', self.displayImage._shape)
+                        # print('shape = ', shape)
+                        currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._righteye)):
+                        if self.displayImage._righteye[i] != righteye[i]:
+                            #checks if righteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._righteye = ', self.displayImage._righteye)
+                            # print('righteye = ', righteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._lefteye)):
+                        if self.displayImage._lefteye[i] != lefteye[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._lefteye = ', self.displayImage._lefteye)
+                            # print('lefteye = ', lefteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage._boundingbox)):
+                        if self.displayImage._boundingbox[i] != boundingbox[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage._boundingbox = ', self.displayImage._boundingbox)
+                            # print('boundingbox = ', boundingbox)
+                            currently_Saved = False
+                
+                if currently_Saved == False:
+                    #If difference is found ask if the user wants to be saved
+                    saveDotsQuestion = QtWidgets.QMessageBox
+                    saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                        'New Landmarks adjustments are currently not saved.\nWould you like to save the new Landmarks?', 
+                        saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                    if saveDotsBox == saveDotsQuestion.Yes:
+                        try:
+                            self.save_results()
+                        except Exception as e:
+                            QtWidgets.QMessageBox.information(self, 'Error', 
+                                f'Error in saving current Landmarks.',#\n Error message: {e}', 
+                                QtWidgets.QMessageBox.Ok)
+            else:
+                saveDotsQuestion = QtWidgets.QMessageBox
+                saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                    'The Landmarks are currently not saved.\nWould you like to save the current Landmarks?', 
+                    saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                if saveDotsBox == saveDotsQuestion.Yes:
+                    try:
+                        self.save_results()
+                    except Exception as e:
+                        QtWidgets.QMessageBox.information(self, 'Error', 
+                            f'Error in saving current Landmarks.',#\n Error message: {e}', 
+                            QtWidgets.QMessageBox.Ok)
+        except:
+            print('Error in verifying save')
+            # QtWidgets.QMessageBox.information(self, 'Error', 
+            #     'Error in verifying saved Landmarks.', 
+            #     QtWidgets.QMessageBox.Ok)
+
+
+    def verifySave2(self):
+        """This function verifies that the current landmarks are save."""
+        try:
+            filename = self._file_name2[:-4]
+            if filename[-1] == '.':
+                filename = filename[:-1]
+            file_txt = (filename + '.txt')
+            if os.path.isfile(file_txt):
+                shape, lefteye, righteye, boundingbox = get_info_from_txt(file_txt)
+                currently_Saved = True #the landmarks are assumed to be saved unless a difference is found
+                for i in range(len(self.displayImage2._shape)):
+                    if (self.displayImage2._shape[i,0] != shape[i,0] or
+                    self.displayImage2._shape[i,1] != shape[i,1] or
+                    self.displayImage2._shape[i,2] != shape[i,2]):
+                        #checks if shape is the same
+                        # print('Difference Found in boundingbox')
+                        # print('self.displayImage2._shape = ', self.displayImage2._shape)
+                        # print('shape = ', shape)
+                        currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage2._righteye)):
+                        if self.displayImage2._righteye[i] != righteye[i]:
+                            #checks if righteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage2._righteye = ', self.displayImage2._righteye)
+                            # print('righteye = ', righteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage2._lefteye)):
+                        if self.displayImage2._lefteye[i] != lefteye[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage2._lefteye = ', self.displayImage2._lefteye)
+                            # print('lefteye = ', lefteye)
+                            currently_Saved = False
+                if currently_Saved == True:
+                    #only checks if no differences are found in shape
+                    for i in range(len(self.displayImage2._boundingbox)):
+                        if self.displayImage2._boundingbox[i] != boundingbox[i]:
+                            #checks if lefteye is the same
+                            # print('Difference Found in boundingbox')
+                            # print('self.displayImage2._boundingbox = ', self.displayImage2._boundingbox)
+                            # print('boundingbox = ', boundingbox)
+                            currently_Saved = False
+                
+                if currently_Saved == False:
+                    #If difference is found ask if the user wants to be saved
+                    saveDotsQuestion = QtWidgets.QMessageBox
+                    saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                        'New Landmarks adjustments are currently not saved.\nWould you like to save the new Landmarks?', 
+                        saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                    if saveDotsBox == saveDotsQuestion.Yes:
+                        try:
+                            self.save_results()
+                        except Exception as e:
+                            QtWidgets.QMessageBox.information(self, 'Error', 
+                                f'Error in saving current Landmarks.',#\n Error message: {e}', 
+                                QtWidgets.QMessageBox.Ok)
+            else:
+                saveDotsQuestion = QtWidgets.QMessageBox
+                saveDotsBox = saveDotsQuestion.question(self, 'Save Dots', 
+                    'The Landmarks are currently not saved.\nWould you like to save the current Landmarks?', 
+                    saveDotsQuestion.Yes | saveDotsQuestion.No) 
+                if saveDotsBox == saveDotsQuestion.Yes:
+                    try:
+                        self.save_results()
+                    except Exception as e:
+                        QtWidgets.QMessageBox.information(self, 'Error', 
+                            f'Error in saving current Landmarks.',#\n Error message: {e}', 
+                            QtWidgets.QMessageBox.Ok)
+        except:
+            print('Error in verifying save')
+            # QtWidgets.QMessageBox.information(self, 'Error', 
+            #     'Error in verifying saved Landmarks.', 
+            #     QtWidgets.QMessageBox.Ok)
+
+
     def previous(self):
+        """This function is used to close the window.
+        It verifies the the landmarks are saved then closes the window and goes back to the home window"""
+        # self.verifySave()
+                        
         self.finished.emit()
         self.close()
+
+    
+    def closeEvent(self, event):
+        """This function is used to close the program.
+        It verifies the the landmarks are saved then closes the program"""
+        self.verifySave()
+        self.verifySave2()
+        event.accept()
 
 
 def main():
