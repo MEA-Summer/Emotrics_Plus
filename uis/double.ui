@@ -564,6 +564,9 @@ p, li { white-space: pre-wrap; }
             </item>
             <item row="10" column="2" alignment="Qt::AlignHCenter">
              <widget class="QPushButton" name="saveMeasurementsButton">
+              <property name="enabled">
+               <bool>false</bool>
+              </property>
               <property name="minimumSize">
                <size>
                 <width>80</width>
