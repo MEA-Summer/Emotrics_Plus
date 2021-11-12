@@ -363,9 +363,9 @@
      </widget>
     </item>
     <item row="9" column="9" colspan="2">
-     <widget class="QPushButton" name="pushButton_4">
+     <widget class="QPushButton" name="saveButton">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="sizePolicy">
        <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
