@@ -675,28 +675,36 @@ class ImageViewer(QtWidgets.QGraphicsView):
     
         
     def draw_circle(self, CircleInformation):
-        
-        """Finding Center and radius based on given info"""
-        
-        
-        #this function draws an circle with specific center and radius 
+        """This function draws an circle as well as a dot in the center with specific center and radius""" 
         
         Circle = QtWidgets.QGraphicsEllipseItem(0,0,CircleInformation[2]*2,CircleInformation[2]*2)
         pen = QtGui.QPen(self._iris_color)
+        brush = QtGui.QBrush(self._iris_color) 
         #set the ellipse line width according to the image size
         if self._landmark_size > 0.5:
             if self._scene.height() < 1000:
                 pen.setWidth(1)
             else:
                 pen.setWidth(3)
-            
         Circle.setPen(pen)      
 
-        
         #this is the position of the top-left corner of the ellipse.......
         Circle.setPos(CircleInformation[0]-CircleInformation[2],CircleInformation[1]-CircleInformation[2])
         Circle.setTransform(QtGui.QTransform())        
         self._scene.addItem(Circle)
+
+        """Adding Dot in center"""
+        radius = self._landmark_size*2 #sets dot to be twice the size as a landmark
+        Ellipse = QtWidgets.QGraphicsEllipseItem(0,0,radius*2,radius*2)
+        #Sets color    
+        Ellipse.setPen(pen)      
+        #if I want to fill the ellipse i should do this: 
+        Ellipse.setBrush(brush)
+        
+        #this is the position of the top-left corner of the ellipse.......
+        Ellipse.setPos(CircleInformation[0]-radius,CircleInformation[1]-radius)
+        Ellipse.setTransform(QtGui.QTransform())        
+        self._scene.addItem(Ellipse)
     
     
     def draw_line(self, LineInformation, ID=None):

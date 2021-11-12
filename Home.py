@@ -69,6 +69,7 @@ class HomeWindow(QtWidgets.QMainWindow):
 
     def load_SinglePhotoWindow(self):
         self._new_window = SinglePhotoWindow()
+        self._new_window._IsMainWindow = True #informs window it is made by HomeWindow not SevenPhotoWindow
         self._new_window.FaceAlignment = self.FaceAlignment
         self._new_window.FaceDetector = self.FaceDetector
         self._new_window.model = self.model

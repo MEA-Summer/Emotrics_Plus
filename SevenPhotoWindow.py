@@ -7,6 +7,7 @@ from PIL import Image, ImageOps
 from ThumbNailDisplay import ThumbNailDisplay
 from ImageDisplay import ImageDisplay
 from MplWidget import MplWidget
+from Save_eFace_Window import Save_eFace_Window
 
 
 class SevenPhotoWindow(QtWidgets.QMainWindow):
@@ -107,6 +108,7 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         """Button Connection"""
         self.previousButton.clicked.connect(self.previous)
         self.matchIrisButton.clicked.connect(self.matchIris)
+        self.saveButton.clicked.connect(self.save_eFace_Excel)
 
 
     ########################################################################################################################
@@ -427,6 +429,28 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.oooooWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
         self.browRaiseWindow.displayImage.update_shape()
         self.update_Plots()
+
+    ########################################################################################################################
+    ########################################################################################################################
+    """Saving Functions"""
+    ########################################################################################################################
+    ########################################################################################################################
+    
+
+    def save_eFace_Excel(self):
+        """This function saves the eFace Scores as an xls file."""
+        try:
+                
+            temp = Save_eFace_Window(self, self._file_R, self._patientID, self._score_brow_rest, self._score_PalpebralFissure_rest,
+            self._score_OralCommissure_rest, self._NLF_at_rest, self._BrowRaise, self._GentleEyeClosure, 
+            self._FullEyeClosure, self._OralCommissureWithSmile, self._LowerLipEEE, self._OcularSynkinesis, 
+            self._StaticScore, self._DynamicScore, self._SynkinesisScore, self._Total_Score)
+            temp.exec_()
+        
+        except Exception as e:
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                    f'Error in creating metrics window.\n Error message: {e}', # ',#
+                    QtWidgets.QMessageBox.Ok)
     
     ########################################################################################################################
     ########################################################################################################################

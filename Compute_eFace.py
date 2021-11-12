@@ -52,7 +52,7 @@ def Compute_Resting_eFace(LeftResting, RightResting, reference_side):
     if RightResting.NLF_angle == 0 or LeftResting.NLF_angle == 0:
         if RightResting.NLF_angle == 0 and LeftResting.NLF_angle == 0:
             #if both sides are 0 the score is 100
-            NLF_at_rest = 100
+            NLF_at_rest = 1
         else:
             #if only 1 side is 0 then the score is zero
             NLF_at_rest = 0
@@ -179,7 +179,7 @@ def Compute_eFace_NLF(LeftResting, RightResting, reference_side):
     if RightResting.NLF_angle == 0 or LeftResting.NLF_angle == 0:
         if RightResting.NLF_angle == 0 and LeftResting.NLF_angle == 0:
             #if both sides are 0 the score is 100
-            NLF_at_rest = 100
+            NLF_at_rest = 1
         else:
             #if only 1 side is 0 then the score is zero
             NLF_at_rest = 0
@@ -255,7 +255,7 @@ def Compute_eFace(Patient):
     if RightResting.NLF_angle == 0 or LeftResting.NLF_angle == 0:
         if RightResting.NLF_angle == 0 and LeftResting.NLF_angle == 0:
             #if both sides are 0 the score is 100
-            NLF_at_rest = 100
+            NLF_at_rest = 1
         else:
             #if only 1 side is 0 then the score is zero
             NLF_at_rest = 0

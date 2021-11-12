@@ -58,6 +58,10 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         self._patientID = None
         self._expression = 'Resting'
         
+        """Variable for closing"""
+        self._IsMainWindow = False  #if this window is created by a SevenPhotoWindow, this remains False
+                                    #if this window is create by home page, this will be set to true
+
         """Set Up the UI form"""
         self.initUI()
         
@@ -192,6 +196,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                     if self.Modelname_NLF == True and len(self.displayImage._shape) == 68:
                         self.startLandmarkThread(image)
                     # self.displayImage.update_shape()
+                    self.got_landmarks.emit()
             else:
                 #Resets Shape and Eyes
                 self.displayImage._shape = None
@@ -292,6 +297,7 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
                         if self.Modelname_NLF == True and len(self.displayImage._shape) == 68:
                             self.startLandmarkThread(image)
                         # self.displayImage.update_shape()
+                        self.got_landmarks.emit()
                 else:
                     #Resets Shape and Eyes
                     self.displayImage._shape = None
@@ -685,6 +691,8 @@ class SinglePhotoWindow(QtWidgets.QMainWindow):
         """This function is used to close the program.
         It verifies the the landmarks are saved then closes the program"""
         self.verifySave()
+        if self._IsMainWindow == False:
+            self.finished.emit()
         event.accept()
 
 
