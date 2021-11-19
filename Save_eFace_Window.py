@@ -417,40 +417,46 @@ class Save_eFace_Window(QDialog):
                     
         else: #the user wants to append to an existing file
             
+            try:
+                
+                filename, file_extension = os.path.splitext( self._name_of_resting_file ) 
+                delimiter = os.path.sep
+                temp=filename.split(delimiter)
+                photo_name=temp[-1] + file_extension
+                
+                #create data frame with new ata
+                Index = [photo_name]
+                df = pd.DataFrame(fill, index = Index, columns = Header)
+                # df.columns = pd.MultiIndex.from_tuples(list(zip(Header,df.columns)))
+                
+                
+                #load data from file and arrange its columns to fit the template
+                old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
             
-            filename, file_extension = os.path.splitext( self._name_of_resting_file ) 
-            delimiter = os.path.sep
-            temp=filename.split(delimiter)
-            photo_name=temp[-1] + file_extension
+                
+                old_df.columns = pd.MultiIndex.from_tuples(df.columns)
             
-            #create data frame with new ata
-            Index = [photo_name]
-            df = pd.DataFrame(fill, index = Index, columns = Header)
-            # df.columns = pd.MultiIndex.from_tuples(list(zip(Header,df.columns)))
-            
-            
-            #load data from file and arrange its columns to fit the template
-            old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
-        
-            
-            old_df.columns = pd.MultiIndex.from_tuples(df.columns)
-        
-            #concatenate old and new data frame
-            Frames = [old_df, df]
-            
-            resuls = pd.concat(Frames, axis=0)
-            
-            #write results in selected file 
-            writer = pd.ExcelWriter(str(self._SelectFile.text()), engine='xlsxwriter')
-                        
-            resuls.to_excel(writer, sheet_name='Sheet1', index = True)
+                #concatenate old and new data frame
+                Frames = [old_df, df]
+                
+                resuls = pd.concat(Frames, axis=0)
+                
+                #write results in selected file 
+                writer = pd.ExcelWriter(str(self._SelectFile.text()), engine='xlsxwriter')
+                            
+                resuls.to_excel(writer, sheet_name='Sheet1', index = True)
 
-            # #adjust the size of each column to fit the text
-            # worksheet = writer.sheets['Sheet1']
-            # for i in range(0, 55):
-            #     worksheet.autoFitColumn(i,0,2)
-            
-            writer.save()
-            self.close() 
+                # #adjust the size of each column to fit the text
+                # worksheet = writer.sheets['Sheet1']
+                # for i in range(0, 55):
+                #     worksheet.autoFitColumn(i,0,2)
+                
+                writer.save()
+                self.close() 
+
+            except Exception as e:
+                        QtWidgets.QMessageBox.information(self, 'Error', 
+                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.',#\nError message: {e}', 
+                            QtWidgets.QMessageBox.Ok)
             
         

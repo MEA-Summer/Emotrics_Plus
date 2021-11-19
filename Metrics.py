@@ -546,7 +546,7 @@ def upper_lip_slope(points_upper, rot_angle, center):
     vals_x_upper = np.linspace(rot_x_upper.min(), rot_x_upper.max(), 100, endpoint=True)
 
     #To find where the midline intersects the spline
-    intersect_x = np.argmin(np.abs(vals_x_upper)) 
+    intersect_x = np.amin(np.abs(vals_x_upper)) 
     intersect_y = spline(intersect_x)
     
     right_commissure_x = rot_x_upper[0]
@@ -582,7 +582,7 @@ def commissure_height(points_upper, rot_angle, center):
     vals_x_upper = np.linspace(rot_x_upper.min(), rot_x_upper.max(), 100, endpoint=True)
 
     #To find where the midline intersects the spline
-    intersect_x = np.argmin(np.abs(vals_x_upper)) 
+    intersect_x = np.amin(np.abs(vals_x_upper)) 
     intersect_y = spline(intersect_x)
     
     right_commissure_y = rot_y_upper[0]
