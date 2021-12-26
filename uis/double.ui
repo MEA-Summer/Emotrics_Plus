@@ -821,7 +821,7 @@ p, li { white-space: pre-wrap; }
             <item row="2" column="1">
              <widget class="QPushButton" name="auto_eFaceButton">
               <property name="enabled">
-               <bool>false</bool>
+               <bool>true</bool>
               </property>
               <property name="sizePolicy">
                <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
