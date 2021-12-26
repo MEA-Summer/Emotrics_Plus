@@ -429,16 +429,12 @@ class Save_eFace_Window(QDialog):
                 df = pd.DataFrame(fill, index = Index, columns = Header)
                 # df.columns = pd.MultiIndex.from_tuples(list(zip(Header,df.columns)))
                 
-                
                 #load data from file and arrange its columns to fit the template
-                old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 1], index_col=0, engine='openpyxl')
+                old_df = pd.read_excel(str(self._SelectFile.text()), sheet_name=0,header=[0, 0], index_col=0, engine='openpyxl')
             
-                
-                old_df.columns = pd.MultiIndex.from_tuples(df.columns)
-            
+                old_df.columns = df.columns
                 #concatenate old and new data frame
                 Frames = [old_df, df]
-                
                 resuls = pd.concat(Frames, axis=0)
                 
                 #write results in selected file 
@@ -456,7 +452,7 @@ class Save_eFace_Window(QDialog):
 
             except Exception as e:
                         QtWidgets.QMessageBox.information(self, 'Error', 
-                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.',#\nError message: {e}', 
+                            f'Error in saving metrics.\nMake sure the existing file is closed\nto allow new file to be saved.',#\nError message: {e}', # 
                             QtWidgets.QMessageBox.Ok)
             
         

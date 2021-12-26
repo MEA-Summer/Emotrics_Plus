@@ -596,15 +596,22 @@ def commissure_height(points_upper, rot_angle, center):
 
 
 def lower_Lip_Height(new_point_lower_inside_right, new_point_lower_inside_left, points_jaw, rot_angle, center):
-    low_lipper_right_top_x = new_point_lower_inside_right[0]
-    low_lipper_left_top_x = new_point_lower_inside_left[0]
+    rot_matrix=np.array([[np.cos(rot_angle), np.sin(rot_angle)],
+                    [-np.sin(rot_angle), np.cos(rot_angle)]])
+
+    low_lipper_right_top_x, low_lipper_right_top_y = rot_matrix.dot([new_point_lower_inside_right[0]-center[0], new_point_lower_inside_right[1]-center[1]])               
+    low_lipper_left_top_x, low_lipper_left_top_y = rot_matrix.dot([new_point_lower_inside_left[0]-center[0], new_point_lower_inside_left[1]-center[1]])               
+
+    # low_lipper_right_top_x = rot_lower_inside_right[0]
+    # low_lipper_left_top_x = rot_lower_inside_left[0]
     
-    low_lipper_right_top_y = new_point_lower_inside_right[1]
-    low_lipper_left_top_y = new_point_lower_inside_left[1]
+    # low_lipper_right_top_y = rot_lower_inside_right[1]
+    # low_lipper_left_top_y = rot_lower_inside_left[1]
     
     #Jaw spline
-    x_lower_jaw = points_jaw[:,0]
-    y_lower_jaw = points_jaw[:,1]
+    x_lower_jaw, y_lower_jaw=rot_matrix.dot([points_jaw[:,0]-center[0], points_jaw[:,1]-center[1]])               
+    # x_lower_jaw = points_jaw[:,0]
+    # y_lower_jaw = points_jaw[:,1]
 
     spline_jaw = UnivariateSpline(x_lower_jaw, y_lower_jaw, s=1)
 

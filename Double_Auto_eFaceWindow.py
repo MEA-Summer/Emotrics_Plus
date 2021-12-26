@@ -1,10 +1,14 @@
-import numpy as np
-from PyQt5 import QtWidgets, QtGui, uic, QtCore
 import sys
-from Metrics import get_measurements_from_data
-from Compute_eFace import *
+
+import numpy as np
+from PyQt5 import QtCore, QtGui, QtWidgets, uic
 from PyQt5.QtGui import QDoubleValidator, QValidator
+from torch._C import has_openmp
+
+from Compute_eFace import *
 from MplWidget import MplWidget
+from Patient import Patient
+
 
 class DoubleValidator(QDoubleValidator):
     def __init__(self, *__args):
@@ -25,20 +29,21 @@ class DoubleValidator(QDoubleValidator):
 
 class Double_Auto_eFaceWindow(QtWidgets.QMainWindow):
     
-    def __init__(self, shape1, left_pupil1, right_pupil1, points1, shape2, left_pupil2, right_pupil2, points2, CalibrationType, CalibrationValue, reference_side, file_name, expression):
+    def __init__(self, shape, left_pupil, right_pupil, points, shape2, left_pupil2, right_pupil2, points2, CalibrationType, CalibrationValue, reference_side, expression):
         super() .__init__()
-        self._shape1 = shape1
-        self._lefteye1 = left_pupil1
-        self._righteye1 = right_pupil1
-        self._points1 = points1
+        #Sets input to variables
+        self._Patient = Patient()
+        self._Patient._Resting._shape = shape
+        self._Patient._Resting._lefteye = left_pupil
+        self._Patient._Resting._righteye = right_pupil
+        self._Patient._Resting._points = points
         self._shape2 = shape2
         self._lefteye2 = left_pupil2
         self._righteye2 = right_pupil2
         self._points2 = points2
-        self._CalibrationType = CalibrationType
-        self._CalibrationValue = CalibrationValue
-        self._reference_side = reference_side
-        self._fileName = file_name
+        self._Patient._CalibrationType = CalibrationType
+        self._Patient._CalibrationValue = CalibrationValue
+        self._Patient._reference_side = reference_side
         self._expression = expression
 
 
@@ -46,412 +51,187 @@ class Double_Auto_eFaceWindow(QtWidgets.QMainWindow):
         
         
     def initUI(self):
-        
-        
-        if self._expression == 'Resting':
-            if self._expression == 'Other':
-                self.setWindowTitle('Other Auto eFace')
-            self.ui = uic.loadUi('uis\Auto_eFace_Resting.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            print(f'self._reference_side = {self._reference_side}')
-            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
-
-            y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
-
-            ##############
-            """Plotting"""
-            ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.BHLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.PFLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.OCLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.NLFLineEdit.setValidator(validator)
-
-            self.BHLineEdit.setText(str(Resting_Brow))
-            self.PFLineEdit.setText(str(Resting_Palpebral_Fissure))
-            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
-            self.NLFLineEdit.setText(str(NLF_at_rest)) 
-
-            self.BHLineEdit.textChanged.connect(self.updateRestingGraph)
-            self.PFLineEdit.textChanged.connect(self.updateRestingGraph)
-            self.OCLineEdit.textChanged.connect(self.updateRestingGraph)
-            self.NLFLineEdit.textChanged.connect(self.updateRestingGraph)
-
-        
-        elif self._expression == 'Brow Raise':
+        if self._expression == 'Brow Raise':
             self.ui = uic.loadUi('uis\Auto_eFace_Brow_Raise.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Brow = Compute_eFace_BH(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Brow Height']
-
-            y = [Resting_Brow]
-
+            self.get_Patient()
+            Brow_Raise = get_brow_raise(self._Patient)
+            x = ['Brow Raise']
+            y = [Brow_Raise]
             ##############
-            """Plotting"""
+            """Setting Line Edits Functions"""
             ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
+            validator = DoubleValidator( 0, 100, 1, self)
             self.BHLineEdit.setValidator(validator)
-
-            self.BHLineEdit.setText(str(Resting_Brow))
-
+            self.BHLineEdit.setText(str(Brow_Raise))
             self.BHLineEdit.textChanged.connect(self.updateBRGraph)
 
-
         elif self._expression == 'Gentle Eye Closure':
-            self.ui = uic.loadUi('uis\Auto_eFace_Gentle_Eye_Closure.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest = Compute_Resting_eFace(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Palpebral Fissure']
-
-            y = [Resting_Palpebral_Fissure]
-
+            self.ui = uic.loadUi('uis\Auto_eFace_Gentle_Eye_Closure_Double.ui', self)
+            self.get_Patient()
+            Gentle_Eye_Closure = get_GEC(self._Patient)
+            x = ['Gentle Eye Closure']
+            y = [Gentle_Eye_Closure]
             ##############
-            """Plotting"""
+            """Setting Line Edits Functions"""
             ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
+            validator = DoubleValidator( 0, 100, 1, self)
             self.PFLineEdit.setValidator(validator)
-            
-            self.PFLineEdit.setText(str(Resting_Palpebral_Fissure))
-
+            self.PFLineEdit.setText(str(Gentle_Eye_Closure))
             self.PFLineEdit.textChanged.connect(self.updateGECGraph)
         
-
         elif self._expression == 'Tight Eye Closure':
-            self.ui = uic.loadUi('uis\Auto_eFace_Tight_Eye_Closure.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Palpebral_Fissure = Compute_eFace_PF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Palpebral Fissure', 'Nasolabial Fold Angle']
-
-            y = [Resting_Palpebral_Fissure, NLF_at_rest]
-
+            self.ui = uic.loadUi('uis\Auto_eFace_Tight_Eye_Closure_Double.ui', self)
+            self.get_Patient()
+            Tight_Eye_Closure = get_TEC(self._Patient)
+            x = ['Tight Eye Closure']
+            y = [Tight_Eye_Closure]
             ##############
-            """Plotting"""
+            """Setting Line Edits Functions"""
             ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
+            validator = DoubleValidator( 0, 100, 1, self)
             self.PFLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.NLFLineEdit.setValidator(validator)
-
-            self.PFLineEdit.setText(str(Resting_Palpebral_Fissure))
-            self.NLFLineEdit.setText(str(NLF_at_rest)) 
-
+            self.PFLineEdit.setText(str(Tight_Eye_Closure))
             self.PFLineEdit.textChanged.connect(self.updateTECGraph)
-            self.NLFLineEdit.textChanged.connect(self.updateTECGraph)
 
-        
         elif self._expression == 'Big Smile':
-            self.ui = uic.loadUi('uis\Auto_eFace_Big_Smile.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Nasolabial Fold Angle']
-
-            y = [NLF_at_rest]
-
+            self.ui = uic.loadUi('uis\Auto_eFace_Big_Smile_Double.ui', self)
+            self.get_Patient()
+            Oral_Commissure = get_OCM(self._Patient)
+            x = ['Oral Commissure Movement with Smile']
+            y = [Oral_Commissure]
             ##############
-            """Plotting"""
+            """Setting Line Edits Functions"""
             ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.NLFLineEdit.setValidator(validator)
-
-            self.NLFLineEdit.setText(str(NLF_at_rest)) 
-
-            self.NLFLineEdit.textChanged.connect(self.updateBSGraph)
-
-        
-        elif self._expression == '"eeeek"':
-            self.ui = uic.loadUi('uis\Auto_eFace_eee.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Oral_Commissure_at_Rest = Compute_eFace_OC(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            NLF_at_rest = Compute_eFace_NLF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Oral Commissure', 'Nasolabial Fold Angle']
-
-            y = [Oral_Commissure_at_Rest, NLF_at_rest]
-
-            ##############
-            """Plotting"""
-            ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
+            validator = DoubleValidator( 0, 100, 1, self)
             self.OCLineEdit.setValidator(validator)
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.NLFLineEdit.setValidator(validator)
+            self.OCLineEdit.setText(str(Oral_Commissure)) 
+            self.OCLineEdit.textChanged.connect(self.updateBSGraph)
 
-            self.OCLineEdit.setText(str(Oral_Commissure_at_Rest))
-            self.NLFLineEdit.setText(str(NLF_at_rest)) 
-
-            self.OCLineEdit.textChanged.connect(self.updateEeeekGraph)
-            self.NLFLineEdit.textChanged.connect(self.updateEeeekGraph)
-
-        
-        elif self._expression == '"ooooo"':
-            self.ui = uic.loadUi('uis\Auto_eFace_ooo.ui', self)
-
-            (MeasurementsLeft, MeasurementsRight, 
-            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(
-                self._shape, self._lefteye, self._righteye, self._points, 
-                self._CalibrationType, self._CalibrationValue, self._reference_side)
-            Resting_Palpebral_Fissure = Compute_eFace_PF(MeasurementsLeft, MeasurementsRight, self._reference_side)
-            x = ['Ocular Synkinesis']
-
-            y = [Resting_Palpebral_Fissure]
-
-            ##############
-            """Plotting"""
-            ##############
-            self.plotWidget.canvas.ax.bar(x, y, color='blue')
-            self.plotWidget.canvas.ax.set_xlabel('Parameters')
-            self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-            self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-            self.plotWidget.canvas.ax.set_ylim(0,200)
-
-            ##############
-            """Filling Line Edits"""
-            ##############
-            validator = DoubleValidator( 0, 200, 1, self)
-            self.PFLineEdit.setValidator(validator)
-
-            self.PFLineEdit.setText(str(Resting_Palpebral_Fissure))
-
-            self.PFLineEdit.textChanged.connect(self.updateOooooGraph)
+        ##############
+        """Plotting"""
+        ##############
+        self.plot_Data(x, y)
 
 
-    def updateRestingGraph(self, text):
-        try:
-            Resting_Brow = float(self.BHLineEdit.text())
-        except:
-            Resting_Brow = 0
-        try:
-            Resting_Palpebral_Fissure = float(self.PFLineEdit.text())
-        except:
-            Resting_Palpebral_Fissure = 0
-        try:
-            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
-        except:
-            Oral_Commissure_at_Rest = 0
-        try:
-            NLF_at_rest = float(self.NLFLineEdit.text())
-        except:
-            NLF_at_rest = 0
-
-        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
-        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
-
-        self.plotWidget.canvas.ax.clear()
+    def plot_Data(self, x, y):
         self.plotWidget.canvas.ax.bar(x, y, color='blue')
         self.plotWidget.canvas.ax.set_xlabel('Parameters')
         self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
         self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
-        self.plotWidget.canvas.draw()
+        self.plotWidget.canvas.ax.set_ylim(0,100)
+
+
+    def get_Patient(self):
+        """This function collects the info need to find the dynamic parameters"""
+        if self._expression == 'Brow Raise': 
+            #Brow Raise
+            self._Patient._Brow_Raise._shape = self._shape2
+            self._Patient._Brow_Raise._lefteye = self._lefteye2
+            self._Patient._Brow_Raise._righteye = self._righteye2
+            self._Patient._Brow_Raise._points = self._points2
+        elif self._expression == 'Gentle Eye Closure': 
+            #Gentle Eye Closure
+            self._Patient._Gentle_Eye_Closure._shape = self._shape2
+            self._Patient._Gentle_Eye_Closure._lefteye = self._lefteye2
+            self._Patient._Gentle_Eye_Closure._righteye = self._righteye2
+            self._Patient._Gentle_Eye_Closure._points = self._points2
+        elif self._expression == 'Tight Eye Closure': 
+            #Tight Eye Closure
+            self._Patient._Tight_Eye_Closure._shape = self._shape2
+            self._Patient._Tight_Eye_Closure._lefteye = self._lefteye2
+            self._Patient._Tight_Eye_Closure._righteye = self._righteye2
+            self._Patient._Tight_Eye_Closure._points = self._points2
+        elif self._expression == 'Big Smile': 
+            #Brow Raise
+            self._Patient._Big_Smile._shape = self._shape2
+            self._Patient._Big_Smile._lefteye = self._lefteye2
+            self._Patient._Big_Smile._righteye = self._righteye2
+            self._Patient._Big_Smile._points = self._points2
 
     
     def updateBRGraph(self, text):
+        """This function is call for updating the graph when any LineEdit is changed
+        if the expression for the photo is 'Brow Raise'
+        
+        Scores shown: Brow Raise"""
+        #Collects Scores from LineEdits
         try:
-            Resting_Brow = float(self.BHLineEdit.text())
+            Brow_Raise = float(self.BHLineEdit.text())
         except:
-            Resting_Brow = 0
+            Brow_Raise = 0
 
-        x = ['Brow Height']
-        y = [Resting_Brow]
+        #Creates array of score so it can be plotted
+        x = ['Brow Raise']
+        y = [Brow_Raise]
 
+        #Plots Data
         self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
+        self.plot_Data(x, y)
         self.plotWidget.canvas.draw()
 
     
     def updateGECGraph(self, text):
+        """This function is call for updating the graph when any LineEdit is changed
+        if the expression for the photo is 'GEC' (Gentle Eye Closure)
+        
+        Scores shown: Gentle Eye Closure"""
+        #Collects Scores from LineEdits
         try:
-            Resting_Palpebral_Fissure = float(self.PFLineEdit.text())
+            Gentle_Eye_Closure = float(self.PFLineEdit.text())
         except:
-            Resting_Palpebral_Fissure = 0
+            Gentle_Eye_Closure = 0
 
-        x = ['Palpebral Fissure']
-        y = [Resting_Palpebral_Fissure]
+        #Creates array of score so it can be plotted
+        x = ['Gentle Eye Closure']
+        y = [Gentle_Eye_Closure]
 
+        #Plots Data
         self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
+        self.plot_Data(x, y)
         self.plotWidget.canvas.draw()
 
 
     def updateTECGraph(self, text):
+        """This function is call for updating the graph when any LineEdit is changed
+        if the expression for the photo is 'TEC' (Tight Eye Closure)
+        
+        Scores shown: Tight Eye Closure"""
+        #Collects Scores from LineEdits
         try:
-            Resting_Palpebral_Fissure = float(self.PFLineEdit.text())
+            Tight_Eye_Closure = float(self.PFLineEdit.text())
         except:
-            Resting_Palpebral_Fissure = 0
-        try:
-            NLF_at_rest = float(self.NLFLineEdit.text())
-        except:
-            NLF_at_rest = 0
+            Tight_Eye_Closure = 0
+        
 
-        x = ['Palpebral Fissure', 'Nasolabial Fold Angle']
-        y = [Resting_Palpebral_Fissure, NLF_at_rest]
+        #Creates array of score so it can be plotted
+        x = ['Tight Eye Closure']
+        y = [Tight_Eye_Closure]
 
+        #Plots Data
         self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
+        self.plot_Data(x, y)
         self.plotWidget.canvas.draw()
 
 
     def updateBSGraph(self, text):
+        """This function is call for updating the graph when any LineEdit is changed
+        if the expression for the photo is 'Big Smile' 
+        
+        Scores shown: Oral Commissure Movement with Smile"""
+        #Collects Scores from LineEdits
         try:
-            NLF_at_rest = float(self.NLFLineEdit.text())
+            Oral_Commissure = float(self.OCLineEdit.text())
         except:
-            NLF_at_rest = 0
+            Oral_Commissure = 0
 
-        x = ['Nasolabial Fold Angle']
-        y = [ NLF_at_rest]
+        #Creates array of score so it can be plotted
+        x = ['Oral Commissure Movement with Smile']
+        y = [Oral_Commissure]
 
+        #Plots Data
         self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
+        self.plot_Data(x, y)
         self.plotWidget.canvas.draw()
 
-
-    def updateEeeekGraph(self, text):
-        try:
-            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
-        except:
-            Oral_Commissure_at_Rest = 0
-        try:
-            NLF_at_rest = float(self.NLFLineEdit.text())
-        except:
-            NLF_at_rest = 0
-
-        x = ['Oral Commissure', 'Nasolabial Fold Angle']
-        y = [Oral_Commissure_at_Rest, NLF_at_rest]
-
-        self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
-        self.plotWidget.canvas.draw()
-
-    
-    def updateOooooGraph(self, text):
-        try:
-            Resting_Brow = float(self.BHLineEdit.text())
-        except:
-            Resting_Brow = 0
-        try:
-            Resting_Palpebral_Fissure = float(self.PFLineEdit.text())
-        except:
-            Resting_Palpebral_Fissure = 0
-        try:
-            Oral_Commissure_at_Rest = float(self.OCLineEdit.text())
-        except:
-            Oral_Commissure_at_Rest = 0
-        try:
-            NLF_at_rest = float(self.NLFLineEdit.text())
-        except:
-            NLF_at_rest = 0
-
-        x = ['Brow Height', 'Palpebral Fissure', 'Oral Commissure', 'Nasolabial Fold Angle']
-        y = [Resting_Brow, Resting_Palpebral_Fissure, Oral_Commissure_at_Rest, NLF_at_rest]
-
-        self.plotWidget.canvas.ax.clear()
-        self.plotWidget.canvas.ax.bar(x, y, color='blue')
-        self.plotWidget.canvas.ax.set_xlabel('Parameters')
-        self.plotWidget.canvas.ax.set_ylabel('Auto-eFace Score')
-        self.plotWidget.canvas.ax.set_title(f'{self._expression} Expression Scores')
-        self.plotWidget.canvas.ax.set_ylim(0,200)
-        self.plotWidget.canvas.draw()
 
     
