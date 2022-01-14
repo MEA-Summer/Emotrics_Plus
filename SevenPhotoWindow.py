@@ -8,6 +8,7 @@ from ThumbNailDisplay import ThumbNailDisplay
 from ImageDisplay import ImageDisplay
 from MplWidget import MplWidget
 from Save_eFace_Window import Save_eFace_Window
+from ReportCardWindow import ReportCardWindow
 
 
 class SevenPhotoWindow(QtWidgets.QMainWindow):
@@ -108,6 +109,7 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         """Button Connection"""
         self.previousButton.clicked.connect(self.previous)
         self.matchIrisButton.clicked.connect(self.matchIris)
+        self.eFaceButton.clicked.connect(self.reportCard)
         self.saveButton.clicked.connect(self.save_eFace_Excel)
 
 
@@ -429,6 +431,18 @@ class SevenPhotoWindow(QtWidgets.QMainWindow):
         self.oooooWindow.displayImage._righteye = self.restingWindow.displayImage._righteye
         self.browRaiseWindow.displayImage.update_shape()
         self.update_Plots()
+
+
+    def reportCard(self):
+        """This function creates a window that show the numbers that are displayed on the graph."""
+        try: 
+            self._new_window = ReportCardWindow(self._Patient)
+            self._new_window.show()
+        except Exception as e:
+            QtWidgets.QMessageBox.information(self, 'Error', 
+                    f'Error in creating Auto-eFace Window.',#\n Error message: {e}', 
+                    QtWidgets.QMessageBox.Ok)
+
 
     ########################################################################################################################
     ########################################################################################################################

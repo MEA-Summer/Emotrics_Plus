@@ -556,38 +556,38 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
     def create_auto_eFace_window(self):
         """This function is used when the user clicks the Auto eFace button.
         This function opens up a window and displays the Auto eFace graph of the photo"""
-        # try:
-        if max(self.displayImage._shape[:, 2]) >= 76:
-            if self._task == 'Resting vs Expression':
-                #This is to make sure that the midline exist
-                if self.displayImage._points == None:
-                    self.displayImage.toggle_midLine()
-                    self.displayImage.toggle_midLine()
-                if self.displayImage2._points == None:
-                    self.displayImage2.toggle_midLine()
-                    self.displayImage2.toggle_midLine()
-                if (self._taskName == 'Brow Raise' or self._taskName == 'Big Smile' 
-                or self._taskName == 'Gentle Eye Closure' or self._taskName == 'Tight Eye Closure'):
-                    """This if statement prevents the window from opening if there is no parameter to be displayed."""
-                    self._new_window = Double_Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self.displayImage2._shape, self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._taskName)
-                    #show the window with the results 
-                    self._new_window.show()
+        try:
+            if max(self.displayImage._shape[:, 2]) >= 76:
+                if self._task == 'Resting vs Expression':
+                    #This is to make sure that the midline exist
+                    if self.displayImage._points == None:
+                        self.displayImage.toggle_midLine()
+                        self.displayImage.toggle_midLine()
+                    if self.displayImage2._points == None:
+                        self.displayImage2.toggle_midLine()
+                        self.displayImage2.toggle_midLine()
+                    if (self._taskName == 'Brow Raise' or self._taskName == 'Big Smile' 
+                    or self._taskName == 'Gentle Eye Closure' or self._taskName == 'Tight Eye Closure'):
+                        """This if statement prevents the window from opening if there is no parameter to be displayed."""
+                        self._new_window = Double_Auto_eFaceWindow(self.displayImage._shape, self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, self.displayImage2._shape, self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side, self._taskName)
+                        #show the window with the results 
+                        self._new_window.show()
+                    else:
+                        QtWidgets.QMessageBox.information(self, 'Error', 
+                            'Auto-eFACE Graph is not available for this expression.', 
+                            QtWidgets.QMessageBox.Ok)  
                 else:
                     QtWidgets.QMessageBox.information(self, 'Error', 
-                        'Auto-eFACE Graph is not available for this expression.', 
-                        QtWidgets.QMessageBox.Ok)  
+                        'Auto eFace Graph can not be made when\ncomparing Pre-Op vs Post-Op.\nAuto eFace Graph can only be produced when comparing expressions.', 
+                        QtWidgets.QMessageBox.Ok)
             else:
                 QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Auto eFace Graph can not be made when\ncomparing Pre-Op vs Post-Op.\nAuto eFace Graph can only be produced when comparing expressions', 
+                    'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
                     QtWidgets.QMessageBox.Ok)
-        else:
+        except Exception as e:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
-                QtWidgets.QMessageBox.Ok)
-        # except Exception as e:
-        #     QtWidgets.QMessageBox.information(self, 'Error', 
-        #             f'Error in creating Auto-eFace Window.',#\n Error message: {e}', 
-        #             QtWidgets.QMessageBox.Ok)
+                    f'Error in creating Auto-eFace Window.',#\n Error message: {e}', 
+                    QtWidgets.QMessageBox.Ok)
 
 
     def leftSideSelected(self):
@@ -794,37 +794,37 @@ class DoublePhotoWindow(QtWidgets.QMainWindow):
 
     def save_metrics(self):
         """This function saves the metrics as an xls file."""
-        try:
-            if max(self.displayImage._shape[:, 2]) >= 76 and max(self.displayImage2._shape[:, 2]) >= 76:
-                #This is to make sure that the midline exist
-                if self.displayImage._points == None:
-                    self.displayImage.toggle_midLine()
-                    self.displayImage.toggle_midLine()
+        # try:
+        if max(self.displayImage._shape[:, 2]) >= 76 and max(self.displayImage2._shape[:, 2]) >= 76:
+            #This is to make sure that the midline exist
+            if self.displayImage._points == None:
+                self.displayImage.toggle_midLine()
+                self.displayImage.toggle_midLine()
 
-                if self.displayImage2._points == None:
-                    self.displayImage2.toggle_midLine()
-                    self.displayImage2.toggle_midLine()
+            if self.displayImage2._points == None:
+                self.displayImage2.toggle_midLine()
+                self.displayImage2.toggle_midLine()
 
-                (MeasurementsLeft, MeasurementsRight, 
-                MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(self.displayImage._shape, 
-                    self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, 
-                    self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side)
+            (MeasurementsLeft, MeasurementsRight, 
+            MeasurementsDeviation, MeasurementsPercentual) = get_measurements_from_data(self.displayImage._shape, 
+                self.displayImage._lefteye, self.displayImage._righteye, self.displayImage._points, 
+                self._CalibrationType, self._CalibrationValue, self.displayImage._reference_side)
 
-                (MeasurementsLeft2, MeasurementsRight2, 
-                MeasurementsDeviation2, MeasurementsPercentual2) = get_measurements_from_data(self.displayImage2._shape, 
-                    self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, 
-                    self._CalibrationType, self._CalibrationValue, self.displayImage2._reference_side)
-                
-                temp = DoubleSaveMetricsWindow(self, self._file_name, MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual, self._file_name2, MeasurementsLeft2, MeasurementsRight2, MeasurementsDeviation2, MeasurementsPercentual2)
-                temp.exec_()
-            else:
-                QtWidgets.QMessageBox.information(self, 'Error', 
-                    'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
-                    QtWidgets.QMessageBox.Ok)
-        except Exception as e:
+            (MeasurementsLeft2, MeasurementsRight2, 
+            MeasurementsDeviation2, MeasurementsPercentual2) = get_measurements_from_data(self.displayImage2._shape, 
+                self.displayImage2._lefteye, self.displayImage2._righteye, self.displayImage2._points, 
+                self._CalibrationType, self._CalibrationValue, self.displayImage2._reference_side)
+            
+            temp = DoubleSaveMetricsWindow(self, self._file_name, MeasurementsLeft, MeasurementsRight, MeasurementsDeviation, MeasurementsPercentual, self._file_name2, MeasurementsLeft2, MeasurementsRight2, MeasurementsDeviation2, MeasurementsPercentual2)
+            temp.exec_()
+        else:
             QtWidgets.QMessageBox.information(self, 'Error', 
-                    f'Error in creating metrics window.',#\n Error message: {e}', 
-                    QtWidgets.QMessageBox.Ok)
+                'Not enough Landmarks. \nThere must be 76 or more Landmarks', 
+                QtWidgets.QMessageBox.Ok)
+        # except Exception as e:
+        #     QtWidgets.QMessageBox.information(self, 'Error', 
+        #             f'Error in creating metrics window.',#\n Error message: {e}', 
+        #             QtWidgets.QMessageBox.Ok)
 
     
 
